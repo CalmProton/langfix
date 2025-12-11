@@ -2,7 +2,7 @@ import { defineBackground } from 'wxt/utils/define-background';
 import { browser } from '#imports';
 import { getProviderFromStorage } from '@/utils/ai-providers';
 import { getInlineRewriteHandler } from '@/utils/inline-rewrite';
-import { RewriteEngine } from '@/utils/rewrite-engine';
+import { RewriteEngine } from '@/utils/rewrite-engine/engine';
 import {
   apiKeyStorage,
   featuresStorage,

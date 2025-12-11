@@ -3,9 +3,6 @@
  * AI-powered text rewriting with different style modes
  */
 
-// Engine
-export { RewriteEngine, RewriteError } from './engine';
-
 // Prompts
 export {
   buildRetryPrompt,

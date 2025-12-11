@@ -11,8 +11,6 @@ import { OpenAIProvider, OpenRouterProvider } from './openai';
 export { AnthropicProvider } from './anthropic';
 // Re-export components
 export { BaseProvider } from './base';
-export { AIProviderError } from './errors';
-export { OpenAIProvider, OpenRouterProvider } from './openai';
 
 /**
  * Create an AI provider instance based on configuration
