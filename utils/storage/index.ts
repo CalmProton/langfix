@@ -212,6 +212,66 @@ export const translationGlossaryStorage = storage.defineItem<
 });
 
 // ============================================================================
+// Templates Storage
+// ============================================================================
+
+import {
+  DEFAULT_TEMPLATE_SETTINGS,
+  type Template,
+  type TemplateSettings,
+  type TemplateUsageEntry,
+} from '../templates/types';
+
+/**
+ * Custom templates - synced across devices (max 200 templates)
+ */
+export const customTemplatesStorage = storage.defineItem<Template[]>(
+  'sync:customTemplates',
+  {
+    fallback: [],
+  },
+);
+
+/**
+ * Template favorites - IDs of favorite templates
+ */
+export const templateFavoritesStorage = storage.defineItem<string[]>(
+  'sync:templateFavorites',
+  {
+    fallback: [],
+  },
+);
+
+/**
+ * Template settings
+ */
+export const templateSettingsStorage = storage.defineItem<TemplateSettings>(
+  'sync:templateSettings',
+  {
+    fallback: DEFAULT_TEMPLATE_SETTINGS,
+  },
+);
+
+/**
+ * Recently used templates - stored locally
+ */
+export const templateRecentlyUsedStorage = storage.defineItem<
+  TemplateUsageEntry[]
+>('local:templateRecentlyUsed', {
+  fallback: [],
+});
+
+/**
+ * Template usage counts - stored locally
+ */
+export const templateUsageStorage = storage.defineItem<Record<string, number>>(
+  'local:templateUsage',
+  {
+    fallback: {},
+  },
+);
+
+// ============================================================================
 // Session Storage (cleared on browser close)
 // ============================================================================
 

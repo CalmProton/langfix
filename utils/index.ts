@@ -19,6 +19,8 @@ export * from './readability-engine';
 export * from './rewrite-engine';
 // Storage
 export * from './storage';
+// Templates
+export * from './templates';
 // Text Extraction
 export * from './text-extraction';
 // Tone Engine
