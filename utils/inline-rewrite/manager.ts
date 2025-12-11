@@ -3,8 +3,9 @@
  * Main controller for the inline rewrite feature
  */
 
-import { reactive } from 'vue';
+import { type App, createApp, h, reactive } from 'vue';
 import { browser } from '#imports';
+import InlineRewritePopup from '../../components/inline-rewrite/InlineRewritePopup.vue';
 import type { RewriteMode } from '../rewrite-engine/types';
 import {
   getShadowContainer,
@@ -46,9 +47,15 @@ export class InlineRewriteManager {
   private container: ShadowContainer;
   private selectionManager: SelectionManager;
   private state: InlineRewriteState;
+  private popupApp: App | null = null;
+  private popupMount: HTMLElement | null = null;
+  private popupRenderState = reactive<{ rect: DOMRect | null }>({
+    rect: null,
+  });
   private abortController: AbortController | null = null;
   private keydownHandler: ((e: KeyboardEvent) => void) | null = null;
   private messageListener: ((message: unknown) => void) | null = null;
+  private positionHandler: (() => void) | null = null;
   private isDestroyed = false;
   private port: ReturnType<typeof browser.runtime.connect> | null = null;
   private stateListeners: Set<() => void> = new Set();
@@ -66,6 +73,8 @@ export class InlineRewriteManager {
   init(): void {
     if (this.isDestroyed) return;
 
+    this.container.mount();
+    this.ensurePopupMount();
     this.setupKeyboardShortcut();
     this.setupContextMenu();
   }
@@ -106,6 +115,93 @@ export class InlineRewriteManager {
     for (const listener of this.stateListeners) {
       listener();
     }
+  }
+
+  /**
+   * Ensure popup mount exists inside the shadow container
+   */
+  private ensurePopupMount(): void {
+    this.container.mount();
+
+    if (!this.popupMount) {
+      this.popupMount = document.createElement('div');
+      this.popupMount.id = 'langfix-inline-rewrite-root';
+      this.container.popupsContainer.appendChild(this.popupMount);
+    }
+  }
+
+  /**
+   * Update popup position reference to current selection
+   */
+  private updatePopupPosition(): void {
+    this.popupRenderState.rect = this.getSelectionRect();
+  }
+
+  /**
+   * Track viewport changes to keep popup aligned
+   */
+  private attachPositionTracking(): void {
+    const handler = () => this.updatePopupPosition();
+
+    window.addEventListener('scroll', handler, true);
+    window.addEventListener('resize', handler);
+
+    this.positionHandler = () => {
+      window.removeEventListener('scroll', handler, true);
+      window.removeEventListener('resize', handler);
+    };
+  }
+
+  /**
+   * Mount the popup UI
+   */
+  private mountPopup(): void {
+    this.ensurePopupMount();
+    this.updatePopupPosition();
+
+    if (!this.popupMount) return;
+
+    if (this.popupApp) {
+      this.popupApp.unmount();
+      this.popupApp = null;
+    }
+
+    const self = this;
+
+    this.popupApp = createApp({
+      setup() {
+        return () =>
+          h(InlineRewritePopup, {
+            state: self.state,
+            rect: self.popupRenderState.rect,
+            onApply: () => self.apply(),
+            onRetry: () => self.retry(),
+            onCopy: () => self.copy(),
+            onClose: () => self.close(),
+            onModeChange: (mode: RewriteMode) => self.changeMode(mode),
+          });
+      },
+    });
+
+    this.popupApp.mount(this.popupMount);
+    this.attachPositionTracking();
+  }
+
+  /**
+   * Unmount the popup UI
+   */
+  private unmountPopup(): void {
+    if (this.popupApp) {
+      this.popupApp.unmount();
+      this.popupApp = null;
+    }
+
+    if (this.positionHandler) {
+      this.positionHandler();
+      this.positionHandler = null;
+    }
+
+    this.popupRenderState.rect = null;
   }
 
   /**
@@ -175,6 +271,8 @@ export class InlineRewriteManager {
     this.state.processingTime = null;
     this.state.stats = null;
     this.notifyStateChange();
+
+    this.mountPopup();
 
     // Start the rewrite request
     this.startRewrite(selection, mode);
@@ -446,6 +544,7 @@ export class InlineRewriteManager {
       }
       this.port = null;
     }
+    this.unmountPopup();
     this.notifyStateChange();
   }
 
@@ -539,6 +638,8 @@ export class InlineRewriteManager {
       browser.runtime.onMessage.removeListener(this.messageListener);
       this.messageListener = null;
     }
+
+    this.unmountPopup();
 
     this.stateListeners.clear();
     this.selectionManager.dispose();

@@ -1,12 +1,11 @@
 import { defineContentScript } from 'wxt/utils/define-content-script';
+import { createGrammarEngine } from '@/utils/grammar-engine';
 import {
   disposeInlineRewriteManager,
   getInlineRewriteManager,
 } from '@/utils/inline-rewrite';
-import {
-  disposeMetricsUIManager,
-  getMetricsUIManager,
-} from '@/utils/metrics';
+import { disposeMetricsUIManager, getMetricsUIManager } from '@/utils/metrics';
+import { behaviorStorage, featuresStorage } from '@/utils/storage';
 import {
   disposeSuggestionUIManager,
   getSuggestionUIManager,
@@ -17,11 +16,25 @@ import {
 } from '@/utils/summarization';
 import { createTextExtractionManager } from '@/utils/text-extraction';
 import type { EditableSurface } from '@/utils/text-extraction/types';
+import {
+  type BehaviorSettings,
+  DEFAULT_BEHAVIOR_SETTINGS,
+  DEFAULT_FEATURES,
+  type FeatureSettings,
+} from '@/utils/types';
 
 export default defineContentScript({
   matches: ['<all_urls>'],
-  main() {
-    // Create and initialize the text extraction manager
+  async main() {
+    let features: FeatureSettings = {
+      ...DEFAULT_FEATURES,
+      ...(await featuresStorage.getValue()),
+    };
+    let behavior: BehaviorSettings = {
+      ...DEFAULT_BEHAVIOR_SETTINGS,
+      ...(await behaviorStorage.getValue()),
+    };
+
     const textManager = createTextExtractionManager({
       minTextLength: 3,
       debounceMs: 350,
@@ -29,74 +42,202 @@ export default defineContentScript({
       scanShadowDom: true,
     });
 
-    // Create the suggestion UI manager
     const suggestionUI = getSuggestionUIManager();
-
-    // Create the inline rewrite manager
-    const inlineRewrite = getInlineRewriteManager();
-
-    // Create the metrics UI manager
-    const metricsUI = getMetricsUIManager();
-
-    // Create the summarization manager
     const summarization = getSummarizationManager();
 
-    // Track current surface for change watching
-    let currentWatchDisposer: (() => void) | null = null;
+    let inlineRewrite: ReturnType<typeof getInlineRewriteManager> | null = null;
+    let metricsUI: ReturnType<typeof getMetricsUIManager> | null = null;
+    let grammarEngine = await (isGrammarEnabled(features)
+      ? createGrammarEngine()
+      : Promise.resolve(null));
 
-    /**
-     * Setup suggestion UI for a focused surface
-     */
-    function setupSurface(surface: EditableSurface | null) {
-      // Cleanup previous watcher
+    let currentSurface: EditableSurface | null = null;
+    let currentWatchDisposer: (() => void) | null = null;
+    let grammarTimer: ReturnType<typeof setTimeout> | null = null;
+    let activeGrammarRequest = 0;
+
+    function isGrammarEnabled(settings: FeatureSettings): boolean {
+      return (
+        settings.grammarCheck ||
+        settings.spellCheck ||
+        settings.punctuationCheck
+      );
+    }
+
+    function isRewriteEnabled(settings: FeatureSettings): boolean {
+      return settings.rewritingSuggestions;
+    }
+
+    function isMetricsEnabled(settings: FeatureSettings): boolean {
+      return settings.wordCount;
+    }
+
+    function resetGrammarTimer() {
+      if (grammarTimer) {
+        clearTimeout(grammarTimer);
+        grammarTimer = null;
+      }
+    }
+
+    async function ensureGrammarEngineReady() {
+      if (grammarEngine || !isGrammarEnabled(features)) return;
+      grammarEngine = await createGrammarEngine();
+      if (!grammarEngine) {
+        console.warn('[LangFix] Grammar engine unavailable (no provider set)');
+      }
+    }
+
+    const ensureInlineRewriteReady = () => {
+      if (isRewriteEnabled(features)) {
+        if (!inlineRewrite) {
+          inlineRewrite = getInlineRewriteManager();
+          inlineRewrite.init();
+        }
+      } else if (inlineRewrite) {
+        inlineRewrite.close();
+        disposeInlineRewriteManager();
+        inlineRewrite = null;
+      }
+    };
+
+    const ensureMetricsReady = async () => {
+      if (isMetricsEnabled(features)) {
+        if (!metricsUI) {
+          metricsUI = getMetricsUIManager();
+          await metricsUI.init();
+        }
+      } else if (metricsUI) {
+        metricsUI.setSurface(null);
+        disposeMetricsUIManager();
+        metricsUI = null;
+      }
+    };
+
+    async function runGrammarCheck(surface: EditableSurface) {
+      if (!isGrammarEnabled(features)) {
+        suggestionUI.clearErrors();
+        return;
+      }
+
+      await ensureGrammarEngineReady();
+
+      if (!grammarEngine) {
+        suggestionUI.clearErrors();
+        return;
+      }
+
+      const requestId = ++activeGrammarRequest;
+      const text = surface.getText();
+
+      if (text.trim().length < 3) {
+        suggestionUI.clearErrors();
+        return;
+      }
+
+      const result = await grammarEngine.checkText(text);
+
+      if (
+        requestId !== activeGrammarRequest ||
+        surface.id !== currentSurface?.id
+      ) {
+        return;
+      }
+
+      suggestionUI.setErrors(result.errors);
+    }
+
+    function scheduleGrammarCheck(surface: EditableSurface) {
+      resetGrammarTimer();
+
+      const run = () => {
+        void runGrammarCheck(surface);
+      };
+
+      if (behavior.autoCheck) {
+        const delay = Math.max(behavior.checkDelay ?? 0, 0);
+        grammarTimer = setTimeout(run, delay);
+      } else {
+        run();
+      }
+    }
+
+    function cleanupSurfaceWatcher() {
       if (currentWatchDisposer) {
         currentWatchDisposer();
         currentWatchDisposer = null;
       }
-
-      // Update suggestion UI surface
-      suggestionUI.setSurface(surface);
-
-      // Update inline rewrite surface
-      inlineRewrite.setSurface(surface);
-
-      // Update metrics UI surface
-      metricsUI.setSurface(surface);
-
-      if (surface) {
-        // Watch for text changes to clear/update errors
-        currentWatchDisposer = textManager.watchSurface(
-          surface,
-          (_text, _selection) => {
-            // Clear errors when text changes - grammar engine will re-check
-            // This will be connected to the grammar engine in a future task
-            suggestionUI.clearErrors();
-          },
-        );
-      }
     }
 
-    // Initialize when DOM is ready
-    function initialize() {
-      textManager.init();
-      suggestionUI.init();
-      inlineRewrite.init();
-      metricsUI.init();
-      summarization.init();
+    function setupSurface(surface: EditableSurface | null) {
+      cleanupSurfaceWatcher();
+      resetGrammarTimer();
+      currentSurface = surface;
 
-      // Track focus changes to update suggestion UI
-      textManager.onFocusChange((current, _previous) => {
-        setupSurface(current);
+      suggestionUI.setSurface(surface);
+      inlineRewrite?.setSurface(
+        surface && isRewriteEnabled(features) ? surface : null,
+      );
+      metricsUI?.setSurface(
+        surface && isMetricsEnabled(features) ? surface : null,
+      );
+
+      if (!surface) {
+        suggestionUI.clearErrors();
+        return;
+      }
+
+      if (!isGrammarEnabled(features)) {
+        suggestionUI.clearErrors();
+        return;
+      }
+
+      void runGrammarCheck(surface);
+
+      currentWatchDisposer = textManager.watchSurface(surface, () => {
+        suggestionUI.clearErrors();
+        if (isGrammarEnabled(features)) {
+          scheduleGrammarCheck(surface);
+        }
       });
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initialize);
-    } else {
-      initialize();
+    async function initialize() {
+      textManager.init();
+      suggestionUI.init();
+      summarization.init();
+
+      ensureInlineRewriteReady();
+      await ensureMetricsReady();
+
+      textManager.onFocusChange((current, _previous) => {
+        setupSurface(current);
+      });
+
+      setupSurface(textManager.getFocusedSurface());
     }
 
-    // Log when surfaces are discovered (development only)
+    featuresStorage.watch((updated) => {
+      features = { ...DEFAULT_FEATURES, ...updated };
+      ensureInlineRewriteReady();
+      void ensureMetricsReady();
+      setupSurface(textManager.getFocusedSurface());
+    });
+
+    behaviorStorage.watch((updated) => {
+      behavior = { ...behavior, ...updated };
+      if (currentSurface && isGrammarEnabled(features)) {
+        void runGrammarCheck(currentSurface);
+      }
+    });
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        void initialize();
+      });
+    } else {
+      void initialize();
+    }
+
     if (import.meta.env.DEV) {
       textManager.onSurfaceAdd((surface) => {
         console.log('[LangFix] Surface added:', surface.type, surface.root);
@@ -117,61 +258,33 @@ export default defineContentScript({
           console.log('[LangFix] Focus lost');
         }
       });
-    }
 
-    // Expose managers for debugging in development
-    if (import.meta.env.DEV) {
       (window as unknown as { __langfix: unknown }).__langfix = {
         textManager,
         suggestionUI,
         inlineRewrite,
         metricsUI,
         summarization,
-        // Helper to manually test inline rewrite
-        testRewrite: () => {
-          inlineRewrite.triggerRewrite();
+        triggerGrammarCheck: () => {
+          const surface = textManager.getFocusedSurface();
+          if (surface) {
+            void runGrammarCheck(surface);
+          }
         },
-        // Helper to manually test summarization
+        testRewrite: () => {
+          inlineRewrite?.triggerRewrite();
+        },
         testSummarize: () => {
           summarization.triggerSummarize();
-        },
-        // Helper to manually test suggestion UI with mock errors
-        testErrors: () => {
-          const surface = textManager.getFocusedSurface();
-          if (!surface) {
-            console.log('[LangFix] No focused surface');
-            return;
-          }
-          const text = surface.getText();
-          // Create mock errors for testing
-          const mockErrors = [
-            {
-              type: 'spelling' as const,
-              op: 'replace' as const,
-              original: text.slice(0, 5) || 'test',
-              suggestion: 'fixed',
-              startIndex: 0,
-              endIndex: Math.min(5, text.length),
-              severity: 'error' as const,
-              explanation: 'This is a test spelling error',
-              alternatives: ['option1', 'option2'],
-            },
-          ];
-          suggestionUI.setErrors(mockErrors);
-          console.log('[LangFix] Added test errors');
-        },
-        // Helper to test metrics display
-        testMetrics: () => {
-          console.log('[LangFix] Current metrics:', metricsUI.getMetrics());
         },
       };
     }
 
-    // Cleanup on page unload
     window.addEventListener('beforeunload', () => {
-      if (currentWatchDisposer) {
-        currentWatchDisposer();
-      }
+      cleanupSurfaceWatcher();
+      resetGrammarTimer();
+      suggestionUI.clearErrors();
+
       disposeSuggestionUIManager();
       disposeInlineRewriteManager();
       disposeMetricsUIManager();
