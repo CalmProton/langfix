@@ -143,16 +143,7 @@ export const AIErrorCode = Type.Union([
 ]);
 export type AIErrorCode = Static<typeof AIErrorCode>;
 
-export class AIProviderError extends Error {
-  constructor(
-    message: string,
-    public code: AIErrorCode,
-    public retryable: boolean = false,
-  ) {
-    super(message);
-    this.name = 'AIProviderError';
-  }
-}
+// Note: AIProviderError class is defined in ../ai-providers/errors.ts
 
 // ============================================================================
 // Default Models by Provider

@@ -15,3 +15,6 @@ export * from './storage';
 // TOON utilities
 export * from './toon';
 export * from './toon/prompts';
+
+// Text Extraction
+export * from './text-extraction';

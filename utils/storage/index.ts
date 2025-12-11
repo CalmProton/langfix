@@ -2,7 +2,7 @@
  * Storage Layer
  * WXT storage definitions for settings, dictionary, and session data
  */
-import { storage } from 'wxt/storage';
+import { storage } from '#imports';
 import {
   type ProviderSettings,
   type FeatureSettings,
