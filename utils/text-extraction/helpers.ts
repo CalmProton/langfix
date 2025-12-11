@@ -84,7 +84,8 @@ export function isVisible(el: HTMLElement): boolean {
 
   // Check CSS visibility properties
   if (style.display === 'none') return false;
-  if (style.visibility === 'hidden' || style.visibility === 'collapse') return false;
+  if (style.visibility === 'hidden' || style.visibility === 'collapse')
+    return false;
   if (Number.parseFloat(style.opacity) === 0) return false;
 
   // Check dimensions
@@ -125,7 +126,11 @@ export function hasNonEditableAncestor(el: HTMLElement): boolean {
 export function isSecretField(el: HTMLElement): boolean {
   if (el instanceof HTMLInputElement) {
     if (el.type === 'password') return true;
-    if (el.autocomplete === 'current-password' || el.autocomplete === 'new-password') return true;
+    if (
+      el.autocomplete === 'current-password' ||
+      el.autocomplete === 'new-password'
+    )
+      return true;
   }
   if (el.getAttribute('aria-secret') === 'true') return true;
   return false;
@@ -163,7 +168,8 @@ export function isEditableElement(el: HTMLElement): boolean {
   // Check ARIA roles
   const role = el.getAttribute('role');
   if (role === 'textbox') return true;
-  if (role === 'combobox' && el.getAttribute('aria-multiline') === 'true') return true;
+  if (role === 'combobox' && el.getAttribute('aria-multiline') === 'true')
+    return true;
 
   return false;
 }
@@ -171,12 +177,15 @@ export function isEditableElement(el: HTMLElement): boolean {
 /**
  * Determine the surface type for an element
  */
-export function getSurfaceType(el: HTMLElement): 'input' | 'textarea' | 'contenteditable' | null {
+export function getSurfaceType(
+  el: HTMLElement,
+): 'input' | 'textarea' | 'contenteditable' | null {
   if (el instanceof HTMLTextAreaElement) return 'textarea';
   if (el instanceof HTMLInputElement) return 'input';
 
   const contentEditable = el.getAttribute('contenteditable');
-  if (contentEditable === 'true' || contentEditable === '') return 'contenteditable';
+  if (contentEditable === 'true' || contentEditable === '')
+    return 'contenteditable';
 
   const role = el.getAttribute('role');
   if (role === 'textbox' || role === 'combobox') return 'contenteditable';
@@ -203,7 +212,10 @@ function isBlockNode(node: Node): boolean {
  */
 export function getPlainText(el: HTMLElement): string {
   const parts: string[] = [];
-  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+  const walker = document.createTreeWalker(
+    el,
+    NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT,
+  );
 
   let prevWasBlock = false;
 
@@ -236,9 +248,16 @@ export function getPlainText(el: HTMLElement): string {
 /**
  * Get the text offset for a DOM position within a contenteditable
  */
-export function getTextOffset(root: HTMLElement, targetNode: Node, targetOffset: number): number {
+export function getTextOffset(
+  root: HTMLElement,
+  targetNode: Node,
+  targetOffset: number,
+): number {
   let offset = 0;
-  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+  const walker = document.createTreeWalker(
+    root,
+    NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT,
+  );
 
   let prevWasBlock = false;
 
@@ -266,7 +285,6 @@ export function getTextOffset(root: HTMLElement, targetNode: Node, targetOffset:
 
     // If target is a child of current node, check children
     if (node.contains(targetNode)) {
-      continue;
     }
   }
 
@@ -279,14 +297,17 @@ export function getTextOffset(root: HTMLElement, targetNode: Node, targetOffset:
 export function createRangeFromOffsets(
   root: HTMLElement,
   startOffset: number,
-  endOffset: number
+  endOffset: number,
 ): Range | null {
   const range = document.createRange();
   let currentOffset = 0;
   let startSet = false;
   let endSet = false;
 
-  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+  const walker = document.createTreeWalker(
+    root,
+    NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT,
+  );
   let prevWasBlock = false;
 
   for (let node = walker.nextNode(); node !== null; node = walker.nextNode()) {
@@ -345,7 +366,7 @@ export function createRangeFromOffsets(
  */
 export function debounce<T extends (...args: unknown[]) => void>(
   fn: T,
-  ms: number
+  ms: number,
 ): { (...args: Parameters<T>): void; cancel: () => void } {
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
@@ -391,6 +412,6 @@ export function dispatchChangeEvent(target: HTMLElement): void {
     new Event('change', {
       bubbles: true,
       cancelable: true,
-    })
+    }),
   );
 }

@@ -2,6 +2,8 @@
  * Input/Textarea Surface Adapter
  * Implements EditableSurface for standard input and textarea elements
  */
+
+import { debounce, dispatchInputEvent, generateSurfaceId } from './helpers';
 import type {
   ChangeCallback,
   ChangeOptions,
@@ -10,7 +12,6 @@ import type {
   SurfaceType,
   TextSelection,
 } from './types';
-import { debounce, dispatchInputEvent, generateSurfaceId } from './helpers';
 
 const DEFAULT_DEBOUNCE_MS = 350;
 
@@ -98,9 +99,12 @@ export class InputTextareaSurface implements EditableSurface {
  * Create an InputTextareaSurface from an element if it's a valid input/textarea
  */
 export function createInputTextareaSurface(
-  element: HTMLElement
+  element: HTMLElement,
 ): InputTextareaSurface | null {
-  if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
+  if (
+    element instanceof HTMLInputElement ||
+    element instanceof HTMLTextAreaElement
+  ) {
     return new InputTextareaSurface(element);
   }
   return null;

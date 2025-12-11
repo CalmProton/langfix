@@ -2,10 +2,19 @@
  * Editable Surface Scanner
  * Discovers and tracks editable elements across the page
  */
-import type { EditableSurface, TextExtractionConfig, ScanResult } from './types';
-import { EDITABLE_SELECTORS, isEditableElement, getSurfaceType } from './helpers';
-import { InputTextareaSurface } from './input-surface';
+
 import { ContentEditableSurface } from './contenteditable-surface';
+import {
+  EDITABLE_SELECTORS,
+  getSurfaceType,
+  isEditableElement,
+} from './helpers';
+import { InputTextareaSurface } from './input-surface';
+import type {
+  EditableSurface,
+  ScanResult,
+  TextExtractionConfig,
+} from './types';
 
 // ============================================================================
 // Surface Factory
@@ -19,7 +28,9 @@ export function createSurface(element: HTMLElement): EditableSurface | null {
   if (!surfaceType) return null;
 
   if (surfaceType === 'input' || surfaceType === 'textarea') {
-    return new InputTextareaSurface(element as HTMLInputElement | HTMLTextAreaElement);
+    return new InputTextareaSurface(
+      element as HTMLInputElement | HTMLTextAreaElement,
+    );
   }
 
   if (surfaceType === 'contenteditable') {
@@ -57,7 +68,7 @@ export function collectEditables(root: ParentNode): HTMLElement[] {
 function scanRoot(
   root: ParentNode,
   config: TextExtractionConfig,
-  visited: Set<ParentNode>
+  visited: Set<ParentNode>,
 ): HTMLElement[] {
   // Avoid infinite loops
   if (visited.has(root)) return [];
@@ -105,7 +116,8 @@ export class EditableScanner {
   private surfaces: Map<HTMLElement, EditableSurface> = new Map();
   private observer: MutationObserver | null = null;
   private onAddCallbacks: Set<(surface: EditableSurface) => void> = new Set();
-  private onRemoveCallbacks: Set<(surface: EditableSurface) => void> = new Set();
+  private onRemoveCallbacks: Set<(surface: EditableSurface) => void> =
+    new Set();
 
   constructor(config: TextExtractionConfig = {}) {
     this.config = {
@@ -214,7 +226,11 @@ export class EditableScanner {
           mutation.target.nodeType === Node.ELEMENT_NODE
         ) {
           const attr = mutation.attributeName;
-          if (attr === 'contenteditable' || attr === 'disabled' || attr === 'type') {
+          if (
+            attr === 'contenteditable' ||
+            attr === 'disabled' ||
+            attr === 'type'
+          ) {
             shouldRescan = true;
           }
         }

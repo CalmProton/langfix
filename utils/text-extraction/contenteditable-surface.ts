@@ -2,14 +2,7 @@
  * ContentEditable Surface Adapter
  * Implements EditableSurface for contenteditable elements
  */
-import type {
-  ChangeCallback,
-  ChangeOptions,
-  Disposer,
-  EditableSurface,
-  SurfaceType,
-  TextSelection,
-} from './types';
+
 import {
   createRangeFromOffsets,
   debounce,
@@ -18,6 +11,14 @@ import {
   getPlainText,
   getTextOffset,
 } from './helpers';
+import type {
+  ChangeCallback,
+  ChangeOptions,
+  Disposer,
+  EditableSurface,
+  SurfaceType,
+  TextSelection,
+} from './types';
 
 const DEFAULT_DEBOUNCE_MS = 350;
 
@@ -51,7 +52,11 @@ export class ContentEditableSurface implements EditableSurface {
       return { start: 0, end: 0 };
     }
 
-    const start = getTextOffset(this.root, range.startContainer, range.startOffset);
+    const start = getTextOffset(
+      this.root,
+      range.startContainer,
+      range.startOffset,
+    );
     const end = getTextOffset(this.root, range.endContainer, range.endOffset);
 
     return { start, end };
@@ -128,7 +133,10 @@ export class ContentEditableSurface implements EditableSurface {
   }
 
   isFocused(): boolean {
-    return document.activeElement === this.root || this.root.contains(document.activeElement);
+    return (
+      document.activeElement === this.root ||
+      this.root.contains(document.activeElement)
+    );
   }
 }
 
@@ -136,7 +144,7 @@ export class ContentEditableSurface implements EditableSurface {
  * Create a ContentEditableSurface from an element if it's a valid contenteditable
  */
 export function createContentEditableSurface(
-  element: HTMLElement
+  element: HTMLElement,
 ): ContentEditableSurface | null {
   const contentEditable = element.getAttribute('contenteditable');
   if (contentEditable === 'true' || contentEditable === '') {

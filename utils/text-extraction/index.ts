@@ -6,57 +6,64 @@
  * editable text surfaces across web pages.
  */
 
+export {
+  ContentEditableSurface,
+  createContentEditableSurface,
+} from './contenteditable-surface';
+export type { FocusCallback } from './focus-tracker';
+// Focus Tracker
+export { createFocusTracker, FocusTracker } from './focus-tracker';
+// Helpers
+export {
+  CODE_EDITOR_MARKERS,
+  createRangeFromOffsets,
+  debounce,
+  dispatchChangeEvent,
+  dispatchInputEvent,
+  EDITABLE_SELECTORS,
+  getPlainText,
+  getSurfaceType,
+  getTextOffset,
+  hasNonEditableAncestor,
+  isEditableElement,
+  isInCodeEditor,
+  isSecretField,
+  isVisible,
+  PLATFORM_SELECTORS,
+} from './helpers';
+// Surface Adapters
+export {
+  createInputTextareaSurface,
+  InputTextareaSurface,
+} from './input-surface';
+// Scanner
+export {
+  collectEditables,
+  createScanner,
+  createSurface,
+  EditableScanner,
+} from './scanner';
 // Types
 export type {
-  EditableSurface,
-  TextSelection,
-  ExtractedText,
   ChangeCallback,
   ChangeOptions,
   Disposer,
-  SurfaceType,
+  EditableSurface,
+  ExtractedText,
   PlatformConfig,
-  TextExtractionConfig,
   ScanResult,
+  SurfaceType,
+  TextExtractionConfig,
+  TextSelection,
 } from './types';
-
-// Helpers
-export {
-  EDITABLE_SELECTORS,
-  CODE_EDITOR_MARKERS,
-  PLATFORM_SELECTORS,
-  isVisible,
-  isInCodeEditor,
-  hasNonEditableAncestor,
-  isSecretField,
-  isEditableElement,
-  getSurfaceType,
-  getPlainText,
-  getTextOffset,
-  createRangeFromOffsets,
-  debounce,
-  dispatchInputEvent,
-  dispatchChangeEvent,
-} from './helpers';
-
-// Surface Adapters
-export { InputTextareaSurface, createInputTextareaSurface } from './input-surface';
-export { ContentEditableSurface, createContentEditableSurface } from './contenteditable-surface';
-
-// Scanner
-export { EditableScanner, createScanner, createSurface, collectEditables } from './scanner';
-
-// Focus Tracker
-export { FocusTracker, createFocusTracker } from './focus-tracker';
-export type { FocusCallback } from './focus-tracker';
 
 // ============================================================================
 // Convenience Factory
 // ============================================================================
 
-import type { TextExtractionConfig, EditableSurface } from './types';
+import { type FocusCallback, FocusTracker } from './focus-tracker';
 import { EditableScanner } from './scanner';
-import { FocusTracker, type FocusCallback } from './focus-tracker';
+import type { EditableSurface, TextExtractionConfig } from './types';
 
 /**
  * Unified text extraction manager
@@ -131,7 +138,7 @@ export class TextExtractionManager {
    */
   watchSurface(
     surface: EditableSurface,
-    callback: (text: string, selection: { start: number; end: number }) => void
+    callback: (text: string, selection: { start: number; end: number }) => void,
   ): () => void {
     // Remove existing watcher if any
     const existingDisposer = this.changeDisposers.get(surface.id);
@@ -178,7 +185,7 @@ export class TextExtractionManager {
  * Create a new TextExtractionManager instance
  */
 export function createTextExtractionManager(
-  config?: TextExtractionConfig
+  config?: TextExtractionConfig,
 ): TextExtractionManager {
   return new TextExtractionManager(config);
 }

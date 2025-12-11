@@ -2,7 +2,7 @@
  * AI Provider Types
  * TypeBox schemas for AI provider configuration and communication
  */
-import { Type, type Static } from '@sinclair/typebox';
+import { type Static, Type } from '@sinclair/typebox';
 
 // ============================================================================
 // Provider Configuration Types

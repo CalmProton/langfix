@@ -2,16 +2,17 @@
  * Focus Tracker
  * Tracks the currently focused editable surface
  */
-import type { EditableSurface } from './types';
-import type { EditableScanner } from './scanner';
+
 import { isEditableElement } from './helpers';
+import type { EditableScanner } from './scanner';
+import type { EditableSurface } from './types';
 
 /**
  * Callback for focus changes
  */
 export type FocusCallback = (
   current: EditableSurface | null,
-  previous: EditableSurface | null
+  previous: EditableSurface | null,
 ) => void;
 
 /**
@@ -161,7 +162,7 @@ export class FocusTracker {
 
   private notifyChange(
     current: EditableSurface | null,
-    previous: EditableSurface | null
+    previous: EditableSurface | null,
   ): void {
     for (const callback of this.callbacks) {
       try {

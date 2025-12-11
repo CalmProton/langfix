@@ -3,18 +3,15 @@
  * Main export file for all utility modules
  */
 
-// Types
-export * from './types';
-
 // AI Providers
 export * from './ai-providers';
-
 // Storage
 export * from './storage';
+// Text Extraction
+export * from './text-extraction';
 
 // TOON utilities
 export * from './toon';
 export * from './toon/prompts';
-
-// Text Extraction
-export * from './text-extraction';
+// Types
+export * from './types';
