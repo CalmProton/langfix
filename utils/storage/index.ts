@@ -3,6 +3,12 @@
  * WXT storage definitions for settings, dictionary, and session data
  */
 import { storage } from '#imports';
+import type {
+  CustomGenre,
+  GenreHistoryEntry,
+  UserGenrePreferences,
+} from '../genre-engine/types';
+import { DEFAULT_GENRE_PREFERENCES } from '../genre-engine/types';
 import type { CustomRule, DictionaryEntry } from '../types';
 import {
   type AppearanceSettings,
@@ -80,6 +86,50 @@ export const styleAnalysisSettingsStorage =
   storage.defineItem<StyleAnalysisSettings>('sync:styleAnalysis', {
     fallback: DEFAULT_STYLE_ANALYSIS_SETTINGS,
   });
+
+// ============================================================================
+// Genre Settings (sync & local storage)
+// ============================================================================
+
+/**
+ * Genre user preferences - synced across devices
+ */
+export const genrePreferencesStorage = storage.defineItem<UserGenrePreferences>(
+  'sync:genrePreferences',
+  {
+    fallback: DEFAULT_GENRE_PREFERENCES,
+  },
+);
+
+/**
+ * Custom genres - synced across devices
+ */
+export const customGenresStorage = storage.defineItem<CustomGenre[]>(
+  'sync:customGenres',
+  {
+    fallback: [],
+  },
+);
+
+/**
+ * Current active genre ID - stored locally for quick access
+ */
+export const currentGenreStorage = storage.defineItem<string>(
+  'local:currentGenre',
+  {
+    fallback: 'auto',
+  },
+);
+
+/**
+ * Genre history - stored locally (per-domain genre usage)
+ */
+export const genreHistoryStorage = storage.defineItem<GenreHistoryEntry[]>(
+  'local:genreHistory',
+  {
+    fallback: [],
+  },
+);
 
 // ============================================================================
 // Dictionary & Rules (sync storage with limits)
@@ -295,5 +345,9 @@ export async function clearAllStorage(): Promise<void> {
     dictionaryStorage.removeValue(),
     customRulesStorage.removeValue(),
     sessionIgnoredWordsStorage.removeValue(),
+    genrePreferencesStorage.removeValue(),
+    customGenresStorage.removeValue(),
+    currentGenreStorage.removeValue(),
+    genreHistoryStorage.removeValue(),
   ]);
 }

@@ -5,6 +5,8 @@
 
 // AI Providers
 export * from './ai-providers';
+// Genre Engine
+export * from './genre-engine';
 // Grammar Engine
 export * from './grammar-engine';
 // Readability Engine
