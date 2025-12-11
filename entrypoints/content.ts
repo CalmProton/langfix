@@ -4,6 +4,10 @@ import {
   getInlineRewriteManager,
 } from '@/utils/inline-rewrite';
 import {
+  disposeMetricsUIManager,
+  getMetricsUIManager,
+} from '@/utils/metrics';
+import {
   disposeSuggestionUIManager,
   getSuggestionUIManager,
 } from '@/utils/suggestion-ui';
@@ -27,6 +31,9 @@ export default defineContentScript({
     // Create the inline rewrite manager
     const inlineRewrite = getInlineRewriteManager();
 
+    // Create the metrics UI manager
+    const metricsUI = getMetricsUIManager();
+
     // Track current surface for change watching
     let currentWatchDisposer: (() => void) | null = null;
 
@@ -46,6 +53,9 @@ export default defineContentScript({
       // Update inline rewrite surface
       inlineRewrite.setSurface(surface);
 
+      // Update metrics UI surface
+      metricsUI.setSurface(surface);
+
       if (surface) {
         // Watch for text changes to clear/update errors
         currentWatchDisposer = textManager.watchSurface(
@@ -64,6 +74,7 @@ export default defineContentScript({
       textManager.init();
       suggestionUI.init();
       inlineRewrite.init();
+      metricsUI.init();
 
       // Track focus changes to update suggestion UI
       textManager.onFocusChange((current, _previous) => {
@@ -106,6 +117,7 @@ export default defineContentScript({
         textManager,
         suggestionUI,
         inlineRewrite,
+        metricsUI,
         // Helper to manually test inline rewrite
         testRewrite: () => {
           inlineRewrite.triggerRewrite();
@@ -135,6 +147,10 @@ export default defineContentScript({
           suggestionUI.setErrors(mockErrors);
           console.log('[LangFix] Added test errors');
         },
+        // Helper to test metrics display
+        testMetrics: () => {
+          console.log('[LangFix] Current metrics:', metricsUI.getMetrics());
+        },
       };
     }
 
@@ -145,6 +161,7 @@ export default defineContentScript({
       }
       disposeSuggestionUIManager();
       disposeInlineRewriteManager();
+      disposeMetricsUIManager();
     });
 
     console.log('[LangFix] Content script initialized');

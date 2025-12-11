@@ -272,6 +272,25 @@ export const templateUsageStorage = storage.defineItem<Record<string, number>>(
 );
 
 // ============================================================================
+// Metrics Settings
+// ============================================================================
+
+import {
+  DEFAULT_METRICS_SETTINGS,
+  type MetricsSettings,
+} from '../metrics/types';
+
+/**
+ * Metrics display settings - synced across devices
+ */
+export const metricsSettingsStorage = storage.defineItem<MetricsSettings>(
+  'sync:metricsSettings',
+  {
+    fallback: DEFAULT_METRICS_SETTINGS,
+  },
+);
+
+// ============================================================================
 // Session Storage (cleared on browser close)
 // ============================================================================
 

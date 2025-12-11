@@ -11,6 +11,8 @@ export * from './dictionary';
 export * from './genre-engine';
 // Grammar Engine
 export * from './grammar-engine';
+// Metrics (word count, reading time)
+export * from './metrics';
 // Multilingual Support
 export * from './multilingual';
 // Readability Engine
