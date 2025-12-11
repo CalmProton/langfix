@@ -24,6 +24,50 @@ import type {
 } from '@/utils/types';
 import { invalidateDictionaryCache } from '@/utils/dictionary/filter';
 
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
+
 // ============================================================================
 // State
 // ============================================================================
@@ -441,589 +485,581 @@ function toggleContextSelection(ctx: string, list: string[]) {
 <template>
   <div class="space-y-8">
     <!-- Header -->
-    <div>
+    <div class="space-y-1">
+      <p class="text-sm uppercase tracking-[0.14em] text-muted-foreground">Dictionary</p>
       <h2 class="text-2xl font-semibold">Personal Dictionary & Rules</h2>
-      <p class="text-muted-foreground mt-1">
+      <p class="text-muted-foreground text-sm">
         Manage your personal dictionary and custom grammar rules.
       </p>
     </div>
 
     <!-- Section Tabs -->
-    <div class="flex gap-2 border-b">
-      <button
-        @click="activeSection = 'dictionary'"
-        class="px-4 py-2 font-medium transition-colors border-b-2 -mb-px"
-        :class="
-          activeSection === 'dictionary'
-            ? 'border-primary text-foreground'
-            : 'border-transparent text-muted-foreground hover:text-foreground'
-        "
-      >
-        📖 Dictionary ({{ dictionaryStats.total }})
-      </button>
-      <button
-        @click="activeSection = 'rules'"
-        class="px-4 py-2 font-medium transition-colors border-b-2 -mb-px"
-        :class="
-          activeSection === 'rules'
-            ? 'border-primary text-foreground'
-            : 'border-transparent text-muted-foreground hover:text-foreground'
-        "
-      >
-        📏 Custom Rules ({{ rulesStats.enabled }}/{{ rulesStats.total }})
-      </button>
-    </div>
+    <Tabs v-model="activeSection" class="space-y-6">
+      <TabsList class="w-full justify-start">
+        <TabsTrigger value="dictionary" class="gap-2">
+          <span>📖</span>
+          <span>Dictionary ({{ dictionaryStats.total }})</span>
+        </TabsTrigger>
+        <TabsTrigger value="rules" class="gap-2">
+          <span>📏</span>
+          <span>Custom Rules ({{ rulesStats.enabled }}/{{ rulesStats.total }})</span>
+        </TabsTrigger>
+      </TabsList>
 
-    <!-- Dictionary Section -->
-    <div v-if="activeSection === 'dictionary'" class="space-y-6">
-      <!-- Actions Bar -->
-      <div class="flex flex-wrap items-center gap-3">
-        <button
-          @click="showAddWordDialog = true"
-          class="btn btn-primary"
-        >
-          ➕ Add Word
-        </button>
-        <button
-          @click="showAddContextDialog = true"
-          class="btn btn-outline"
-        >
-          🏷️ Manage Contexts
-        </button>
-        <div class="flex-1" />
-        <button @click="exportData" class="btn btn-outline">
-          📤 Export
-        </button>
-        <button @click="showImportDialog = true" class="btn btn-outline">
-          📥 Import
-        </button>
-      </div>
-
-      <!-- Search & Filter -->
-      <div class="flex gap-3">
-        <input
-          v-model="dictionarySearch"
-          type="text"
-          class="input flex-1"
-          placeholder="Search words..."
-        />
-        <select v-model="dictionaryContextFilter" class="select w-40">
-          <option value="all">All Contexts</option>
-          <option v-for="ctx in contexts" :key="ctx.id" :value="ctx.id">
-            {{ ctx.name }}
-          </option>
-        </select>
-      </div>
-
-      <!-- Stats -->
-      <div class="grid grid-cols-3 gap-4">
-        <div class="card p-4 text-center">
-          <div class="text-2xl font-bold">{{ dictionaryStats.total }}</div>
-          <div class="text-sm text-muted-foreground">Total Words</div>
+      <!-- Dictionary Section -->
+      <TabsContent value="dictionary" class="space-y-6">
+        <!-- Actions Bar -->
+        <div class="flex flex-wrap items-center gap-3">
+          <Button @click="showAddWordDialog = true">
+            ➕ Add Word
+          </Button>
+          <Button variant="outline" @click="showAddContextDialog = true">
+            🏷️ Manage Contexts
+          </Button>
+          <div class="flex-1" />
+          <Button variant="outline" @click="exportData">
+            📤 Export
+          </Button>
+          <Button variant="outline" @click="showImportDialog = true">
+            📥 Import
+          </Button>
         </div>
-        <div class="card p-4 text-center">
-          <div class="text-2xl font-bold">{{ dictionaryStats.caseSensitive }}</div>
-          <div class="text-sm text-muted-foreground">Case Sensitive</div>
-        </div>
-        <div class="card p-4 text-center">
-          <div class="text-2xl font-bold">{{ dictionaryStats.withContext }}</div>
-          <div class="text-sm text-muted-foreground">With Context</div>
-        </div>
-      </div>
 
-      <!-- Dictionary Table -->
-      <div class="card overflow-hidden">
-        <div v-if="filteredDictionary.length === 0" class="p-8 text-center text-muted-foreground">
-          <p v-if="dictionary.length === 0">No words in your dictionary yet.</p>
-          <p v-else>No words match your search.</p>
+        <!-- Search & Filter -->
+        <div class="flex gap-3">
+          <Input
+            v-model="dictionarySearch"
+            type="text"
+            class="flex-1"
+            placeholder="Search words..."
+          />
+          <Select v-model="dictionaryContextFilter">
+            <SelectTrigger class="w-40">
+              <SelectValue placeholder="All Contexts" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Contexts</SelectItem>
+              <SelectItem v-for="ctx in contexts" :key="ctx.id" :value="ctx.id">
+                {{ ctx.name }}
+              </SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-        <table v-else class="w-full">
-          <thead class="bg-muted/50">
-            <tr>
-              <th class="px-4 py-3 text-left text-sm font-medium">Word</th>
-              <th class="px-4 py-3 text-left text-sm font-medium">Options</th>
-              <th class="px-4 py-3 text-left text-sm font-medium">Context</th>
-              <th class="px-4 py-3 text-left text-sm font-medium">Added</th>
-              <th class="px-4 py-3 text-right text-sm font-medium">Actions</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y">
-            <tr
-              v-for="entry in filteredDictionary"
-              :key="entry.id"
-              class="hover:bg-muted/30"
-            >
-              <td class="px-4 py-3">
-                <span class="font-mono">{{ entry.word }}</span>
-                <p v-if="entry.notes" class="text-xs text-muted-foreground mt-1">
-                  {{ entry.notes }}
-                </p>
-              </td>
-              <td class="px-4 py-3">
-                <span
-                  v-if="entry.caseSensitive"
-                  class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200"
-                >
-                  Case Sensitive
-                </span>
-              </td>
-              <td class="px-4 py-3">
-                <div class="flex flex-wrap gap-1">
-                  <span
-                    v-for="ctx in entry.context"
-                    :key="ctx"
-                    class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-primary/10 text-primary"
-                  >
-                    {{ contexts.find(c => c.id === ctx)?.name || ctx }}
-                  </span>
-                  <span v-if="!entry.context?.length" class="text-muted-foreground text-sm">—</span>
-                </div>
-              </td>
-              <td class="px-4 py-3 text-sm text-muted-foreground">
-                {{ formatDate(entry.addedAt) }}
-              </td>
-              <td class="px-4 py-3 text-right">
-                <button
-                  @click="deleteWord(entry.id!)"
-                  class="text-destructive hover:underline text-sm"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
 
-    <!-- Custom Rules Section -->
-    <div v-if="activeSection === 'rules'" class="space-y-6">
-      <!-- Actions Bar -->
-      <div class="flex flex-wrap items-center gap-3">
-        <button
-          @click="showAddRuleDialog = true"
-          class="btn btn-primary"
-        >
-          ➕ Add Rule
-        </button>
-        <div class="flex-1" />
-        <button @click="exportData" class="btn btn-outline">
-          📤 Export
-        </button>
-        <button @click="showImportDialog = true" class="btn btn-outline">
-          📥 Import
-        </button>
-      </div>
-
-      <!-- Search -->
-      <input
-        v-model="rulesSearch"
-        type="text"
-        class="input w-full"
-        placeholder="Search rules..."
-      />
-
-      <!-- Stats -->
-      <div class="grid grid-cols-4 gap-4">
-        <div class="card p-4 text-center">
-          <div class="text-2xl font-bold">{{ rulesStats.enabled }}/{{ rulesStats.total }}</div>
-          <div class="text-sm text-muted-foreground">Active Rules</div>
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-4">
+          <Card class="text-center">
+            <CardContent class="p-4">
+              <div class="text-2xl font-bold">{{ dictionaryStats.total }}</div>
+              <div class="text-sm text-muted-foreground">Total Words</div>
+            </CardContent>
+          </Card>
+          <Card class="text-center">
+            <CardContent class="p-4">
+              <div class="text-2xl font-bold">{{ dictionaryStats.caseSensitive }}</div>
+              <div class="text-sm text-muted-foreground">Case Sensitive</div>
+            </CardContent>
+          </Card>
+          <Card class="text-center">
+            <CardContent class="p-4">
+              <div class="text-2xl font-bold">{{ dictionaryStats.withContext }}</div>
+              <div class="text-sm text-muted-foreground">With Context</div>
+            </CardContent>
+          </Card>
         </div>
-        <div class="card p-4 text-center">
-          <div class="text-2xl font-bold text-yellow-600">{{ rulesStats.ignore }}</div>
-          <div class="text-sm text-muted-foreground">Ignore</div>
-        </div>
-        <div class="card p-4 text-center">
-          <div class="text-2xl font-bold text-blue-600">{{ rulesStats.replace }}</div>
-          <div class="text-sm text-muted-foreground">Replace</div>
-        </div>
-        <div class="card p-4 text-center">
-          <div class="text-2xl font-bold text-green-600">{{ rulesStats.prefer }}</div>
-          <div class="text-sm text-muted-foreground">Prefer</div>
-        </div>
-      </div>
 
-      <!-- Rules List -->
-      <div class="space-y-3">
-        <div v-if="filteredRules.length === 0" class="card p-8 text-center text-muted-foreground">
-          <p v-if="customRules.length === 0">No custom rules defined yet.</p>
-          <p v-else>No rules match your search.</p>
-        </div>
-        <div
-          v-for="rule in filteredRules"
-          :key="rule.id"
-          class="card p-4"
-          :class="{ 'opacity-50': !rule.enabled }"
-        >
-          <div class="flex items-start gap-4">
-            <!-- Toggle -->
-            <button
-              type="button"
-              role="switch"
-              :aria-checked="rule.enabled"
-              @click="toggleRuleEnabled(rule.id)"
-              class="mt-1 relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors"
-              :class="rule.enabled ? 'bg-primary' : 'bg-input'"
-            >
-              <span
-                class="pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg transition-transform"
-                :class="rule.enabled ? 'translate-x-5' : 'translate-x-0'"
-              />
-            </button>
-
-            <!-- Rule Info -->
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-2 mb-1">
-                <span class="font-medium">{{ rule.name || rule.pattern }}</span>
-                <span
-                  class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium"
-                  :class="getRuleTypeBadgeClass(rule.type)"
-                >
-                  {{ getRuleTypeLabel(rule.type) }}
-                </span>
-                <span
-                  v-if="rule.isRegex"
-                  class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200"
-                >
-                  Regex
-                </span>
-                <span
-                  v-if="rule.caseSensitive"
-                  class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200"
-                >
-                  Case Sensitive
-                </span>
-              </div>
-
-              <div class="text-sm text-muted-foreground space-y-1">
-                <p>
-                  <span class="font-mono bg-muted px-1 rounded">{{ rule.pattern }}</span>
-                  <template v-if="rule.replacement">
-                    → <span class="font-mono bg-muted px-1 rounded">{{ rule.replacement }}</span>
-                  </template>
-                </p>
-                <p v-if="rule.message" class="italic">{{ rule.message }}</p>
-                <div v-if="rule.context?.length" class="flex gap-1 mt-2">
-                  <span
-                    v-for="ctx in rule.context"
-                    :key="ctx"
-                    class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-primary/10 text-primary"
-                  >
-                    {{ contexts.find(c => c.id === ctx)?.name || ctx }}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Actions -->
-            <button
-              @click="deleteRule(rule.id)"
-              class="text-destructive hover:underline text-sm"
-            >
-              Delete
-            </button>
+        <!-- Dictionary Table -->
+        <Card class="overflow-hidden">
+          <div v-if="filteredDictionary.length === 0" class="p-8 text-center text-muted-foreground">
+            <p v-if="dictionary.length === 0">No words in your dictionary yet.</p>
+            <p v-else>No words match your search.</p>
           </div>
+          <Table v-else>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Word</TableHead>
+                <TableHead>Options</TableHead>
+                <TableHead>Context</TableHead>
+                <TableHead>Added</TableHead>
+                <TableHead class="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow
+                v-for="entry in filteredDictionary"
+                :key="entry.id"
+              >
+                <TableCell>
+                  <span class="font-mono">{{ entry.word }}</span>
+                  <p v-if="entry.notes" class="text-xs text-muted-foreground mt-1">
+                    {{ entry.notes }}
+                  </p>
+                </TableCell>
+                <TableCell>
+                  <Badge
+                    v-if="entry.caseSensitive"
+                    variant="outline"
+                    class="bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200"
+                  >
+                    Case Sensitive
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <div class="flex flex-wrap gap-1">
+                    <Badge
+                      v-for="ctx in entry.context"
+                      :key="ctx"
+                      variant="secondary"
+                    >
+                      {{ contexts.find(c => c.id === ctx)?.name || ctx }}
+                    </Badge>
+                    <span v-if="!entry.context?.length" class="text-muted-foreground text-sm">—</span>
+                  </div>
+                </TableCell>
+                <TableCell class="text-muted-foreground">
+                  {{ formatDate(entry.addedAt) }}
+                </TableCell>
+                <TableCell class="text-right">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    class="text-destructive hover:text-destructive"
+                    @click="deleteWord(entry.id!)"
+                  >
+                    Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </Card>
+      </TabsContent>
+
+      <!-- Custom Rules Section -->
+      <TabsContent value="rules" class="space-y-6">
+        <!-- Actions Bar -->
+        <div class="flex flex-wrap items-center gap-3">
+          <Button @click="showAddRuleDialog = true">
+            ➕ Add Rule
+          </Button>
+          <div class="flex-1" />
+          <Button variant="outline" @click="exportData">
+            📤 Export
+          </Button>
+          <Button variant="outline" @click="showImportDialog = true">
+            📥 Import
+          </Button>
         </div>
-      </div>
-    </div>
+
+        <!-- Search -->
+        <Input
+          v-model="rulesSearch"
+          type="text"
+          class="w-full"
+          placeholder="Search rules..."
+        />
+
+        <!-- Stats -->
+        <div class="grid grid-cols-4 gap-4">
+          <Card class="text-center">
+            <CardContent class="p-4">
+              <div class="text-2xl font-bold">{{ rulesStats.enabled }}/{{ rulesStats.total }}</div>
+              <div class="text-sm text-muted-foreground">Active Rules</div>
+            </CardContent>
+          </Card>
+          <Card class="text-center">
+            <CardContent class="p-4">
+              <div class="text-2xl font-bold text-yellow-600">{{ rulesStats.ignore }}</div>
+              <div class="text-sm text-muted-foreground">Ignore</div>
+            </CardContent>
+          </Card>
+          <Card class="text-center">
+            <CardContent class="p-4">
+              <div class="text-2xl font-bold text-blue-600">{{ rulesStats.replace }}</div>
+              <div class="text-sm text-muted-foreground">Replace</div>
+            </CardContent>
+          </Card>
+          <Card class="text-center">
+            <CardContent class="p-4">
+              <div class="text-2xl font-bold text-green-600">{{ rulesStats.prefer }}</div>
+              <div class="text-sm text-muted-foreground">Prefer</div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <!-- Rules List -->
+        <div class="space-y-3">
+          <Card v-if="filteredRules.length === 0" class="p-8 text-center text-muted-foreground">
+            <p v-if="customRules.length === 0">No custom rules defined yet.</p>
+            <p v-else>No rules match your search.</p>
+          </Card>
+          <Card
+            v-for="rule in filteredRules"
+            :key="rule.id"
+            class="p-4"
+            :class="{ 'opacity-50': !rule.enabled }"
+          >
+            <div class="flex items-start gap-4">
+              <!-- Toggle -->
+              <Switch
+                :checked="rule.enabled"
+                class="mt-1"
+                @update:checked="toggleRuleEnabled(rule.id)"
+              />
+
+              <!-- Rule Info -->
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="font-medium">{{ rule.name || rule.pattern }}</span>
+                  <Badge
+                    variant="outline"
+                    :class="getRuleTypeBadgeClass(rule.type)"
+                  >
+                    {{ getRuleTypeLabel(rule.type) }}
+                  </Badge>
+                  <Badge
+                    v-if="rule.isRegex"
+                    variant="outline"
+                    class="bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200"
+                  >
+                    Regex
+                  </Badge>
+                  <Badge
+                    v-if="rule.caseSensitive"
+                    variant="outline"
+                    class="bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200"
+                  >
+                    Case Sensitive
+                  </Badge>
+                </div>
+
+                <div class="text-sm text-muted-foreground space-y-1">
+                  <p>
+                    <span class="font-mono bg-muted px-1 rounded">{{ rule.pattern }}</span>
+                    <template v-if="rule.replacement">
+                      → <span class="font-mono bg-muted px-1 rounded">{{ rule.replacement }}</span>
+                    </template>
+                  </p>
+                  <p v-if="rule.message" class="italic">{{ rule.message }}</p>
+                  <div v-if="rule.context?.length" class="flex gap-1 mt-2">
+                    <Badge
+                      v-for="ctx in rule.context"
+                      :key="ctx"
+                      variant="secondary"
+                    >
+                      {{ contexts.find(c => c.id === ctx)?.name || ctx }}
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <Button
+                variant="ghost"
+                size="sm"
+                class="text-destructive hover:text-destructive"
+                @click="deleteRule(rule.id)"
+              >
+                Delete
+              </Button>
+            </div>
+          </Card>
+        </div>
+      </TabsContent>
+    </Tabs>
 
     <!-- Add Word Dialog -->
-    <div
-      v-if="showAddWordDialog"
-      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-      @click.self="showAddWordDialog = false"
-    >
-      <div class="bg-background rounded-xl shadow-xl p-6 w-full max-w-md">
-        <h3 class="text-lg font-semibold mb-4">Add Word to Dictionary</h3>
+    <Dialog :open="showAddWordDialog" @update:open="showAddWordDialog = $event">
+      <DialogContent class="max-w-md">
+        <DialogHeader>
+          <DialogTitle>Add Word to Dictionary</DialogTitle>
+          <DialogDescription>
+            Add a word or phrase to your personal dictionary.
+          </DialogDescription>
+        </DialogHeader>
 
         <div class="space-y-4">
-          <div>
-            <label class="label">Word or Phrase</label>
-            <input
+          <div class="space-y-2">
+            <Label for="new-word">Word or Phrase</Label>
+            <Input
+              id="new-word"
               v-model="newWord.word"
               type="text"
-              class="input w-full"
               placeholder="e.g., MyCompany"
               @keyup.enter="addWord"
             />
           </div>
 
           <div class="flex items-center gap-2">
-            <input
-              v-model="newWord.caseSensitive"
-              type="checkbox"
+            <Checkbox
               id="new-word-case"
-              class="checkbox"
+              :checked="newWord.caseSensitive"
+              @update:checked="newWord.caseSensitive = $event"
             />
-            <label for="new-word-case">Case sensitive</label>
+            <Label for="new-word-case" class="font-normal">Case sensitive</Label>
           </div>
 
-          <div>
-            <label class="label">Context (optional)</label>
+          <div class="space-y-2">
+            <Label>Context (optional)</Label>
             <div class="flex flex-wrap gap-2">
-              <button
+              <Button
                 v-for="ctx in contexts"
                 :key="ctx.id"
-                type="button"
+                size="sm"
+                :variant="newWord.context.includes(ctx.id) ? 'default' : 'outline'"
                 @click="toggleContextSelection(ctx.id, newWord.context)"
-                class="px-3 py-1 rounded-full text-sm border transition-colors"
-                :class="
-                  newWord.context.includes(ctx.id)
-                    ? 'bg-primary text-primary-foreground border-primary'
-                    : 'hover:bg-muted'
-                "
               >
                 {{ ctx.name }}
-              </button>
+              </Button>
             </div>
           </div>
 
-          <div>
-            <label class="label">Notes (optional)</label>
-            <textarea
+          <div class="space-y-2">
+            <Label for="new-word-notes">Notes (optional)</Label>
+            <Textarea
+              id="new-word-notes"
               v-model="newWord.notes"
-              class="input w-full"
               rows="2"
               placeholder="Why this word is important..."
             />
           </div>
         </div>
 
-        <div class="flex justify-end gap-3 mt-6">
-          <button @click="showAddWordDialog = false" class="btn btn-outline">
+        <DialogFooter class="mt-6">
+          <Button variant="outline" @click="showAddWordDialog = false">
             Cancel
-          </button>
-          <button
-            @click="addWord"
-            class="btn btn-primary"
+          </Button>
+          <Button
             :disabled="!newWord.word.trim()"
+            @click="addWord"
           >
             Add to Dictionary
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
 
     <!-- Add Rule Dialog -->
-    <div
-      v-if="showAddRuleDialog"
-      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-      @click.self="showAddRuleDialog = false"
-    >
-      <div class="bg-background rounded-xl shadow-xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
-        <h3 class="text-lg font-semibold mb-4">Add Custom Rule</h3>
+    <Dialog :open="showAddRuleDialog" @update:open="showAddRuleDialog = $event">
+      <DialogContent class="max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Add Custom Rule</DialogTitle>
+          <DialogDescription>
+            Create a custom grammar or style rule.
+          </DialogDescription>
+        </DialogHeader>
 
         <div class="space-y-4">
-          <div>
-            <label class="label">Rule Name</label>
-            <input
+          <div class="space-y-2">
+            <Label for="rule-name">Rule Name</Label>
+            <Input
+              id="rule-name"
               v-model="newRule.name"
               type="text"
-              class="input w-full"
               placeholder="e.g., Prefer 'utilize' over 'use'"
             />
           </div>
 
-          <div>
-            <label class="label">Rule Type</label>
+          <div class="space-y-2">
+            <Label>Rule Type</Label>
             <div class="grid grid-cols-3 gap-2">
-              <button
-                v-for="type in ['ignore', 'replace', 'prefer']"
+              <Button
+                v-for="type in (['ignore', 'replace', 'prefer'] as const)"
                 :key="type"
-                type="button"
-                @click="newRule.type = type as 'ignore' | 'replace' | 'prefer'"
-                class="p-3 rounded-lg border text-center transition-colors"
-                :class="
-                  newRule.type === type
-                    ? 'bg-primary text-primary-foreground border-primary'
-                    : 'hover:bg-muted'
-                "
+                :variant="newRule.type === type ? 'default' : 'outline'"
+                class="h-auto flex-col gap-1 py-3"
+                @click="newRule.type = type"
               >
-                <div class="font-medium">{{ getRuleTypeLabel(type) }}</div>
-                <div class="text-xs opacity-75">
+                <span class="font-medium">{{ getRuleTypeLabel(type) }}</span>
+                <span class="text-xs opacity-75">
                   {{ type === 'ignore' ? 'Never flag' : type === 'replace' ? 'Auto-replace' : 'Suggest instead' }}
-                </div>
-              </button>
+                </span>
+              </Button>
             </div>
           </div>
 
-          <div>
-            <label class="label">Pattern to Match</label>
-            <input
+          <div class="space-y-2">
+            <Label for="rule-pattern">Pattern to Match</Label>
+            <Input
+              id="rule-pattern"
               v-model="newRule.pattern"
               type="text"
-              class="input w-full font-mono"
+              class="font-mono"
               placeholder="e.g., utilize"
             />
             <div class="flex items-center gap-4 mt-2">
-              <label class="flex items-center gap-2 text-sm">
-                <input v-model="newRule.isRegex" type="checkbox" class="checkbox" />
-                Use regex
-              </label>
-              <label class="flex items-center gap-2 text-sm">
-                <input v-model="newRule.caseSensitive" type="checkbox" class="checkbox" />
-                Case sensitive
-              </label>
+              <div class="flex items-center gap-2">
+                <Checkbox
+                  id="rule-regex"
+                  :checked="newRule.isRegex"
+                  @update:checked="newRule.isRegex = $event"
+                />
+                <Label for="rule-regex" class="font-normal text-sm">Use regex</Label>
+              </div>
+              <div class="flex items-center gap-2">
+                <Checkbox
+                  id="rule-case"
+                  :checked="newRule.caseSensitive"
+                  @update:checked="newRule.caseSensitive = $event"
+                />
+                <Label for="rule-case" class="font-normal text-sm">Case sensitive</Label>
+              </div>
             </div>
           </div>
 
-          <div v-if="newRule.type !== 'ignore'">
-            <label class="label">Replacement</label>
-            <input
+          <div v-if="newRule.type !== 'ignore'" class="space-y-2">
+            <Label for="rule-replacement">Replacement</Label>
+            <Input
+              id="rule-replacement"
               v-model="newRule.replacement"
               type="text"
-              class="input w-full font-mono"
+              class="font-mono"
               placeholder="e.g., use"
             />
           </div>
 
-          <div>
-            <label class="label">Message (optional)</label>
-            <input
+          <div class="space-y-2">
+            <Label for="rule-message">Message (optional)</Label>
+            <Input
+              id="rule-message"
               v-model="newRule.message"
               type="text"
-              class="input w-full"
               placeholder="Explanation shown to user..."
             />
           </div>
 
-          <div>
-            <label class="label">Apply in Contexts (optional)</label>
+          <div class="space-y-2">
+            <Label>Apply in Contexts (optional)</Label>
             <div class="flex flex-wrap gap-2">
-              <button
+              <Button
                 v-for="ctx in contexts"
                 :key="ctx.id"
-                type="button"
+                size="sm"
+                :variant="newRule.context.includes(ctx.id) ? 'default' : 'outline'"
                 @click="toggleContextSelection(ctx.id, newRule.context)"
-                class="px-3 py-1 rounded-full text-sm border transition-colors"
-                :class="
-                  newRule.context.includes(ctx.id)
-                    ? 'bg-primary text-primary-foreground border-primary'
-                    : 'hover:bg-muted'
-                "
               >
                 {{ ctx.name }}
-              </button>
+              </Button>
             </div>
-            <p class="text-xs text-muted-foreground mt-1">
+            <p class="text-xs text-muted-foreground">
               Leave empty to apply everywhere
             </p>
           </div>
         </div>
 
-        <div class="flex justify-end gap-3 mt-6">
-          <button @click="showAddRuleDialog = false" class="btn btn-outline">
+        <DialogFooter class="mt-6">
+          <Button variant="outline" @click="showAddRuleDialog = false">
             Cancel
-          </button>
-          <button
-            @click="addRuleEntry"
-            class="btn btn-primary"
+          </Button>
+          <Button
             :disabled="!newRule.pattern.trim()"
+            @click="addRuleEntry"
           >
             Add Rule
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
 
     <!-- Add Context Dialog -->
-    <div
-      v-if="showAddContextDialog"
-      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-      @click.self="showAddContextDialog = false"
-    >
-      <div class="bg-background rounded-xl shadow-xl p-6 w-full max-w-md">
-        <h3 class="text-lg font-semibold mb-4">Manage Contexts</h3>
+    <Dialog :open="showAddContextDialog" @update:open="showAddContextDialog = $event">
+      <DialogContent class="max-w-md">
+        <DialogHeader>
+          <DialogTitle>Manage Contexts</DialogTitle>
+          <DialogDescription>
+            Create and manage dictionary contexts.
+          </DialogDescription>
+        </DialogHeader>
 
         <!-- Existing Contexts -->
-        <div class="space-y-2 mb-6">
-          <div
+        <div class="space-y-2 mb-4">
+          <Card
             v-for="ctx in contexts"
             :key="ctx.id"
-            class="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
+            class="p-3"
           >
-            <div>
-              <span class="font-medium">{{ ctx.name }}</span>
-              <p v-if="ctx.description" class="text-sm text-muted-foreground">
-                {{ ctx.description }}
-              </p>
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="font-medium">{{ ctx.name }}</span>
+                <p v-if="ctx.description" class="text-sm text-muted-foreground">
+                  {{ ctx.description }}
+                </p>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                class="text-destructive hover:text-destructive"
+                @click="deleteContext(ctx.id)"
+              >
+                Remove
+              </Button>
             </div>
-            <button
-              @click="deleteContext(ctx.id)"
-              class="text-destructive hover:underline text-sm"
-            >
-              Remove
-            </button>
-          </div>
+          </Card>
           <div v-if="contexts.length === 0" class="text-center text-muted-foreground py-4">
             No contexts defined.
           </div>
         </div>
 
         <!-- Add New Context -->
-        <div class="border-t pt-4">
-          <h4 class="font-medium mb-3">Add New Context</h4>
-          <div class="space-y-3">
-            <input
-              v-model="newContext.name"
-              type="text"
-              class="input w-full"
-              placeholder="Context name (e.g., Medical)"
-            />
-            <input
-              v-model="newContext.description"
-              type="text"
-              class="input w-full"
-              placeholder="Description (optional)"
-            />
-            <button
-              @click="addContextEntry"
-              class="btn btn-primary w-full"
-              :disabled="!newContext.name.trim()"
-            >
-              Add Context
-            </button>
-          </div>
+        <div class="border-t pt-4 space-y-3">
+          <Label class="text-base font-medium">Add New Context</Label>
+          <Input
+            v-model="newContext.name"
+            type="text"
+            placeholder="Context name (e.g., Medical)"
+          />
+          <Input
+            v-model="newContext.description"
+            type="text"
+            placeholder="Description (optional)"
+          />
+          <Button
+            class="w-full"
+            :disabled="!newContext.name.trim()"
+            @click="addContextEntry"
+          >
+            Add Context
+          </Button>
         </div>
 
-        <div class="flex justify-end mt-6">
-          <button @click="showAddContextDialog = false" class="btn btn-outline">
+        <DialogFooter class="mt-4">
+          <Button variant="outline" @click="showAddContextDialog = false">
             Done
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
 
     <!-- Import Dialog -->
-    <div
-      v-if="showImportDialog"
-      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-      @click.self="showImportDialog = false"
-    >
-      <div class="bg-background rounded-xl shadow-xl p-6 w-full max-w-md">
-        <h3 class="text-lg font-semibold mb-4">Import Dictionary & Rules</h3>
+    <Dialog :open="showImportDialog" @update:open="showImportDialog = $event">
+      <DialogContent class="max-w-md">
+        <DialogHeader>
+          <DialogTitle>Import Dictionary & Rules</DialogTitle>
+          <DialogDescription>
+            Import data from a JSON export file.
+          </DialogDescription>
+        </DialogHeader>
 
         <div class="space-y-4">
-          <div>
-            <label class="label">Select File</label>
-            <input
+          <div class="space-y-2">
+            <Label for="import-file">Select File</Label>
+            <Input
+              id="import-file"
               type="file"
               accept=".json"
               @change="handleFileSelect"
-              class="input w-full"
             />
           </div>
 
           <div class="flex items-center gap-2">
-            <input
-              v-model="importMerge"
-              type="checkbox"
+            <Checkbox
               id="import-merge"
-              class="checkbox"
+              :checked="importMerge"
+              @update:checked="importMerge = $event"
             />
-            <label for="import-merge">
+            <Label for="import-merge" class="font-normal">
               Merge with existing data (uncheck to replace)
-            </label>
+            </Label>
           </div>
 
           <p v-if="importError" class="text-destructive text-sm">
@@ -1031,20 +1067,19 @@ function toggleContextSelection(ctx: string, list: string[]) {
           </p>
         </div>
 
-        <div class="flex justify-end gap-3 mt-6">
-          <button @click="showImportDialog = false" class="btn btn-outline">
+        <DialogFooter class="mt-6">
+          <Button variant="outline" @click="showImportDialog = false">
             Cancel
-          </button>
-          <button
-            @click="handleImport"
-            class="btn btn-primary"
+          </Button>
+          <Button
             :disabled="!importFile"
+            @click="handleImport"
           >
             Import
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
 
     <!-- Save Status Toast -->
     <div
@@ -1062,39 +1097,3 @@ function toggleContextSelection(ctx: string, list: string[]) {
     </div>
   </div>
 </template>
-
-<style scoped>
-@reference "../style.css";
-
-.card {
-  @apply border rounded-xl bg-card;
-}
-
-.label {
-  @apply block text-sm font-medium mb-1;
-}
-
-.input {
-  @apply px-3 py-2 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary;
-}
-
-.select {
-  @apply px-3 py-2 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary;
-}
-
-.checkbox {
-  @apply w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary/20;
-}
-
-.btn {
-  @apply px-4 py-2 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20;
-}
-
-.btn-primary {
-  @apply bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50;
-}
-
-.btn-outline {
-  @apply border hover:bg-muted;
-}
-</style>

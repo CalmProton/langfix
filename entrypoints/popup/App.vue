@@ -7,6 +7,16 @@ import {
   providerSettingsStorage,
 } from '@/utils/storage';
 import { DEFAULT_FEATURES, type FeatureSettings } from '@/utils/types';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
 const state = reactive({
   loading: true,
@@ -108,93 +118,92 @@ defineExpose({
   <main class="popup">
     <header class="header">
       <div>
-        <p class="eyebrow">LangFix</p>
-        <h1 class="title">Writing assistant</h1>
-        <p class="subtext">
+        <p class="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">LangFix</p>
+        <h1 class="text-xl font-bold leading-tight text-foreground">Writing assistant</h1>
+        <p class="mt-1.5 text-sm text-muted-foreground">
           Streamlined controls for rewrite, grammar, and metrics.
         </p>
       </div>
-      <button class="link" type="button" @click="openOptions">Options</button>
+      <Button variant="outline" size="sm" @click="openOptions">Options</Button>
     </header>
 
-    <section class="card">
-      <div class="card-head">
-        <span class="label">Provider</span>
-        <span :class="['pill', state.provider.hasKey ? 'pill--ok' : 'pill--warn']">
+    <Card class="mb-3">
+      <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle class="text-sm font-semibold">Provider</CardTitle>
+        <Badge :variant="state.provider.hasKey ? 'secondary' : 'destructive'">
           {{ state.provider.hasKey ? 'Configured' : 'API key missing' }}
-        </span>
-      </div>
-      <div class="provider">
-        <div class="provider-row">
-          <span class="muted">Type</span>
-          <span class="value">{{ state.provider.type }}</span>
+        </Badge>
+      </CardHeader>
+      <CardContent class="space-y-1.5">
+        <div class="flex justify-between text-sm">
+          <span class="text-muted-foreground">Type</span>
+          <span class="font-semibold">{{ state.provider.type }}</span>
         </div>
-        <div class="provider-row">
-          <span class="muted">Main model</span>
-          <span class="value">{{ state.provider.mainModel }}</span>
+        <div class="flex justify-between text-sm">
+          <span class="text-muted-foreground">Main model</span>
+          <span class="font-semibold">{{ state.provider.mainModel }}</span>
         </div>
-        <div class="provider-row">
-          <span class="muted">Fast model</span>
-          <span class="value">{{ state.provider.fastModel }}</span>
+        <div class="flex justify-between text-sm">
+          <span class="text-muted-foreground">Fast model</span>
+          <span class="font-semibold">{{ state.provider.fastModel }}</span>
         </div>
-      </div>
-      <p v-if="state.error" class="error">{{ state.error }}</p>
-    </section>
+        <p v-if="state.error" class="mt-2 text-xs text-destructive">{{ state.error }}</p>
+      </CardContent>
+    </Card>
 
-    <section class="card">
-      <div class="card-head">
-        <span class="label">Feature toggles</span>
-        <span v-if="state.actionStatus" class="muted">{{ state.actionStatus }}</span>
-      </div>
-      <div class="toggles">
-        <label class="toggle">
-          <div>
-            <p class="value">Inline rewrite</p>
-            <p class="muted">Enable rewrite popup and shortcuts.</p>
+    <Card class="mb-3">
+      <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle class="text-sm font-semibold">Feature toggles</CardTitle>
+        <span v-if="state.actionStatus" class="text-xs text-muted-foreground">{{ state.actionStatus }}</span>
+      </CardHeader>
+      <CardContent class="space-y-2.5">
+        <div class="flex items-center justify-between gap-3 rounded-lg border p-2.5">
+          <div class="space-y-0.5">
+            <Label class="text-sm font-semibold">Inline rewrite</Label>
+            <p class="text-xs text-muted-foreground">Enable rewrite popup and shortcuts.</p>
           </div>
-          <input type="checkbox" :checked="state.features.rewritingSuggestions"
-            @change="toggleFeature('rewritingSuggestions')">
-        </label>
-        <label class="toggle">
-          <div>
-            <p class="value">Grammar checks</p>
-            <p class="muted">Show underlines and fixes on edit.</p>
+          <Switch :checked="state.features.rewritingSuggestions"
+            @update:checked="toggleFeature('rewritingSuggestions')" />
+        </div>
+        <div class="flex items-center justify-between gap-3 rounded-lg border p-2.5">
+          <div class="space-y-0.5">
+            <Label class="text-sm font-semibold">Grammar checks</Label>
+            <p class="text-xs text-muted-foreground">Show underlines and fixes on edit.</p>
           </div>
-          <input type="checkbox" :checked="state.features.grammarCheck" @change="toggleFeature('grammarCheck')">
-        </label>
-        <label class="toggle">
-          <div>
-            <p class="value">Metrics overlay</p>
-            <p class="muted">Word counts and pace while typing.</p>
+          <Switch :checked="state.features.grammarCheck" @update:checked="toggleFeature('grammarCheck')" />
+        </div>
+        <div class="flex items-center justify-between gap-3 rounded-lg border p-2.5">
+          <div class="space-y-0.5">
+            <Label class="text-sm font-semibold">Metrics overlay</Label>
+            <p class="text-xs text-muted-foreground">Word counts and pace while typing.</p>
           </div>
-          <input type="checkbox" :checked="state.features.wordCount" @change="toggleFeature('wordCount')">
-        </label>
-        <label class="toggle">
-          <div>
-            <p class="value">Readability heatmap</p>
-            <p class="muted">Highlight hard-to-read sentences.</p>
+          <Switch :checked="state.features.wordCount" @update:checked="toggleFeature('wordCount')" />
+        </div>
+        <div class="flex items-center justify-between gap-3 rounded-lg border p-2.5">
+          <div class="space-y-0.5">
+            <Label class="text-sm font-semibold">Readability heatmap</Label>
+            <p class="text-xs text-muted-foreground">Highlight hard-to-read sentences.</p>
           </div>
-          <input type="checkbox" :checked="state.features.readabilityHeatmap"
-            @change="toggleFeature('readabilityHeatmap')">
-        </label>
-      </div>
-    </section>
+          <Switch :checked="state.features.readabilityHeatmap" @update:checked="toggleFeature('readabilityHeatmap')" />
+        </div>
+      </CardContent>
+    </Card>
 
-    <section class="card">
-      <div class="card-head">
-        <span class="label">Quick actions</span>
-      </div>
-      <div class="actions">
-        <button class="btn" type="button" @click="triggerRewrite">
+    <Card class="mb-3">
+      <CardHeader class="pb-2">
+        <CardTitle class="text-sm font-semibold">Quick actions</CardTitle>
+      </CardHeader>
+      <CardContent class="space-y-2">
+        <Button class="w-full" @click="triggerRewrite">
           Improve selection
-        </button>
-        <button class="btn btn--secondary" type="button" @click="triggerSummarize">
+        </Button>
+        <Button class="w-full" variant="secondary" @click="triggerSummarize">
           Summarize selection
-        </button>
-      </div>
-    </section>
+        </Button>
+      </CardContent>
+    </Card>
 
-    <p v-if="state.loading" class="muted">Loading settings…</p>
+    <p v-if="state.loading" class="text-xs text-muted-foreground">Loading settings…</p>
   </main>
 </template>
 
@@ -204,8 +213,6 @@ defineExpose({
   min-height: 100%;
   padding: 16px;
   font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background: linear-gradient(135deg, #0f172a 0%, #0b1221 45%, #0f172a 100%);
-  color: #e2e8f0;
 }
 
 .header {
@@ -214,144 +221,5 @@ defineExpose({
   align-items: flex-start;
   gap: 12px;
   margin-bottom: 14px;
-}
-
-.eyebrow {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: #94a3b8;
-  margin: 0 0 4px;
-}
-
-.title {
-  margin: 0;
-  font-size: 20px;
-  line-height: 1.1;
-  color: #f8fafc;
-}
-
-.subtext {
-  margin: 6px 0 0;
-  color: #cbd5e1;
-  font-size: 13px;
-}
-
-.link {
-  background: transparent;
-  border: 1px solid #334155;
-  color: #e2e8f0;
-  padding: 6px 10px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.card {
-  background: rgba(15, 23, 42, 0.7);
-  border: 1px solid #1f2937;
-  border-radius: 12px;
-  padding: 12px;
-  margin-bottom: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-}
-
-.card-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.label {
-  font-weight: 700;
-  font-size: 13px;
-  color: #f8fafc;
-}
-
-.pill {
-  padding: 4px 8px;
-  border-radius: 999px;
-  font-size: 11px;
-  border: 1px solid #1e293b;
-}
-
-.pill--ok {
-  background: rgba(34, 197, 94, 0.12);
-  color: #34d399;
-  border-color: rgba(34, 197, 94, 0.25);
-}
-
-.pill--warn {
-  background: rgba(248, 113, 113, 0.12);
-  color: #f87171;
-  border-color: rgba(248, 113, 113, 0.25);
-}
-
-.provider {
-  display: grid;
-  gap: 6px;
-}
-
-.provider-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-}
-
-.muted {
-  color: #94a3b8;
-  font-size: 12px;
-}
-
-.value {
-  color: #e2e8f0;
-  font-weight: 600;
-  font-size: 13px;
-}
-
-.toggles {
-  display: grid;
-  gap: 10px;
-}
-
-.toggle {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid #1f2937;
-  padding: 8px 10px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.02);
-  gap: 12px;
-}
-
-.toggle input[type='checkbox'] {
-  width: 18px;
-  height: 18px;
-}
-
-.actions {
-  display: grid;
-  gap: 8px;
-}
-
-.btn {
-  width: 100%;
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  font-weight: 700;
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-  color: #0f172a;
-}
-.btn--secondary {
-  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-}
-.error {
-  margin-top: 8px;
-  color: #fca5a5;
-  font-size: 12px;
 }
 </style>
