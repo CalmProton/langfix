@@ -2,8 +2,8 @@
  * Settings Types
  * TypeBox schemas for extension settings and feature configuration
  */
-import { Type, type Static } from '@sinclair/typebox';
-import { ProviderType, ApiFormat } from './ai-provider';
+import { type Static, Type } from '@sinclair/typebox';
+import { ApiFormat, ProviderType } from './ai-provider';
 
 // ============================================================================
 // Feature Settings
@@ -97,6 +97,52 @@ export const DEFAULT_BEHAVIOR_SETTINGS: BehaviorSettings = {
   autoCheck: true,
   checkDelay: 500,
   excludedSites: [],
+};
+
+// ============================================================================
+// Style Analysis Settings
+// ============================================================================
+
+export const StyleSensitivity = Type.Union([
+  Type.Literal('low'),
+  Type.Literal('medium'),
+  Type.Literal('high'),
+]);
+export type StyleSensitivity = Static<typeof StyleSensitivity>;
+
+export const StyleWritingContext = Type.Union([
+  Type.Literal('formal'),
+  Type.Literal('casual'),
+  Type.Literal('technical'),
+  Type.Literal('creative'),
+]);
+export type StyleWritingContext = Static<typeof StyleWritingContext>;
+
+export const StyleAnalysisSettings = Type.Object({
+  enabled: Type.Boolean({ default: true }),
+  sensitivity: StyleSensitivity,
+  writingContext: StyleWritingContext,
+  categories: Type.Object({
+    style: Type.Boolean({ default: true }),
+    clarity: Type.Boolean({ default: true }),
+    conciseness: Type.Boolean({ default: true }),
+  }),
+  autoFix: Type.Boolean({ default: false }),
+  showExplanations: Type.Boolean({ default: true }),
+});
+export type StyleAnalysisSettings = Static<typeof StyleAnalysisSettings>;
+
+export const DEFAULT_STYLE_ANALYSIS_SETTINGS: StyleAnalysisSettings = {
+  enabled: true,
+  sensitivity: 'medium',
+  writingContext: 'formal',
+  categories: {
+    style: true,
+    clarity: true,
+    conciseness: true,
+  },
+  autoFix: false,
+  showExplanations: true,
 };
 
 // ============================================================================

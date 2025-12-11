@@ -11,9 +11,11 @@ import {
   DEFAULT_BEHAVIOR_SETTINGS,
   DEFAULT_FEATURES,
   DEFAULT_PROVIDER_SETTINGS,
+  DEFAULT_STYLE_ANALYSIS_SETTINGS,
   type FeatureSettings,
   type ProviderConfig,
   type ProviderSettings,
+  type StyleAnalysisSettings,
 } from '../types';
 
 // ============================================================================
@@ -68,6 +70,16 @@ export const appearanceStorage = storage.defineItem<AppearanceSettings>(
   'sync:appearance',
   {
     fallback: DEFAULT_APPEARANCE_SETTINGS,
+  },
+);
+
+/**
+ * Style analysis settings - synced across devices
+ */
+export const styleAnalysisSettingsStorage = storage.defineItem<StyleAnalysisSettings>(
+  'sync:styleAnalysis',
+  {
+    fallback: DEFAULT_STYLE_ANALYSIS_SETTINGS,
   },
 );
 
