@@ -11,6 +11,10 @@ import {
   disposeSuggestionUIManager,
   getSuggestionUIManager,
 } from '@/utils/suggestion-ui';
+import {
+  disposeSummarizationManager,
+  getSummarizationManager,
+} from '@/utils/summarization';
 import { createTextExtractionManager } from '@/utils/text-extraction';
 import type { EditableSurface } from '@/utils/text-extraction/types';
 
@@ -33,6 +37,9 @@ export default defineContentScript({
 
     // Create the metrics UI manager
     const metricsUI = getMetricsUIManager();
+
+    // Create the summarization manager
+    const summarization = getSummarizationManager();
 
     // Track current surface for change watching
     let currentWatchDisposer: (() => void) | null = null;
@@ -75,6 +82,7 @@ export default defineContentScript({
       suggestionUI.init();
       inlineRewrite.init();
       metricsUI.init();
+      summarization.init();
 
       // Track focus changes to update suggestion UI
       textManager.onFocusChange((current, _previous) => {
@@ -118,9 +126,14 @@ export default defineContentScript({
         suggestionUI,
         inlineRewrite,
         metricsUI,
+        summarization,
         // Helper to manually test inline rewrite
         testRewrite: () => {
           inlineRewrite.triggerRewrite();
+        },
+        // Helper to manually test summarization
+        testSummarize: () => {
+          summarization.triggerSummarize();
         },
         // Helper to manually test suggestion UI with mock errors
         testErrors: () => {
@@ -162,6 +175,7 @@ export default defineContentScript({
       disposeSuggestionUIManager();
       disposeInlineRewriteManager();
       disposeMetricsUIManager();
+      disposeSummarizationManager();
     });
 
     console.log('[LangFix] Content script initialized');
