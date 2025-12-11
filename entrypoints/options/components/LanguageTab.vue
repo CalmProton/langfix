@@ -1,5 +1,24 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import {
   addGlossaryTerm,
   getLanguageSettings,
@@ -27,18 +46,15 @@ const settings = ref<LanguageSettings>({
 const glossary = ref<Record<string, string>>({});
 const saveStatus = ref<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
-// New entries
 const newSiteDomain = ref('');
 const newSiteLanguage = ref('en');
 const newGlossaryTerm = ref('');
 const newGlossaryTranslation = ref('');
 
-// Language lists
 const tier1Languages = SUPPORTED_LANGUAGES.filter((l) => l.tier === 1);
 const tier2Languages = SUPPORTED_LANGUAGES.filter((l) => l.tier === 2);
 const allLanguages = [...tier1Languages, ...tier2Languages];
 
-// Load settings
 onMounted(async () => {
   try {
     settings.value = await getLanguageSettings();
@@ -48,7 +64,6 @@ onMounted(async () => {
   }
 });
 
-// Save settings
 async function saveSettings() {
   saveStatus.value = 'saving';
   try {
@@ -63,21 +78,16 @@ async function saveSettings() {
   }
 }
 
-// Toggle language in enabled list
 function toggleLanguage(code: string) {
   const idx = settings.value.enabledLanguages.indexOf(code);
   if (idx === -1) {
     settings.value.enabledLanguages.push(code);
-  } else {
-    // Don't allow removing the last language
-    if (settings.value.enabledLanguages.length > 1) {
-      settings.value.enabledLanguages.splice(idx, 1);
-    }
+  } else if (settings.value.enabledLanguages.length > 1) {
+    settings.value.enabledLanguages.splice(idx, 1);
   }
-  saveSettings();
+  void saveSettings();
 }
 
-// Site overrides
 async function addSiteOverride() {
   const domain = newSiteDomain.value.trim().toLowerCase();
   if (!domain) return;
@@ -94,7 +104,6 @@ async function removeSiteOverride(domain: string) {
   delete settings.value.perSiteOverrides[domain];
 }
 
-// Glossary
 async function addGlossaryEntry() {
   const term = newGlossaryTerm.value.trim();
   const translation = newGlossaryTranslation.value.trim();
@@ -112,7 +121,6 @@ async function removeGlossaryEntry(term: string) {
   delete glossary.value[term];
 }
 
-// Get language name
 function getLanguageName(code: string): string {
   const lang = SUPPORTED_LANGUAGES.find((l) => l.code === code);
   return lang ? lang.name : code.toUpperCase();
@@ -121,251 +129,208 @@ function getLanguageName(code: string): string {
 
 <template>
   <div class="space-y-8">
-    <!-- Header -->
-    <div>
-      <h2 class="text-2xl font-semibold">Language Settings</h2>
-      <p class="text-muted-foreground mt-1">
+    <div class="space-y-1">
+      <p class="text-sm uppercase tracking-[0.14em] text-muted-foreground">Language</p>
+      <h2 class="text-2xl font-semibold">Language & translation</h2>
+      <p class="text-muted-foreground text-sm">
         Configure language detection, grammar checking, and translation preferences.
       </p>
     </div>
 
-    <!-- Default Language -->
-    <section class="card">
-      <h3 class="card-title">Default Language</h3>
-      <p class="card-description">
-        Your primary writing language. This is used when language auto-detection is disabled.
-      </p>
-
-      <div class="grid grid-cols-2 gap-4 mt-4">
-        <div>
-          <label class="label" for="default-language">Default Language</label>
-          <select
-            id="default-language"
-            v-model="settings.defaultLanguage"
-            class="select"
-            @change="saveSettings"
-          >
-            <option v-for="lang in allLanguages" :key="lang.code" :value="lang.code">
-              {{ lang.name }} ({{ lang.nativeName }})
-            </option>
-          </select>
+    <Card>
+      <CardHeader>
+        <CardTitle class="text-lg">Default language</CardTitle>
+        <CardDescription>Your primary writing language when auto-detect is off.</CardDescription>
+      </CardHeader>
+      <CardContent class="grid gap-4 md:grid-cols-2">
+        <div class="space-y-2">
+          <Label for="default-language">Default language</Label>
+          <Select v-model="settings.defaultLanguage" @update:modelValue="saveSettings">
+            <SelectTrigger id="default-language">
+              <SelectValue placeholder="Choose a language" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem v-for="lang in allLanguages" :key="lang.code" :value="lang.code">
+                {{ lang.name }} ({{ lang.nativeName }})
+              </SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
-        <div>
-          <label class="label" for="target-language">Preferred Translation Target</label>
-          <select
-            id="target-language"
+        <div class="space-y-2">
+          <Label for="target-language">Preferred translation target</Label>
+          <Select
             v-model="settings.preferredTargetLanguage"
-            class="select"
-            @change="saveSettings"
+ @update:modelValue="saveSettings"
           >
-            <option v-for="lang in allLanguages" :key="lang.code" :value="lang.code">
-              {{ lang.name }} ({{ lang.nativeName }})
-            </option>
-          </select>
+            <SelectTrigger id="target-language">
+              <SelectValue placeholder="Select target" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem v-for="lang in allLanguages" :key="lang.code" :value="lang.code">
+                {{ lang.name }} ({{ lang.nativeName }})
+              </SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-      </div>
 
-      <div class="mt-4">
-        <label class="flex items-center gap-2 cursor-pointer">
-          <input
-            type="checkbox"
-            v-model="settings.autoDetect"
-            class="checkbox"
-            @change="saveSettings"
+        <div class="col-span-full flex items-start gap-3 rounded-lg border bg-card/30 p-4">
+          <Switch v-model:checked="settings.autoDetect" aria-label="Toggle language auto-detection"
+            @update:checked="saveSettings"
           />
-          <span>Enable automatic language detection</span>
-        </label>
-        <p class="text-sm text-muted-foreground mt-1 ml-6">
-          Automatically detect the language of your text and apply appropriate grammar rules.
-        </p>
-      </div>
-    </section>
+          <div class="space-y-1">
+            <p class="font-medium text-sm">Enable automatic language detection</p>
+            <p class="text-xs text-muted-foreground">
+              Automatically detect the language of your text and apply appropriate grammar rules.
+            </p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
 
-    <!-- Enabled Languages for Grammar -->
-    <section class="card">
-      <h3 class="card-title">Grammar Check Languages</h3>
-      <p class="card-description">
-        Select which languages to check for grammar errors. Tier 1 languages have full grammar support,
-        while Tier 2 languages have basic support.
-      </p>
-
-      <div class="mt-4 space-y-4">
-        <!-- Tier 1 -->
+    <Card>
+      <CardHeader>
+        <CardTitle class="text-lg">Grammar check languages</CardTitle>
+        <CardDescription>Select which languages to check for grammar errors.</CardDescription>
+      </CardHeader>
+      <CardContent class="space-y-6">
         <div>
-          <h4 class="text-sm font-medium mb-2">Tier 1 - Full Support</h4>
-          <div class="grid grid-cols-3 gap-2">
+          <h4 class="mb-2 text-sm font-medium">Tier 1 - Full support</h4>
+          <div class="grid grid-cols-1 gap-2 sm:grid-cols-3">
             <label
               v-for="lang in tier1Languages"
               :key="lang.code"
-              class="flex items-center gap-2 p-2 rounded-lg border cursor-pointer hover:bg-muted/50"
-              :class="{
-                'border-primary bg-primary/5': settings.enabledLanguages.includes(lang.code),
-                'border-border': !settings.enabledLanguages.includes(lang.code),
-              }"
+ :for="`tier1-${lang.code}`"
+              class="flex items-center gap-3 rounded-lg border bg-card/30 p-3 transition-colors hover:border-primary"
+              :class="settings.enabledLanguages.includes(lang.code) ? 'border-primary shadow-sm' : 'border-border'"
             >
-              <input
-                type="checkbox"
+              <Checkbox :id="`tier1-${lang.code}`"
                 :checked="settings.enabledLanguages.includes(lang.code)"
-                class="checkbox"
-                @change="toggleLanguage(lang.code)"
+                @update:checked="toggleLanguage(lang.code)"
               />
               <div>
-                <div class="font-medium text-sm">{{ lang.name }}</div>
-                <div class="text-xs text-muted-foreground">{{ lang.nativeName }}</div>
+                <p class="font-medium text-sm">{{ lang.name }}</p>
+                <p class="text-xs text-muted-foreground">{{ lang.nativeName }}</p>
               </div>
             </label>
           </div>
         </div>
 
-        <!-- Tier 2 -->
         <div>
-          <h4 class="text-sm font-medium mb-2">Tier 2 - Basic Support</h4>
-          <div class="grid grid-cols-3 gap-2">
+          <h4 class="mb-2 text-sm font-medium">Tier 2 - Basic support</h4>
+          <div class="grid grid-cols-1 gap-2 sm:grid-cols-3">
             <label
               v-for="lang in tier2Languages"
               :key="lang.code"
-              class="flex items-center gap-2 p-2 rounded-lg border cursor-pointer hover:bg-muted/50"
-              :class="{
-                'border-primary bg-primary/5': settings.enabledLanguages.includes(lang.code),
-                'border-border': !settings.enabledLanguages.includes(lang.code),
-              }"
+ :for="`tier2-${lang.code}`"
+              class="flex items-center gap-3 rounded-lg border bg-card/30 p-3 transition-colors hover:border-primary"
+              :class="settings.enabledLanguages.includes(lang.code) ? 'border-primary shadow-sm' : 'border-border'"
             >
-              <input
-                type="checkbox"
+              <Checkbox :id="`tier2-${lang.code}`"
                 :checked="settings.enabledLanguages.includes(lang.code)"
-                class="checkbox"
-                @change="toggleLanguage(lang.code)"
+                @update:checked="toggleLanguage(lang.code)"
               />
               <div>
-                <div class="font-medium text-sm">{{ lang.name }}</div>
-                <div class="text-xs text-muted-foreground">{{ lang.nativeName }}</div>
+                <p class="font-medium text-sm">{{ lang.name }}</p>
+                <p class="text-xs text-muted-foreground">{{ lang.nativeName }}</p>
               </div>
             </label>
           </div>
         </div>
-      </div>
-    </section>
+      </CardContent>
+    </Card>
 
-    <!-- Per-Site Language Overrides -->
-    <section class="card">
-      <h3 class="card-title">Per-Site Language Overrides</h3>
-      <p class="card-description">
-        Force a specific language for certain websites, bypassing auto-detection.
-      </p>
-
-      <!-- Existing overrides -->
-      <div v-if="Object.keys(settings.perSiteOverrides).length > 0" class="mt-4 space-y-2">
-        <div
-          v-for="(lang, domain) in settings.perSiteOverrides"
-          :key="domain"
-          class="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
-        >
-          <div>
-            <span class="font-mono text-sm">{{ domain }}</span>
-            <span class="mx-2">→</span>
-            <span class="text-sm font-medium">{{ getLanguageName(lang) }}</span>
+    <Card>
+      <CardHeader>
+        <CardTitle class="text-lg">Per-site language overrides</CardTitle>
+        <CardDescription>Force a specific language for certain websites.</CardDescription>
+      </CardHeader>
+      <CardContent class="space-y-4">
+        <div v-if="Object.keys(settings.perSiteOverrides).length" class="space-y-2">
+          <div v-for="(lang, domain) in settings.perSiteOverrides" :key="domain"
+            class="flex items-center justify-between rounded-lg border bg-card/30 p-3">
+            <div class="space-x-2 text-sm">
+              <span class="font-mono">{{ domain }}</span>
+              <span class="text-muted-foreground">→</span>
+              <span class="font-medium">{{ getLanguageName(lang) }}</span>
+            </div>
+            <Button variant="ghost" size="sm" class="text-destructive" @click="removeSiteOverride(domain as string)">
+              Remove
+            </Button>
           </div>
-          <button
-            type="button"
-            class="btn btn-ghost btn-sm text-destructive"
-            @click="removeSiteOverride(domain as string)"
-          >
-            Remove
-          </button>
         </div>
-      </div>
+        <div v-else class="rounded-lg border border-dashed bg-card/30 p-4 text-center text-sm text-muted-foreground">
+          No site overrides configured.
+        </div>
 
-      <div v-else class="mt-4 p-4 text-center text-muted-foreground bg-muted/30 rounded-lg">
-        No site overrides configured.
-      </div>
-
-      <!-- Add new override -->
-      <div class="mt-4 flex gap-2">
-        <input
-          v-model="newSiteDomain"
-          type="text"
-          class="input flex-1"
-          placeholder="example.com"
-        />
-        <select v-model="newSiteLanguage" class="select w-40">
-          <option v-for="lang in allLanguages" :key="lang.code" :value="lang.code">
-            {{ lang.name }}
-          </option>
-        </select>
-        <button
-          type="button"
-          class="btn btn-primary"
-          :disabled="!newSiteDomain.trim()"
-          @click="addSiteOverride"
-        >
-          Add
-        </button>
-      </div>
-    </section>
-
-    <!-- Translation Glossary -->
-    <section class="card">
-      <h3 class="card-title">Translation Glossary</h3>
-      <p class="card-description">
-        Define custom translations for specific terms. These will be applied during translation.
-      </p>
-
-      <!-- Existing glossary entries -->
-      <div v-if="Object.keys(glossary).length > 0" class="mt-4 space-y-2">
-        <div
-          v-for="(translation, term) in glossary"
-          :key="term"
-          class="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
-        >
-          <div>
-            <span class="font-mono text-sm">"{{ term }}"</span>
-            <span class="mx-2">→</span>
-            <span class="font-mono text-sm">"{{ translation }}"</span>
+        <div class="grid gap-3 sm:grid-cols-[1fr_180px_auto] sm:items-end">
+          <div class="space-y-2">
+            <Label for="site-domain">Domain</Label>
+            <Input id="site-domain" v-model="newSiteDomain" type="text" placeholder="example.com" />
           </div>
-          <button
-            type="button"
-            class="btn btn-ghost btn-sm text-destructive"
-            @click="removeGlossaryEntry(term as string)"
-          >
-            Remove
-          </button>
+          <div class="space-y-2">
+            <Label for="site-language">Language</Label>
+            <Select v-model="newSiteLanguage">
+              <SelectTrigger id="site-language">
+                <SelectValue placeholder="Choose" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem v-for="lang in allLanguages" :key="lang.code" :value="lang.code">
+                  {{ lang.name }}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <Button :disabled="!newSiteDomain.trim()" class="sm:ml-auto" @click="addSiteOverride">
+            Add
+          </Button>
         </div>
-      </div>
+      </CardContent>
+    </Card>
 
-      <div v-else class="mt-4 p-4 text-center text-muted-foreground bg-muted/30 rounded-lg">
-        No glossary terms defined.
-      </div>
+    <Card>
+      <CardHeader>
+        <CardTitle class="text-lg">Translation glossary</CardTitle>
+        <CardDescription>Define custom translations for specific terms.</CardDescription>
+      </CardHeader>
+      <CardContent class="space-y-4">
+        <div v-if="Object.keys(glossary).length" class="space-y-2">
+          <div v-for="(translation, term) in glossary" :key="term"
+            class="flex items-center justify-between rounded-lg border bg-card/30 p-3">
+            <div class="space-x-2 text-sm">
+              <span class="font-mono">"{{ term }}"</span>
+              <span class="text-muted-foreground">→</span>
+              <span class="font-mono">"{{ translation }}"</span>
+            </div>
+            <Button variant="ghost" size="sm" class="text-destructive" @click="removeGlossaryEntry(term as string)">
+              Remove
+            </Button>
+          </div>
+        </div>
+        <div v-else class="rounded-lg border border-dashed bg-card/30 p-4 text-center text-sm text-muted-foreground">
+          No glossary terms defined.
+        </div>
 
-      <!-- Add new term -->
-      <div class="mt-4 flex gap-2">
-        <input
-          v-model="newGlossaryTerm"
-          type="text"
-          class="input flex-1"
-          placeholder="Source term"
-        />
-        <input
-          v-model="newGlossaryTranslation"
-          type="text"
-          class="input flex-1"
-          placeholder="Translation"
-        />
-        <button
-          type="button"
-          class="btn btn-primary"
-          :disabled="!newGlossaryTerm.trim() || !newGlossaryTranslation.trim()"
-          @click="addGlossaryEntry"
-        >
-          Add
-        </button>
-      </div>
-    </section>
+        <div class="grid gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
+          <div class="space-y-2">
+            <Label for="glossary-term">Source term</Label>
+            <Input id="glossary-term" v-model="newGlossaryTerm" type="text" placeholder="Source term" />
+          </div>
+          <div class="space-y-2">
+            <Label for="glossary-translation">Translation</Label>
+            <Input id="glossary-translation" v-model="newGlossaryTranslation" type="text"
+ placeholder="Translation" />
+          </div>
+          <Button :disabled="!newGlossaryTerm.trim() || !newGlossaryTranslation.trim()" @click="addGlossaryEntry">
+            Add
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
 
-    <!-- Save Status -->
     <div
       v-if="saveStatus !== 'idle'"
-      class="fixed bottom-4 right-4 px-4 py-2 rounded-lg shadow-lg"
+ class="fixed bottom-4 right-4 rounded-lg px-4 py-2 shadow-lg"
       :class="{
         'bg-primary text-primary-foreground': saveStatus === 'saving',
         'bg-green-500 text-white': saveStatus === 'saved',
@@ -378,51 +343,3 @@ function getLanguageName(code: string): string {
     </div>
   </div>
 </template>
-
-<style scoped>
-@reference "../style.css";
-
-.card {
-  @apply p-6 border rounded-xl bg-card;
-}
-
-.card-title {
-  @apply text-lg font-semibold;
-}
-
-.card-description {
-  @apply text-sm text-muted-foreground mt-1;
-}
-
-.label {
-  @apply block text-sm font-medium mb-1;
-}
-
-.select {
-  @apply w-full px-3 py-2 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary;
-}
-
-.checkbox {
-  @apply w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary/20;
-}
-
-.input {
-  @apply px-3 py-2 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary;
-}
-
-.btn {
-  @apply px-4 py-2 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20;
-}
-
-.btn-primary {
-  @apply bg-primary text-primary-foreground hover:bg-primary/90;
-}
-
-.btn-ghost {
-  @apply hover:bg-muted;
-}
-
-.btn-sm {
-  @apply px-2 py-1 text-sm;
-}
-</style>

@@ -1,14 +1,21 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
 import { featuresStorage } from '@/utils/storage';
 import type { FeatureSettings } from '@/utils/types';
 import { DEFAULT_FEATURES } from '@/utils/types';
 
-// State
 const features = ref<FeatureSettings>({ ...DEFAULT_FEATURES });
 const saveStatus = ref<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
-// Feature groups for organization
 const featureGroups = [
   {
     title: 'Core Checks',
@@ -107,18 +114,19 @@ const featureGroups = [
   },
 ];
 
-// Load settings on mount
+const enabledTotal = computed(() =>
+  Object.values(features.value).filter(Boolean).length,
+);
+
 onMounted(async () => {
   const stored = await featuresStorage.getValue();
   features.value = { ...DEFAULT_FEATURES, ...stored };
 });
 
-// Toggle feature
 function toggleFeature(key: keyof FeatureSettings) {
   features.value[key] = !features.value[key];
 }
 
-// Save settings
 async function saveSettings() {
   saveStatus.value = 'saving';
 
@@ -135,7 +143,6 @@ async function saveSettings() {
   }
 }
 
-// Enable/disable all in a group
 function toggleGroup(group: (typeof featureGroups)[0], enabled: boolean) {
   for (const feature of group.features) {
     features.value[feature.key] = enabled;
@@ -145,88 +152,52 @@ function toggleGroup(group: (typeof featureGroups)[0], enabled: boolean) {
 
 <template>
   <div class="space-y-6">
-    <div class="space-y-4">
-      <h2 class="text-xl font-semibold">Features</h2>
+    <div class="space-y-1">
+      <p class="text-sm uppercase tracking-[0.14em] text-muted-foreground">Features</p>
+      <h2 class="text-2xl font-semibold">Pick the tools you need</h2>
       <p class="text-muted-foreground text-sm">
-        Enable or disable LangFix features
+        Enable or disable LangFix capabilities. {{ enabledTotal }} features enabled.
       </p>
     </div>
 
-    <!-- Feature Groups -->
-    <div class="space-y-6">
-      <div
-        v-for="group in featureGroups"
-        :key="group.title"
-        class="border rounded-lg overflow-hidden"
-      >
-        <!-- Group Header -->
-        <div class="bg-muted px-4 py-3 flex items-center justify-between">
-          <div>
-            <h3 class="font-medium">{{ group.title }}</h3>
-            <p class="text-sm text-muted-foreground">{{ group.description }}</p>
+    <div class="space-y-4">
+      <Card v-for="group in featureGroups" :key="group.title">
+        <CardHeader class="flex flex-row items-start justify-between gap-3">
+          <div class="space-y-1">
+            <CardTitle class="text-base">{{ group.title }}</CardTitle>
+            <CardDescription>{{ group.description }}</CardDescription>
           </div>
           <div class="flex gap-2">
-            <button
-              @click="toggleGroup(group, true)"
-              class="text-xs px-2 py-1 border rounded hover:bg-background"
-            >
-              All On
-            </button>
-            <button
-              @click="toggleGroup(group, false)"
-              class="text-xs px-2 py-1 border rounded hover:bg-background"
-            >
-              All Off
-            </button>
+            <Button size="sm" variant="outline" @click="toggleGroup(group, true)">
+              All on
+            </Button>
+            <Button size="sm" variant="ghost" @click="toggleGroup(group, false)">
+              All off
+            </Button>
           </div>
-        </div>
-
-        <!-- Feature Toggles -->
-        <div class="divide-y">
-          <label
+        </CardHeader>
+        <CardContent class="divide-y">
+          <div
             v-for="feature in group.features"
             :key="feature.key"
-            class="flex items-center justify-between px-4 py-3 hover:bg-muted/50 cursor-pointer"
+            class="flex items-center justify-between gap-4 py-3"
           >
             <div>
-              <div class="font-medium text-sm">{{ feature.label }}</div>
-              <div class="text-xs text-muted-foreground">
-                {{ feature.description }}
-              </div>
+              <p class="font-medium text-sm">{{ feature.label }}</p>
+              <p class="text-xs text-muted-foreground">{{ feature.description }}</p>
             </div>
-            <button
-              type="button"
-              role="switch"
-              :aria-checked="features[feature.key]"
-              @click="toggleFeature(feature.key)"
-              class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              :class="features[feature.key] ? 'bg-primary' : 'bg-input'"
-            >
-              <span
-                class="pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform"
-                :class="features[feature.key] ? 'translate-x-5' : 'translate-x-0'"
-              />
-            </button>
-          </label>
-        </div>
-      </div>
+            <Switch v-model:checked="features[feature.key]" :aria-label="`Toggle ${feature.label}`" />
+          </div>
+        </CardContent>
+      </Card>
     </div>
 
-    <!-- Save Button -->
-    <div class="flex items-center gap-4 pt-4 border-t">
-      <button
-        @click="saveSettings"
-        :disabled="saveStatus === 'saving'"
-        class="px-6 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50"
-      >
-        {{ saveStatus === 'saving' ? 'Saving...' : 'Save Features' }}
-      </button>
-      <span v-if="saveStatus === 'saved'" class="text-sm text-green-600">
-        ✓ Settings saved
-      </span>
-      <span v-else-if="saveStatus === 'error'" class="text-sm text-red-600">
-        ✗ Error saving settings
-      </span>
+    <div class="flex items-center gap-4 pt-2">
+      <Button :disabled="saveStatus === 'saving'" @click="saveSettings">
+        {{ saveStatus === 'saving' ? 'Saving…' : 'Save features' }}
+      </Button>
+      <span v-if="saveStatus === 'saved'" class="text-sm text-green-600">✓ Settings saved</span>
+      <span v-else-if="saveStatus === 'error'" class="text-sm text-destructive">✗ Error saving settings</span>
     </div>
   </div>
 </template>

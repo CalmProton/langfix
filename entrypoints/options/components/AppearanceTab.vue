@@ -1,15 +1,24 @@
 <script setup lang="ts">
-import { ref, onMounted, watchEffect } from 'vue';
+import { onMounted, ref, watchEffect } from 'vue';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Switch } from '@/components/ui/switch';
 import { appearanceStorage } from '@/utils/storage';
 import type { ThemeType } from '@/utils/types';
 import { DEFAULT_APPEARANCE_SETTINGS } from '@/utils/types';
 
-// State
 const theme = ref<ThemeType>('auto');
 const showWordCount = ref(true);
 const saveStatus = ref<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
-// Theme options
 const themeOptions = [
   {
     id: 'auto' as const,
@@ -26,7 +35,6 @@ const themeOptions = [
   { id: 'dark' as const, label: 'Dark', icon: '🌙', description: 'Dark theme' },
 ];
 
-// Load settings on mount
 onMounted(async () => {
   const stored = await appearanceStorage.getValue();
   theme.value = stored.theme ?? DEFAULT_APPEARANCE_SETTINGS.theme;
@@ -34,7 +42,6 @@ onMounted(async () => {
     stored.showWordCount ?? DEFAULT_APPEARANCE_SETTINGS.showWordCount;
 });
 
-// Apply theme to document
 watchEffect(() => {
   const root = document.documentElement;
 
@@ -48,7 +55,6 @@ watchEffect(() => {
   }
 });
 
-// Save settings
 async function saveSettings() {
   saveStatus.value = 'saving';
 
@@ -71,84 +77,64 @@ async function saveSettings() {
 
 <template>
   <div class="space-y-6">
-    <div class="space-y-4">
-      <h2 class="text-xl font-semibold">Appearance</h2>
-      <p class="text-muted-foreground text-sm">Customize how LangFix looks</p>
+    <div class="space-y-2">
+      <p class="text-sm uppercase tracking-[0.14em] text-muted-foreground">Appearance</p>
+      <h2 class="text-2xl font-semibold">Theme & display</h2>
+      <p class="text-muted-foreground text-sm">Customize how LangFix looks.</p>
     </div>
 
-    <!-- Theme Selection -->
-    <div class="space-y-3">
-      <label class="text-sm font-medium">Theme</label>
-      <div class="grid gap-3 grid-cols-3">
-        <label
-          v-for="option in themeOptions"
-          :key="option.id"
-          class="flex flex-col items-center gap-2 p-4 border rounded-lg cursor-pointer transition-colors"
-          :class="
-            theme === option.id
-              ? 'border-primary bg-primary/5'
-              : 'border-border hover:border-primary/50'
-          "
-        >
-          <input
-            type="radio"
-            :value="option.id"
-            v-model="theme"
-            class="sr-only"
-          >
-          <span class="text-2xl">{{ option.icon }}</span>
-          <span class="font-medium text-sm">{{ option.label }}</span>
-          <span class="text-xs text-muted-foreground text-center"
-            >{{ option.description }}</span
-          >
-        </label>
-      </div>
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle class="text-lg">Theme</CardTitle>
+        <CardDescription>Select how LangFix follows your system.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <RadioGroup v-model="theme" class="grid gap-3 sm:grid-cols-3">
+          <label v-for="option in themeOptions" :key="option.id"
+            class="flex cursor-pointer flex-col gap-3 rounded-lg border bg-card/30 p-4 transition-colors hover:border-primary"
+            :class="theme === option.id ? 'border-primary shadow-sm' : 'border-border'" :for="`theme-${option.id}`">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="text-xl">{{ option.icon }}</span>
+                <div class="space-y-1">
+                  <Label :for="`theme-${option.id}`" class="text-base font-semibold">
+                    {{ option.label }}
+                  </Label>
+                  <p class="text-xs text-muted-foreground">{{ option.description }}</p>
+                </div>
+              </div>
+              <RadioGroupItem :id="`theme-${option.id}`" :value="option.id"
+ aria-label="Theme choice" />
+            </div>
+          </label>
+        </RadioGroup>
+      </CardContent>
+    </Card>
 
-    <!-- Additional Options -->
-    <div class="space-y-4">
-      <h3 class="text-sm font-medium">Display Options</h3>
-
-      <label
-        class="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-muted/50"
-      >
-        <div>
-          <div class="font-medium text-sm">Show Word Count</div>
-          <div class="text-xs text-muted-foreground">
-            Display word and character count in the popup
+    <Card>
+      <CardHeader>
+        <CardTitle class="text-lg">Display options</CardTitle>
+        <CardDescription>Control what appears in the popup.</CardDescription>
+      </CardHeader>
+      <CardContent class="space-y-4">
+        <div class="flex items-start justify-between gap-4 rounded-lg border p-4">
+          <div class="space-y-1">
+            <p class="font-medium text-sm">Show word count</p>
+            <p class="text-xs text-muted-foreground">
+              Display word and character count in the popup.
+            </p>
           </div>
+          <Switch v-model:checked="showWordCount" aria-label="Toggle word count" />
         </div>
-        <button
-          type="button"
-          role="switch"
-          :aria-checked="showWordCount"
-          @click="showWordCount = !showWordCount"
-          class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          :class="showWordCount ? 'bg-primary' : 'bg-input'"
-        >
-          <span
-            class="pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform"
-            :class="showWordCount ? 'translate-x-5' : 'translate-x-0'"
-          />
-        </button>
-      </label>
-    </div>
+      </CardContent>
+    </Card>
 
-    <!-- Save Button -->
-    <div class="flex items-center gap-4 pt-4 border-t">
-      <button
-        @click="saveSettings"
-        :disabled="saveStatus === 'saving'"
-        class="px-6 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50"
-      >
-        {{ saveStatus === 'saving' ? 'Saving...' : 'Save Appearance' }}
-      </button>
-      <span v-if="saveStatus === 'saved'" class="text-sm text-green-600">
-        ✓ Settings saved
-      </span>
-      <span v-else-if="saveStatus === 'error'" class="text-sm text-red-600">
-        ✗ Error saving settings
-      </span>
+    <div class="flex items-center gap-4 pt-2">
+      <Button :disabled="saveStatus === 'saving'" @click="saveSettings">
+        {{ saveStatus === 'saving' ? 'Saving…' : 'Save appearance' }}
+      </Button>
+      <span v-if="saveStatus === 'saved'" class="text-sm text-green-600">✓ Settings saved</span>
+      <span v-else-if="saveStatus === 'error'" class="text-sm text-destructive">✗ Error saving settings</span>
     </div>
   </div>
 </template>

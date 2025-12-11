@@ -1,5 +1,17 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import {
   apiKeyStorage,
   providerSettingsStorage,
@@ -9,7 +21,6 @@ import type { ProviderType } from '@/utils/types';
 import { createProvider } from '@/utils/ai-providers';
 import { DEFAULT_MODELS, DEFAULT_BASE_URLS } from '@/utils/types';
 
-// State
 const providerType = ref<ProviderType>('anthropic');
 const apiKey = ref('');
 const baseUrl = ref('');
@@ -20,7 +31,6 @@ const fastModel = ref('');
 const keyStatus = ref<'idle' | 'validating' | 'valid' | 'invalid'>('idle');
 const saveStatus = ref<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
-// Providers
 const providers = [
   {
     id: 'anthropic' as const,
@@ -44,14 +54,12 @@ const providers = [
   },
 ];
 
-// Computed
 const showCustomOptions = computed(() => providerType.value === 'custom');
 const currentDefaultModels = computed(() => {
   if (providerType.value === 'custom') return null;
   return DEFAULT_MODELS[providerType.value];
 });
 
-// Load settings on mount
 onMounted(async () => {
   const [key, settings] = await Promise.all([
     apiKeyStorage.getValue(),
@@ -66,7 +74,6 @@ onMounted(async () => {
   fastModel.value = settings.fastModel;
 });
 
-// Update models when provider changes
 function onProviderChange(newType: ProviderType) {
   providerType.value = newType;
 
@@ -74,11 +81,10 @@ function onProviderChange(newType: ProviderType) {
     const defaults = DEFAULT_MODELS[newType];
     mainModel.value = defaults.main;
     fastModel.value = defaults.fast;
-    baseUrl.value = '';
+    baseUrl.value = DEFAULT_BASE_URLS[newType] ?? '';
   }
 }
 
-// Validate API key
 async function validateKey() {
   if (!apiKey.value) {
     keyStatus.value = 'idle';
@@ -118,7 +124,6 @@ async function validateKey() {
   }
 }
 
-// Save settings
 async function saveSettings() {
   saveStatus.value = 'saving';
 
@@ -147,134 +152,127 @@ async function saveSettings() {
 
 <template>
   <div class="space-y-6">
-    <div class="space-y-4">
-      <h2 class="text-xl font-semibold">AI Provider</h2>
+    <div class="space-y-1">
+      <p class="text-sm uppercase tracking-[0.14em] text-muted-foreground">Provider</p>
+      <h2 class="text-2xl font-semibold">Connect your AI backend</h2>
       <p class="text-muted-foreground text-sm">
-        Select your AI provider and enter your API key
+        Select your AI provider and enter your API key.
       </p>
     </div>
 
-    <!-- Provider Selection -->
-    <div class="space-y-3">
-      <label class="text-sm font-medium">Provider</label>
-      <div class="grid gap-3">
-        <label
-          v-for="provider in providers"
-          :key="provider.id"
-          class="flex items-start gap-3 p-4 border rounded-lg cursor-pointer transition-colors"
-          :class="
-            providerType === provider.id
-              ? 'border-primary bg-primary/5'
-              : 'border-border hover:border-primary/50'
-          "
-        >
-          <input
-            type="radio"
-            :value="provider.id"
-            :checked="providerType === provider.id"
-            @change="onProviderChange(provider.id)"
-            class="mt-1"
-          >
-          <div>
-            <div class="font-medium">{{ provider.name }}</div>
-            <div class="text-sm text-muted-foreground">
-              {{ provider.description }}
+    <Card>
+      <CardHeader>
+        <CardTitle class="text-lg">Provider</CardTitle>
+        <CardDescription>Pick where LangFix sends requests.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <RadioGroup v-model="providerType" class="grid gap-3 md:grid-cols-2"
+          @update:modelValue="onProviderChange($event as ProviderType)">
+          <label v-for="provider in providers" :key="provider.id"
+            class="flex cursor-pointer items-start gap-3 rounded-lg border bg-card/30 p-4 transition-colors hover:border-primary"
+            :class="providerType === provider.id ? 'border-primary shadow-sm' : 'border-border'"
+            :for="`provider-${provider.id}`">
+            <RadioGroupItem :id="`provider-${provider.id}`" :value="provider.id"
+ class="mt-1"
+ />
+            <div class="space-y-1">
+              <Label :for="`provider-${provider.id}`">{{ provider.name }}</Label>
+              <p class="text-sm text-muted-foreground">{{ provider.description }}</p>
             </div>
+            <Badge v-if="provider.id === 'custom'" variant="outline" class="ml-auto">Advanced</Badge>
+          </label>
+        </RadioGroup>
+      </CardContent>
+    </Card>
+
+    <Card>
+      <CardHeader class="space-y-1">
+        <CardTitle class="text-lg">API key</CardTitle>
+        <CardDescription>Keys are stored locally in your browser.</CardDescription>
+      </CardHeader>
+      <CardContent class="space-y-3">
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+          <div class="flex-1 space-y-2">
+            <Label for="apiKey">API key</Label>
+            <Input id="apiKey"
+ v-model="apiKey"
+ type="password" placeholder="Enter your API key" @blur="validateKey"
+ />
           </div>
-        </label>
-      </div>
-    </div>
-
-    <!-- API Key -->
-    <div class="space-y-2">
-      <label class="text-sm font-medium" for="apiKey">API Key</label>
-      <div class="flex gap-2">
-        <input
-          id="apiKey"
-          type="password"
-          v-model="apiKey"
-          placeholder="Enter your API key..."
-          class="flex-1 px-3 py-2 border rounded-md bg-background"
-          @blur="validateKey"
-        >
-        <button
-          @click="validateKey"
-          :disabled="!apiKey || keyStatus === 'validating'"
-          class="px-4 py-2 border rounded-md hover:bg-muted disabled:opacity-50"
-        >
-          {{ keyStatus === 'validating' ? 'Checking...' : 'Test' }}
-        </button>
-      </div>
-      <div v-if="keyStatus === 'valid'" class="text-sm text-green-600">
-        ✓ API key is valid
-      </div>
-      <div v-else-if="keyStatus === 'invalid'" class="text-sm text-red-600">
-        ✗ API key is invalid
-      </div>
-    </div>
-
-    <!-- Custom Provider Options -->
-    <template v-if="showCustomOptions">
-      <div class="space-y-2">
-        <label class="text-sm font-medium" for="baseUrl">Base URL</label>
-        <input
-          id="baseUrl"
-          type="url"
-          v-model="baseUrl"
-          placeholder="https://api.example.com/v1"
-          class="w-full px-3 py-2 border rounded-md bg-background"
-        >
-      </div>
-
-      <div class="space-y-2">
-        <label class="text-sm font-medium">API Format</label>
-        <div class="flex gap-4">
-          <label class="flex items-center gap-2">
-            <input type="radio" v-model="apiFormat" value="openai">
-            <span>OpenAI-compatible</span>
-          </label>
-          <label class="flex items-center gap-2">
-            <input type="radio" v-model="apiFormat" value="anthropic">
-            <span>Anthropic-compatible</span>
-          </label>
+          <Button class="self-start sm:self-end" variant="outline" :disabled="!apiKey || keyStatus === 'validating'"
+            @click="validateKey">
+            {{ keyStatus === 'validating' ? 'Checking…' : 'Test key' }}
+          </Button>
         </div>
-      </div>
-    </template>
+        <p v-if="keyStatus === 'valid'" class="text-sm text-green-600">✓ API key is valid</p>
+        <p v-else-if="keyStatus === 'invalid'" class="text-sm text-destructive">✗ API key is invalid</p>
+      </CardContent>
+    </Card>
 
-    <!-- Model presets hint -->
-    <div v-if="currentDefaultModels" class="p-4 bg-muted rounded-lg">
-      <div class="text-sm font-medium mb-2">Default Models</div>
-      <div class="text-sm text-muted-foreground space-y-1">
-        <div>
-          Main:
-          <code class="bg-background px-1 rounded">
-            {{ currentDefaultModels.main }}
-          </code>
+    <Card v-if="showCustomOptions">
+      <CardHeader>
+        <CardTitle class="text-lg">Custom provider details</CardTitle>
+        <CardDescription>Point LangFix at your own endpoint.</CardDescription>
+      </CardHeader>
+      <CardContent class="space-y-4">
+        <div class="space-y-2">
+          <Label for="baseUrl">Base URL</Label>
+          <Input id="baseUrl"
+ v-model="baseUrl"
+ type="url"
+ placeholder="https://api.example.com/v1"
+ />
         </div>
-        <div>
-          Fast:
-          <code class="bg-background px-1 rounded">
-            {{ currentDefaultModels.fast }}
-          </code>
-        </div>
-      </div>
-    </div>
 
-    <!-- Save Button -->
-    <div class="flex items-center gap-4 pt-4 border-t">
-      <button
-        @click="saveSettings"
-        :disabled="saveStatus === 'saving'"
-        class="px-6 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50"
-      >
-        {{ saveStatus === 'saving' ? 'Saving...' : 'Save Settings' }}
-      </button>
-      <span v-if="saveStatus === 'saved'" class="text-sm text-green-600">
-        ✓ Settings saved
-      </span>
-      <span v-else-if="saveStatus === 'error'" class="text-sm text-red-600">
-        ✗ Error saving settings
-      </span>
+        <div class="space-y-2">
+          <Label>API format</Label>
+          <RadioGroup v-model="apiFormat" class="grid gap-2 sm:grid-cols-2">
+            <label
+              class="flex cursor-pointer items-center gap-3 rounded-lg border bg-card/30 p-3 transition-colors hover:border-primary"
+              for="format-openai">
+              <RadioGroupItem id="format-openai" value="openai" />
+              <div>
+                <p class="font-medium text-sm">OpenAI-compatible</p>
+                <p class="text-xs text-muted-foreground">Works with most hosted providers.</p>
+              </div>
+            </label>
+            <label
+              class="flex cursor-pointer items-center gap-3 rounded-lg border bg-card/30 p-3 transition-colors hover:border-primary"
+              for="format-anthropic">
+              <RadioGroupItem id="format-anthropic" value="anthropic" />
+              <div>
+                <p class="font-medium text-sm">Anthropic-compatible</p>
+                <p class="text-xs text-muted-foreground">Use Claude-style endpoints.</p>
+              </div>
+            </label>
+          </RadioGroup>
+        </div>
+      </CardContent>
+    </Card>
+
+    <Card v-else-if="currentDefaultModels">
+      <CardHeader>
+        <CardTitle class="text-lg">Default models</CardTitle>
+        <CardDescription>We prefill common choices for this provider.</CardDescription>
+      </CardHeader>
+      <CardContent class="space-y-2 text-sm">
+        <div class="flex items-center gap-2">
+          <span class="text-muted-foreground">Main</span>
+          <Badge variant="outline">{{ currentDefaultModels.main }}</Badge>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-muted-foreground">Fast</span>
+          <Badge variant="outline">{{ currentDefaultModels.fast }}</Badge>
+        </div>
+      </CardContent>
+    </Card>
+
+    <div class="flex items-center gap-4">
+      <Button :disabled="saveStatus === 'saving'" @click="saveSettings">
+        {{ saveStatus === 'saving' ? 'Saving…' : 'Save settings' }}
+      </Button>
+      <span v-if="saveStatus === 'saved'" class="text-sm text-green-600">✓ Settings saved</span>
+      <span v-else-if="saveStatus === 'error'" class="text-sm text-destructive">✗ Error saving settings</span>
     </div>
   </div>
 </template>

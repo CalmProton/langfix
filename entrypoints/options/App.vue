@@ -1,5 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/components/ui/tabs';
 import ProviderTab from './components/ProviderTab.vue';
 import ModelsTab from './components/ModelsTab.vue';
 import FeaturesTab from './components/FeaturesTab.vue';
@@ -24,40 +30,49 @@ const tabs = [
 </script>
 
 <template>
-  <div class="min-h-screen">
-    <!-- Header -->
-    <header class="mb-8">
-      <h1 class="text-3xl font-bold mb-2">LangFix Settings</h1>
-      <p class="text-muted-foreground">Configure your AI writing assistant</p>
-    </header>
+  <div class="min-h-screen bg-background">
+    <div class="mx-auto flex max-w-5xl flex-col gap-8 px-6 py-10">
+      <header class="space-y-2">
+        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+          Settings
+        </p>
+        <h1 class="text-3xl font-bold leading-tight">LangFix Control Panel</h1>
+        <p class="text-muted-foreground">
+          Configure your AI writing assistant experience.
+        </p>
+      </header>
 
-    <!-- Tab Navigation -->
-    <nav class="flex gap-1 border-b mb-6">
-      <button
-        v-for="tab in tabs"
-        :key="tab.id"
-        @click="activeTab = tab.id"
-        class="px-4 py-2 text-sm font-medium transition-colors border-b-2 -mb-px"
-        :class="
-          activeTab === tab.id
-            ? 'border-primary text-foreground'
-            : 'border-transparent text-muted-foreground hover:text-foreground'
-        "
-      >
-        <span class="mr-2">{{ tab.icon }}</span>
-        {{ tab.label }}
-      </button>
-    </nav>
+      <Tabs v-model="activeTab" class="space-y-6">
+        <TabsList class="flex w-full flex-wrap gap-2">
+          <TabsTrigger v-for="tab in tabs" :key="tab.id"
+ :value="tab.id" class="flex items-center gap-2">
+            <span class="text-lg">{{ tab.icon }}</span>
+            <span>{{ tab.label }}</span>
+          </TabsTrigger>
+        </TabsList>
 
-    <!-- Tab Content -->
-    <main>
-      <ProviderTab v-if="activeTab === 'provider'"/>
-      <ModelsTab v-else-if="activeTab === 'models'"/>
-      <FeaturesTab v-else-if="activeTab === 'features'"/>
-      <LanguageTab v-else-if="activeTab === 'language'" />
-      <DictionaryTab v-else-if="activeTab === 'dictionary'" />
-      <AppearanceTab v-else-if="activeTab === 'appearance'"/>
-      <AboutTab v-else-if="activeTab === 'about'"/>
-    </main>
+        <TabsContent value="provider">
+          <ProviderTab />
+        </TabsContent>
+        <TabsContent value="models">
+          <ModelsTab />
+        </TabsContent>
+        <TabsContent value="features">
+          <FeaturesTab />
+        </TabsContent>
+        <TabsContent value="language">
+          <LanguageTab />
+        </TabsContent>
+        <TabsContent value="dictionary">
+          <DictionaryTab />
+        </TabsContent>
+        <TabsContent value="appearance">
+          <AppearanceTab />
+        </TabsContent>
+        <TabsContent value="about">
+          <AboutTab />
+        </TabsContent>
+      </Tabs>
+    </div>
   </div>
 </template>

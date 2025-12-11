@@ -1,4 +1,14 @@
 <script setup lang="ts">
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+
 const version = '0.1.0';
 const repoUrl = 'https://github.com/opengale/langfix';
 
@@ -34,112 +44,88 @@ const technologies = [
 
 <template>
   <div class="space-y-6">
-    <div class="space-y-4">
-      <h2 class="text-xl font-semibold">About LangFix</h2>
-      <p class="text-muted-foreground text-sm">
-        Open-source, privacy-first AI writing assistant
-      </p>
-    </div>
-
-    <!-- Version Info -->
-    <div class="p-6 border rounded-lg bg-muted/30">
-      <div class="flex items-center gap-4">
+    <Card>
+      <CardHeader class="flex flex-row items-start gap-4">
         <div class="text-4xl">✍️</div>
-        <div>
-          <h3 class="text-lg font-bold">LangFix</h3>
-          <p class="text-muted-foreground">Version {{ version }}</p>
+        <div class="space-y-1">
+          <CardTitle>LangFix</CardTitle>
+          <CardDescription>Version {{ version }}</CardDescription>
+          <p class="text-sm text-muted-foreground">
+            Open-source, privacy-first AI writing assistant
+          </p>
         </div>
-      </div>
-    </div>
+        <Badge variant="secondary" class="ml-auto">MIT Licensed</Badge>
+      </CardHeader>
+      <CardContent class="space-y-4 text-sm text-muted-foreground">
+        <p>
+          LangFix is a free, open-source alternative to Grammarly that lets you use
+          your own AI API keys. Connect to Anthropic, OpenAI, OpenRouter, or any
+          compatible provider to get powerful writing assistance while maintaining
+          full control over your data and costs.
+        </p>
+        <div class="grid gap-2 sm:grid-cols-2">
+          <div class="rounded-lg border bg-muted/30 p-3">
+            <p class="font-semibold text-foreground">Privacy-first</p>
+            <p>Your API keys and data stay yours.</p>
+          </div>
+          <div class="rounded-lg border bg-muted/30 p-3">
+            <p class="font-semibold text-foreground">Multi-provider</p>
+            <p>Anthropic, OpenAI, OpenRouter, or your own endpoints.</p>
+          </div>
+          <div class="rounded-lg border bg-muted/30 p-3">
+            <p class="font-semibold text-foreground">Writing superpowers</p>
+            <p>Grammar, spelling, rewriting, tone, and readability.</p>
+          </div>
+          <div class="rounded-lg border bg-muted/30 p-3">
+            <p class="font-semibold text-foreground">Cross-browser</p>
+            <p>Chrome, Firefox, Edge, and Safari friendly.</p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
 
-    <!-- Description -->
-    <div class="space-y-3">
-      <h3 class="font-medium">What is LangFix?</h3>
-      <p class="text-sm text-muted-foreground leading-relaxed">
-        LangFix is a free, open-source alternative to Grammarly that lets you
-        use your own AI API keys. Connect to Anthropic, OpenAI, OpenRouter, or
-        any compatible provider to get powerful writing assistance while
-        maintaining full control over your data and costs.
-      </p>
-    </div>
-
-    <!-- Key Features -->
-    <div class="space-y-3">
-      <h3 class="font-medium">Key Features</h3>
-      <ul class="grid gap-2 text-sm text-muted-foreground">
-        <li class="flex items-center gap-2">
-          <span class="text-green-500">✓</span>
-          Privacy-first: Your API keys, your data
-        </li>
-        <li class="flex items-center gap-2">
-          <span class="text-green-500">✓</span>
-          Multi-provider support (Anthropic, OpenAI, OpenRouter)
-        </li>
-        <li class="flex items-center gap-2">
-          <span class="text-green-500">✓</span>
-          Grammar, spelling, and style checking
-        </li>
-        <li class="flex items-center gap-2">
-          <span class="text-green-500">✓</span>
-          Text rewriting and tone adjustment
-        </li>
-        <li class="flex items-center gap-2">
-          <span class="text-green-500">✓</span>
-          Cross-browser support (Chrome, Firefox, Edge, Safari)
-        </li>
-        <li class="flex items-center gap-2">
-          <span class="text-green-500">✓</span>
-          Open source and free forever
-        </li>
-      </ul>
-    </div>
-
-    <!-- Links -->
-    <div class="space-y-3">
-      <h3 class="font-medium">Links</h3>
-      <div class="flex flex-wrap gap-3">
-        <a
+    <Card>
+      <CardHeader>
+        <CardTitle class="text-lg">Project links</CardTitle>
+        <CardDescription>Explore the code, docs, or file an issue.</CardDescription>
+      </CardHeader>
+      <CardContent class="flex flex-wrap gap-3">
+        <Button
           v-for="link in links"
           :key="link.url"
+ as="a"
           :href="link.url"
           target="_blank"
-          rel="noopener noreferrer"
-          class="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-muted transition-colors"
+ rel="noreferrer"
+          variant="outline"
         >
           <span>{{ link.icon }}</span>
-          <span class="text-sm">{{ link.label }}</span>
-        </a>
-      </div>
-    </div>
+          <span>{{ link.label }}</span>
+        </Button>
+      </CardContent>
+    </Card>
 
-    <!-- Built With -->
-    <div class="space-y-3">
-      <h3 class="font-medium">Built With</h3>
-      <div class="grid gap-2 md:grid-cols-2">
+    <Card>
+      <CardHeader>
+        <CardTitle class="text-lg">Built with</CardTitle>
+        <CardDescription>Open tools that power LangFix.</CardDescription>
+      </CardHeader>
+      <CardContent class="grid gap-3 md:grid-cols-2">
         <a
           v-for="tech in technologies"
           :key="tech.name"
           :href="tech.url"
           target="_blank"
-          rel="noopener noreferrer"
-          class="flex items-center gap-3 p-3 border rounded-lg hover:bg-muted transition-colors"
+ rel="noreferrer"
+          class="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-muted/60"
         >
           <div>
-            <div class="font-medium text-sm">{{ tech.name }}</div>
-            <div class="text-xs text-muted-foreground">
-              {{ tech.description }}
-            </div>
+            <p class="font-medium text-foreground">{{ tech.name }}</p>
+            <p class="text-xs text-muted-foreground">{{ tech.description }}</p>
           </div>
+          <Badge variant="outline">Learn more</Badge>
         </a>
-      </div>
-    </div>
-
-    <!-- License -->
-    <div class="p-4 border rounded-lg bg-muted/30">
-      <p class="text-sm text-muted-foreground">
-        LangFix is open source software licensed under the MIT License.
-        Contributions are welcome!
-      </p>
-    </div>
+      </CardContent>
+    </Card>
   </div>
 </template>

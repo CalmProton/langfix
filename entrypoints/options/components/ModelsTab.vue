@@ -1,16 +1,25 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { providerSettingsStorage, saveProviderConfig } from '@/utils/storage';
-import { DEFAULT_MODELS } from '@/utils/types';
 import type { ProviderType } from '@/utils/types';
+import { DEFAULT_MODELS } from '@/utils/types';
 
-// State
 const providerType = ref<ProviderType>('anthropic');
 const mainModel = ref('');
 const fastModel = ref('');
 const saveStatus = ref<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
-// Model presets for each provider
 const modelPresets = {
   anthropic: [
     {
@@ -42,7 +51,11 @@ const modelPresets = {
   ],
 };
 
-// Load settings on mount
+const currentPresets = computed(() => {
+  if (providerType.value === 'custom') return [];
+  return modelPresets[providerType.value] || [];
+});
+
 onMounted(async () => {
   const settings = await providerSettingsStorage.getValue();
   providerType.value = settings.type;
@@ -50,19 +63,11 @@ onMounted(async () => {
   fastModel.value = settings.fastModel;
 });
 
-// Get current presets
-const currentPresets = computed(() => {
-  if (providerType.value === 'custom') return [];
-  return modelPresets[providerType.value] || [];
-});
-
-// Apply preset
 function applyPreset(preset: { main: string; fast: string }) {
   mainModel.value = preset.main;
   fastModel.value = preset.fast;
 }
 
-// Save settings
 async function saveSettings() {
   saveStatus.value = 'saving';
 
@@ -85,96 +90,92 @@ async function saveSettings() {
 
 <template>
   <div class="space-y-6">
-    <div class="space-y-4">
-      <h2 class="text-xl font-semibold">Model Selection</h2>
+    <div class="space-y-1">
+      <p class="text-sm uppercase tracking-[0.14em] text-muted-foreground">Models</p>
+      <h2 class="text-2xl font-semibold">Choose your stacks</h2>
       <p class="text-muted-foreground text-sm">
-        Configure which AI models to use for different tasks
+        Configure which AI models to use for different tasks.
       </p>
     </div>
 
-    <!-- Model Explanation -->
     <div class="grid gap-4 md:grid-cols-2">
-      <div class="p-4 border rounded-lg">
-        <h3 class="font-medium mb-2">🧠 Main Model</h3>
-        <p class="text-sm text-muted-foreground">
-          Used for complex tasks like rewriting, tone analysis, and detailed
-          explanations. Should be a capable model with good reasoning abilities.
-        </p>
-      </div>
-      <div class="p-4 border rounded-lg">
-        <h3 class="font-medium mb-2">⚡ Fast Model</h3>
-        <p class="text-sm text-muted-foreground">
-          Used for quick tasks like grammar checking, spelling, and simple
-          corrections. Optimized for speed and cost efficiency.
-        </p>
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle class="text-base flex items-center gap-2">🧠 Main model</CardTitle>
+          <CardDescription>
+            Use for rewriting, tone analysis, and longer responses.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Badge variant="secondary">Prefer quality</Badge>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle class="text-base flex items-center gap-2">⚡ Fast model</CardTitle>
+          <CardDescription>
+            Optimized for quick grammar checks and small fixes.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Badge variant="outline">Prefer speed</Badge>
+        </CardContent>
+      </Card>
     </div>
 
-    <!-- Presets -->
     <div v-if="currentPresets.length > 0" class="space-y-3">
-      <label class="text-sm font-medium">Quick Presets</label>
+      <Label class="text-sm font-medium">Quick presets</Label>
       <div class="flex flex-wrap gap-2">
-        <button
+        <Button
           v-for="preset in currentPresets"
           :key="preset.label"
-          @click="applyPreset(preset)"
-          class="px-3 py-1.5 text-sm border rounded-md hover:bg-muted transition-colors"
+ size="sm" variant="outline"
           :class="
             mainModel === preset.main && fastModel === preset.fast
               ? 'border-primary bg-primary/5'
               : ''
           "
+ @click="applyPreset(preset)"
         >
           {{ preset.label }}
-        </button>
+        </Button>
       </div>
     </div>
 
-    <!-- Main Model Input -->
-    <div class="space-y-2">
-      <label class="text-sm font-medium" for="mainModel">Main Model</label>
-      <input
-        id="mainModel"
-        type="text"
-        v-model="mainModel"
-        placeholder="e.g., claude-sonnet-4-20250514"
-        class="w-full px-3 py-2 border rounded-md bg-background"
-      >
-      <p class="text-xs text-muted-foreground">
-        Enter the model identifier as specified by your provider
-      </p>
-    </div>
+    <Card>
+      <CardContent class="space-y-4 p-6">
+        <div class="space-y-2">
+          <Label for="mainModel">Main model</Label>
+          <Input id="mainModel"
+ v-model="mainModel"
+ type="text"
+ placeholder="e.g., claude-sonnet-4-20250514"
+ />
+          <p class="text-xs text-muted-foreground">
+            Enter the model identifier as specified by your provider.
+          </p>
+        </div>
 
-    <!-- Fast Model Input -->
-    <div class="space-y-2">
-      <label class="text-sm font-medium" for="fastModel">Fast Model</label>
-      <input
-        id="fastModel"
-        type="text"
-        v-model="fastModel"
-        placeholder="e.g., claude-haiku-4-20250514"
-        class="w-full px-3 py-2 border rounded-md bg-background"
-      >
-      <p class="text-xs text-muted-foreground">
-        A smaller, faster model for quick checks
-      </p>
-    </div>
+        <div class="space-y-2">
+          <Label for="fastModel">Fast model</Label>
+          <Input id="fastModel"
+ v-model="fastModel"
+ type="text"
+ placeholder="e.g., claude-haiku-4-20250514"
+ />
+          <p class="text-xs text-muted-foreground">
+            Use a smaller, faster model for quick checks.
+          </p>
+        </div>
+      </CardContent>
+    </Card>
 
-    <!-- Save Button -->
-    <div class="flex items-center gap-4 pt-4 border-t">
-      <button
-        @click="saveSettings"
-        :disabled="saveStatus === 'saving'"
-        class="px-6 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50"
-      >
-        {{ saveStatus === 'saving' ? 'Saving...' : 'Save Models' }}
-      </button>
-      <span v-if="saveStatus === 'saved'" class="text-sm text-green-600">
-        ✓ Settings saved
-      </span>
-      <span v-else-if="saveStatus === 'error'" class="text-sm text-red-600">
-        ✗ Error saving settings
-      </span>
+    <div class="flex items-center gap-4">
+      <Button :disabled="saveStatus === 'saving'" @click="saveSettings">
+        {{ saveStatus === 'saving' ? 'Saving…' : 'Save models' }}
+      </Button>
+      <span v-if="saveStatus === 'saved'" class="text-sm text-green-600">✓ Settings saved</span>
+      <span v-else-if="saveStatus === 'error'" class="text-sm text-destructive">✗ Error saving settings</span>
     </div>
   </div>
 </template>
