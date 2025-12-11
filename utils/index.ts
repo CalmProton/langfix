@@ -7,6 +7,8 @@
 export * from './ai-providers';
 // Grammar Engine
 export * from './grammar-engine';
+// Rewrite Engine
+export * from './rewrite-engine';
 // Storage
 export * from './storage';
 // Text Extraction
