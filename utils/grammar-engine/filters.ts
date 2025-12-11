@@ -1,9 +1,20 @@
 /**
  * Grammar Engine Filters
  * Dictionary and session-based error filtering
+ *
+ * Note: This module provides basic filters that are used by the grammar engine.
+ * For more advanced filtering with custom rules and context support,
+ * use the dictionary module: @/utils/dictionary
  */
+import {
+  applyAllFilters,
+  invalidateDictionaryCache,
+} from '../dictionary/filter';
 import { dictionaryStorage, sessionIgnoredWordsStorage } from '../storage';
 import type { ExtendedGrammarError } from './types';
+
+// Re-export for external use
+export { invalidateDictionaryCache };
 
 // ============================================================================
 // Dictionary Filter
@@ -66,9 +77,21 @@ export async function filterBySessionIgnore(
 
 /**
  * Apply all filters to errors
- * Order: dictionary filter → session ignore filter
+ * Order: dictionary filter → session ignore filter → custom rules
  */
 export async function applyFilters(
+  errors: ExtendedGrammarError[],
+  options?: { context?: string },
+): Promise<ExtendedGrammarError[]> {
+  // Use the advanced filter from dictionary module
+  return applyAllFilters(errors, options);
+}
+
+/**
+ * Apply only basic filters (dictionary + session ignore, no custom rules)
+ * Use this for performance-critical paths where custom rules aren't needed
+ */
+export async function applyBasicFilters(
   errors: ExtendedGrammarError[],
 ): Promise<ExtendedGrammarError[]> {
   let filtered = errors;

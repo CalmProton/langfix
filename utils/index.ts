@@ -5,6 +5,8 @@
 
 // AI Providers
 export * from './ai-providers';
+// Dictionary (personal dictionary & custom rules)
+export * from './dictionary';
 // Genre Engine
 export * from './genre-engine';
 // Grammar Engine

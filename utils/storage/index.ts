@@ -13,7 +13,12 @@ import {
   DEFAULT_LANGUAGE_SETTINGS,
   type LanguageSettings,
 } from '../multilingual/types';
-import type { CustomRule, DictionaryEntry } from '../types';
+import type {
+  CustomRule,
+  DictionaryContext,
+  DictionaryEntry,
+  DictionaryExport,
+} from '../types';
 import {
   type AppearanceSettings,
   type BehaviorSettings,
@@ -27,6 +32,12 @@ import {
   type ProviderSettings,
   type StyleAnalysisSettings,
 } from '../types';
+import {
+  DEFAULT_CONTEXTS,
+  DICTIONARY_EXPORT_VERSION,
+  MAX_CUSTOM_RULES,
+  MAX_DICTIONARY_ENTRIES,
+} from '../types/dictionary';
 
 // ============================================================================
 // Provider Settings (local storage - contains sensitive data)
@@ -159,6 +170,15 @@ export const customRulesStorage = storage.defineItem<CustomRule[]>(
   },
 );
 
+/**
+ * Dictionary contexts - user-defined context labels
+ */
+export const dictionaryContextsStorage = storage.defineItem<
+  DictionaryContext[]
+>('sync:dictionaryContexts', {
+  fallback: DEFAULT_CONTEXTS,
+});
+
 // ============================================================================
 // Language Settings (sync storage)
 // ============================================================================
@@ -259,30 +279,101 @@ export async function saveProviderConfig(
 /**
  * Add word to personal dictionary
  */
-export async function addToDictionary(word: string): Promise<void> {
-  const normalized = word.trim().toLowerCase();
+export async function addToDictionary(
+  word: string,
+  options?: {
+    caseSensitive?: boolean;
+    context?: string[];
+    notes?: string;
+  },
+): Promise<void> {
+  const normalized = options?.caseSensitive
+    ? word.trim()
+    : word.trim().toLowerCase();
   if (!normalized) return;
 
   const current = await dictionaryStorage.getValue();
 
   // Check if already exists
-  if (
-    current.some((e: DictionaryEntry) => e.word.toLowerCase() === normalized)
-  ) {
+  const existingIndex = current.findIndex((e: DictionaryEntry) =>
+    options?.caseSensitive
+      ? e.word === normalized
+      : e.word.toLowerCase() === normalized.toLowerCase(),
+  );
+
+  if (existingIndex !== -1) {
+    // Update existing entry's usage count
+    const updated = [...current];
+    updated[existingIndex] = {
+      ...updated[existingIndex],
+      usageCount: (updated[existingIndex].usageCount || 0) + 1,
+    };
+    await dictionaryStorage.setValue(updated);
     return;
   }
 
-  // Add new entry, keeping max 500
-  const newDictionary = [
-    ...current,
-    { word: normalized, addedAt: Date.now() },
-  ].slice(-500);
+  // Add new entry, keeping max entries
+  const newEntry: DictionaryEntry = {
+    id: crypto.randomUUID(),
+    word: normalized,
+    caseSensitive: options?.caseSensitive ?? false,
+    context: options?.context,
+    addedAt: Date.now(),
+    usageCount: 0,
+    notes: options?.notes,
+  };
 
+  const newDictionary = [...current, newEntry].slice(-MAX_DICTIONARY_ENTRIES);
   await dictionaryStorage.setValue(newDictionary);
 }
 
 /**
- * Remove word from personal dictionary
+ * Add word to dictionary with full entry object
+ */
+export async function addDictionaryEntry(
+  entry: Omit<DictionaryEntry, 'id' | 'addedAt'>,
+): Promise<DictionaryEntry> {
+  const current = await dictionaryStorage.getValue();
+
+  const newEntry: DictionaryEntry = {
+    ...entry,
+    id: crypto.randomUUID(),
+    addedAt: Date.now(),
+  };
+
+  const newDictionary = [...current, newEntry].slice(-MAX_DICTIONARY_ENTRIES);
+  await dictionaryStorage.setValue(newDictionary);
+
+  return newEntry;
+}
+
+/**
+ * Update an existing dictionary entry
+ */
+export async function updateDictionaryEntry(
+  id: string,
+  updates: Partial<Omit<DictionaryEntry, 'id' | 'addedAt'>>,
+): Promise<void> {
+  const current = await dictionaryStorage.getValue();
+  const index = current.findIndex((e) => e.id === id);
+
+  if (index === -1) return;
+
+  const updated = [...current];
+  updated[index] = { ...updated[index], ...updates };
+  await dictionaryStorage.setValue(updated);
+}
+
+/**
+ * Remove word from personal dictionary by ID
+ */
+export async function removeDictionaryEntry(id: string): Promise<void> {
+  const current = await dictionaryStorage.getValue();
+  await dictionaryStorage.setValue(current.filter((e) => e.id !== id));
+}
+
+/**
+ * Remove word from personal dictionary by word string (legacy support)
  */
 export async function removeFromDictionary(word: string): Promise<void> {
   const normalized = word.trim().toLowerCase();
@@ -296,12 +387,67 @@ export async function removeFromDictionary(word: string): Promise<void> {
 /**
  * Check if word is in personal dictionary
  */
-export async function isInDictionary(word: string): Promise<boolean> {
+export async function isInDictionary(
+  word: string,
+  context?: string,
+): Promise<boolean> {
   const normalized = word.trim().toLowerCase();
   const dictionary = await dictionaryStorage.getValue();
-  return dictionary.some(
-    (e: DictionaryEntry) => e.word.toLowerCase() === normalized,
-  );
+
+  return dictionary.some((entry: DictionaryEntry) => {
+    // Check word match
+    const wordMatch = entry.caseSensitive
+      ? entry.word === word.trim()
+      : entry.word.toLowerCase() === normalized;
+
+    if (!wordMatch) return false;
+
+    // Check context if specified
+    if (context && entry.context && entry.context.length > 0) {
+      return entry.context.includes(context);
+    }
+
+    return true;
+  });
+}
+
+/**
+ * Get all dictionary entries
+ */
+export async function getDictionary(): Promise<DictionaryEntry[]> {
+  return dictionaryStorage.getValue();
+}
+
+/**
+ * Get dictionary contexts
+ */
+export async function getDictionaryContexts(): Promise<DictionaryContext[]> {
+  return dictionaryContextsStorage.getValue();
+}
+
+/**
+ * Add a new dictionary context
+ */
+export async function addDictionaryContext(
+  context: Omit<DictionaryContext, 'id'>,
+): Promise<DictionaryContext> {
+  const current = await dictionaryContextsStorage.getValue();
+
+  const newContext: DictionaryContext = {
+    ...context,
+    id: crypto.randomUUID(),
+  };
+
+  await dictionaryContextsStorage.setValue([...current, newContext]);
+  return newContext;
+}
+
+/**
+ * Remove a dictionary context
+ */
+export async function removeDictionaryContext(id: string): Promise<void> {
+  const current = await dictionaryContextsStorage.getValue();
+  await dictionaryContextsStorage.setValue(current.filter((c) => c.id !== id));
 }
 
 /**
@@ -332,7 +478,7 @@ export async function isIgnoredForSession(word: string): Promise<boolean> {
  */
 export async function addCustomRule(
   rule: Omit<CustomRule, 'id' | 'createdAt'>,
-): Promise<void> {
+): Promise<CustomRule> {
   const current = await customRulesStorage.getValue();
 
   const newRule: CustomRule = {
@@ -341,9 +487,28 @@ export async function addCustomRule(
     createdAt: Date.now(),
   };
 
-  // Keep max 200 rules
-  const newRules = [...current, newRule].slice(-200);
+  // Keep max rules
+  const newRules = [...current, newRule].slice(-MAX_CUSTOM_RULES);
   await customRulesStorage.setValue(newRules);
+
+  return newRule;
+}
+
+/**
+ * Update a custom rule
+ */
+export async function updateCustomRule(
+  id: string,
+  updates: Partial<Omit<CustomRule, 'id' | 'createdAt'>>,
+): Promise<void> {
+  const current = await customRulesStorage.getValue();
+  const index = current.findIndex((r) => r.id === id);
+
+  if (index === -1) return;
+
+  const updated = [...current];
+  updated[index] = { ...updated[index], ...updates };
+  await customRulesStorage.setValue(updated);
 }
 
 /**
@@ -369,6 +534,126 @@ export async function toggleCustomRule(ruleId: string): Promise<void> {
 }
 
 /**
+ * Get all custom rules
+ */
+export async function getCustomRules(): Promise<CustomRule[]> {
+  return customRulesStorage.getValue();
+}
+
+/**
+ * Mark a custom rule as recently used
+ */
+export async function markRuleUsed(ruleId: string): Promise<void> {
+  const current = await customRulesStorage.getValue();
+  await customRulesStorage.setValue(
+    current.map((r: CustomRule) =>
+      r.id === ruleId ? { ...r, lastUsed: Date.now() } : r,
+    ),
+  );
+}
+
+/**
+ * Export dictionary and rules data
+ */
+export async function exportDictionaryData(): Promise<DictionaryExport> {
+  const [dictionary, rules, contexts] = await Promise.all([
+    dictionaryStorage.getValue(),
+    customRulesStorage.getValue(),
+    dictionaryContextsStorage.getValue(),
+  ]);
+
+  return {
+    version: DICTIONARY_EXPORT_VERSION,
+    exportedAt: Date.now(),
+    dictionary,
+    rules,
+    contexts,
+  };
+}
+
+/**
+ * Import dictionary and rules data
+ */
+export async function importDictionaryData(
+  data: DictionaryExport,
+  options?: {
+    merge?: boolean; // If true, merge with existing data; if false, replace
+  },
+): Promise<{ imported: number; skipped: number }> {
+  const merge = options?.merge ?? true;
+  let imported = 0;
+  let skipped = 0;
+
+  if (merge) {
+    // Merge with existing data
+    const [currentDict, currentRules, currentContexts] = await Promise.all([
+      dictionaryStorage.getValue(),
+      customRulesStorage.getValue(),
+      dictionaryContextsStorage.getValue(),
+    ]);
+
+    // Merge dictionary
+    const existingWords = new Set(currentDict.map((e) => e.word.toLowerCase()));
+    const newDictEntries = data.dictionary.filter((e) => {
+      if (existingWords.has(e.word.toLowerCase())) {
+        skipped++;
+        return false;
+      }
+      imported++;
+      return true;
+    });
+    await dictionaryStorage.setValue(
+      [...currentDict, ...newDictEntries].slice(-MAX_DICTIONARY_ENTRIES),
+    );
+
+    // Merge rules
+    const existingPatterns = new Set(
+      currentRules.map((r) => `${r.type}:${r.pattern.toLowerCase()}`),
+    );
+    const newRules = data.rules.filter((r) => {
+      const key = `${r.type}:${r.pattern.toLowerCase()}`;
+      if (existingPatterns.has(key)) {
+        skipped++;
+        return false;
+      }
+      imported++;
+      return true;
+    });
+    await customRulesStorage.setValue(
+      [...currentRules, ...newRules].slice(-MAX_CUSTOM_RULES),
+    );
+
+    // Merge contexts
+    if (data.contexts) {
+      const existingContextNames = new Set(
+        currentContexts.map((c) => c.name.toLowerCase()),
+      );
+      const newContexts = data.contexts.filter(
+        (c) => !existingContextNames.has(c.name.toLowerCase()),
+      );
+      await dictionaryContextsStorage.setValue([
+        ...currentContexts,
+        ...newContexts,
+      ]);
+    }
+  } else {
+    // Replace existing data
+    await Promise.all(
+      [
+        dictionaryStorage.setValue(
+          data.dictionary.slice(-MAX_DICTIONARY_ENTRIES),
+        ),
+        customRulesStorage.setValue(data.rules.slice(-MAX_CUSTOM_RULES)),
+        data.contexts && dictionaryContextsStorage.setValue(data.contexts),
+      ].filter(Boolean) as Promise<void>[],
+    );
+    imported = data.dictionary.length + data.rules.length;
+  }
+
+  return { imported, skipped };
+}
+
+/**
  * Clear all storage (for testing/reset)
  */
 export async function clearAllStorage(): Promise<void> {
@@ -379,6 +664,7 @@ export async function clearAllStorage(): Promise<void> {
     behaviorStorage.removeValue(),
     appearanceStorage.removeValue(),
     dictionaryStorage.removeValue(),
+    dictionaryContextsStorage.removeValue(),
     customRulesStorage.removeValue(),
     sessionIgnoredWordsStorage.removeValue(),
     genrePreferencesStorage.removeValue(),
