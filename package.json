@@ -43,7 +43,7 @@
     "@biomejs/biome": "2.3.8",
     "@tailwindcss/vite": "^4.1.17",
     "@wxt-dev/module-vue": "^1.0.2",
-    "tailwindcss": "^4.1.17",
+    "tailwindcss": "^4.1.18",
     "typescript": "^5.9.2",
     "vue-tsc": "^3.0.6",
     "wxt": "^0.20.6"
