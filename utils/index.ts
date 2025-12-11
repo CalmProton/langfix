@@ -5,6 +5,8 @@
 
 // AI Providers
 export * from './ai-providers';
+// Grammar Engine
+export * from './grammar-engine';
 // Storage
 export * from './storage';
 // Text Extraction
