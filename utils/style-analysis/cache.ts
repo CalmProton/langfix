@@ -47,7 +47,9 @@ export class StyleAnalysisCache {
       textHash: hashString(params.text),
       context: params.context || 'default',
       sensitivity: params.sensitivity || 'medium',
-      categories: (params.categories || ['style', 'clarity', 'conciseness']).sort().join(','),
+      categories: (params.categories || ['style', 'clarity', 'conciseness'])
+        .sort()
+        .join(','),
     };
     return hashString(JSON.stringify(keyData));
   }
@@ -155,7 +157,12 @@ export class StyleAnalysisCache {
   /**
    * Get cache statistics
    */
-  stats(): { entries: number; bytes: number; maxEntries: number; maxBytes: number } {
+  stats(): {
+    entries: number;
+    bytes: number;
+    maxEntries: number;
+    maxBytes: number;
+  } {
     return {
       entries: this.cache.size,
       bytes: this.currentBytes,

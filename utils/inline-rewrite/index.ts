@@ -4,7 +4,10 @@
  */
 
 // Background Handler
-export { getInlineRewriteHandler, InlineRewriteHandler } from './background-handler';
+export {
+  getInlineRewriteHandler,
+  InlineRewriteHandler,
+} from './background-handler';
 
 // Manager
 export {

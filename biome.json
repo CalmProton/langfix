@@ -7,12 +7,7 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": [
-      "**",
-      "!**/node_modules",
-      "!**/.output",
-	  "!**/.wxt"
-    ]
+    "includes": ["**", "!**/node_modules", "!**/.output", "!**/.wxt"]
   },
   "formatter": {
     "enabled": true,

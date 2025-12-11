@@ -51,7 +51,10 @@ export const IssueSeverity = Type.Union([
 export type IssueSeverity = Static<typeof IssueSeverity>;
 
 // Combined issue type
-export type AnyIssueType = StyleIssueType | ClarityIssueType | ConcisenessIssueType;
+export type AnyIssueType =
+  | StyleIssueType
+  | ClarityIssueType
+  | ConcisenessIssueType;
 
 // ============================================================================
 // Writing Context

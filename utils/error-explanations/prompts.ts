@@ -239,7 +239,13 @@ corrections[N]{text,description,confidence,type,preservesIntent}:
  */
 export function mapErrorTypeToCategory(
   errorType: string,
-): 'spelling' | 'grammar' | 'punctuation' | 'style' | 'clarity' | 'word_choice' {
+):
+  | 'spelling'
+  | 'grammar'
+  | 'punctuation'
+  | 'style'
+  | 'clarity'
+  | 'word_choice' {
   switch (errorType) {
     case 'spelling':
       return 'spelling';
@@ -279,7 +285,9 @@ export function mapSeverityToExplanationSeverity(
 /**
  * Determine if error is simple enough for quick explanation (fast model)
  */
-export function isSimpleError(error: ExtendedGrammarError | SuggestionError): boolean {
+export function isSimpleError(
+  error: ExtendedGrammarError | SuggestionError,
+): boolean {
   // Simple errors: spelling, punctuation, basic grammar
   const simpleTypes = ['spelling', 'punctuation'];
   if (simpleTypes.includes(error.type)) {

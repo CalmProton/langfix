@@ -55,13 +55,11 @@ const alternativeCorrections = computed(() => {
 
     <!-- Actions -->
     <div class="lf-correction-actions">
-      <button
-        type="button"
-        class="lf-action-btn"
-        @click="$emit('ignore')"
-      >
+      <button type="button" class="lf-action-btn" @click="$emit('ignore')">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+          <path
+            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
+          />
         </svg>
         Ignore
       </button>
@@ -72,7 +70,9 @@ const alternativeCorrections = computed(() => {
         @click="$emit('addToDictionary')"
       >
         <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2z"/>
+          <path
+            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2z"
+          />
         </svg>
         Add to Dictionary
       </button>

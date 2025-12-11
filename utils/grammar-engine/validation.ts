@@ -50,7 +50,10 @@ function isErrorResponse(data: unknown): data is { error: ToonErrorResponse } {
 /**
  * Parse raw error from TOON decode into ExtendedGrammarError
  */
-function parseRawError(raw: unknown, warnings: string[]): ExtendedGrammarError | null {
+function parseRawError(
+  raw: unknown,
+  warnings: string[],
+): ExtendedGrammarError | null {
   if (typeof raw !== 'object' || raw === null) {
     warnings.push('Invalid error entry: not an object');
     return null;

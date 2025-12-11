@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
-import type { SuggestionError, ViewportRect } from '../../utils/suggestion-ui/types';
+import type {
+  SuggestionError,
+  ViewportRect,
+} from '../../utils/suggestion-ui/types';
 
 const props = defineProps<{
   error: SuggestionError;
@@ -54,9 +57,9 @@ function handleKeydown(event: KeyboardEvent) {
     @click="handleClick"
     @keydown="handleKeydown"
   >
-    <span :class="underlineClass" :style="underlineStyle" />
+    <span :class="underlineClass" :style="underlineStyle"/>
     <span class="lf-sr-only">
-      {{ error.type }}: {{ error.original }} - {{ error.explanation }}
+      {{ error.type }}: {{ error.original }}- {{ error.explanation }}
     </span>
   </button>
 </template>

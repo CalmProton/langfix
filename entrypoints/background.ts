@@ -3,7 +3,9 @@ import { browser } from '#imports';
 import { getInlineRewriteHandler } from '@/utils/inline-rewrite';
 
 export default defineBackground(() => {
-  console.log('[LangFix] Background script initialized', { id: browser.runtime.id });
+  console.log('[LangFix] Background script initialized', {
+    id: browser.runtime.id,
+  });
 
   // Get the inline rewrite handler
   const inlineRewriteHandler = getInlineRewriteHandler();

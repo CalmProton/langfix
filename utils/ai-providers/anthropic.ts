@@ -24,7 +24,9 @@ export class AnthropicProvider extends BaseProvider {
     try {
       // Extract system message if present
       const systemMessage = request.messages.find((m) => m.role === 'system');
-      const nonSystemMessages = request.messages.filter((m) => m.role !== 'system');
+      const nonSystemMessages = request.messages.filter(
+        (m) => m.role !== 'system',
+      );
 
       const response = await this.client.messages.create({
         model: this.getModel(request.modelType),
@@ -76,7 +78,9 @@ export class AnthropicProvider extends BaseProvider {
     try {
       // Extract system message if present
       const systemMessage = request.messages.find((m) => m.role === 'system');
-      const nonSystemMessages = request.messages.filter((m) => m.role !== 'system');
+      const nonSystemMessages = request.messages.filter(
+        (m) => m.role !== 'system',
+      );
 
       const stream = await this.client.messages.stream({
         model: this.getModel(request.modelType),

@@ -48,7 +48,11 @@ export type ThemeMode = 'light' | 'dark' | 'system';
 /**
  * Error type to underline color mapping
  */
-export type UnderlineType = 'grammar' | 'spelling' | 'punctuation' | 'contextual';
+export type UnderlineType =
+  | 'grammar'
+  | 'spelling'
+  | 'punctuation'
+  | 'contextual';
 
 /**
  * Underline style variant based on severity

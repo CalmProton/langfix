@@ -154,7 +154,12 @@ export class GrammarCache {
   /**
    * Get cache statistics
    */
-  stats(): { entries: number; bytes: number; maxEntries: number; maxBytes: number } {
+  stats(): {
+    entries: number;
+    bytes: number;
+    maxEntries: number;
+    maxBytes: number;
+  } {
     return {
       entries: this.cache.size,
       bytes: this.currentBytes,

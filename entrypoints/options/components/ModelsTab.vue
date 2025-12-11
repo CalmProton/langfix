@@ -13,16 +13,32 @@ const saveStatus = ref<'idle' | 'saving' | 'saved' | 'error'>('idle');
 // Model presets for each provider
 const modelPresets = {
   anthropic: [
-    { main: 'claude-sonnet-4-20250514', fast: 'claude-haiku-4-20250514', label: 'Claude 4 (Latest)' },
-    { main: 'claude-3-5-sonnet-20241022', fast: 'claude-3-haiku-20240307', label: 'Claude 3.5/3' },
+    {
+      main: 'claude-sonnet-4-20250514',
+      fast: 'claude-haiku-4-20250514',
+      label: 'Claude 4 (Latest)',
+    },
+    {
+      main: 'claude-3-5-sonnet-20241022',
+      fast: 'claude-3-haiku-20240307',
+      label: 'Claude 3.5/3',
+    },
   ],
   openai: [
     { main: 'gpt-4o', fast: 'gpt-4o-mini', label: 'GPT-4o (Latest)' },
     { main: 'gpt-4-turbo', fast: 'gpt-3.5-turbo', label: 'GPT-4 Turbo / 3.5' },
   ],
   openrouter: [
-    { main: 'anthropic/claude-sonnet-4', fast: 'anthropic/claude-haiku-4', label: 'Claude 4 via OpenRouter' },
-    { main: 'openai/gpt-4o', fast: 'openai/gpt-4o-mini', label: 'GPT-4o via OpenRouter' },
+    {
+      main: 'anthropic/claude-sonnet-4',
+      fast: 'anthropic/claude-haiku-4',
+      label: 'Claude 4 via OpenRouter',
+    },
+    {
+      main: 'openai/gpt-4o',
+      fast: 'openai/gpt-4o-mini',
+      label: 'GPT-4o via OpenRouter',
+    },
   ],
 };
 
@@ -81,15 +97,15 @@ async function saveSettings() {
       <div class="p-4 border rounded-lg">
         <h3 class="font-medium mb-2">🧠 Main Model</h3>
         <p class="text-sm text-muted-foreground">
-          Used for complex tasks like rewriting, tone analysis, and detailed explanations.
-          Should be a capable model with good reasoning abilities.
+          Used for complex tasks like rewriting, tone analysis, and detailed
+          explanations. Should be a capable model with good reasoning abilities.
         </p>
       </div>
       <div class="p-4 border rounded-lg">
         <h3 class="font-medium mb-2">⚡ Fast Model</h3>
         <p class="text-sm text-muted-foreground">
-          Used for quick tasks like grammar checking, spelling, and simple corrections.
-          Optimized for speed and cost efficiency.
+          Used for quick tasks like grammar checking, spelling, and simple
+          corrections. Optimized for speed and cost efficiency.
         </p>
       </div>
     </div>
@@ -123,7 +139,7 @@ async function saveSettings() {
         v-model="mainModel"
         placeholder="e.g., claude-sonnet-4-20250514"
         class="w-full px-3 py-2 border rounded-md bg-background"
-      />
+      >
       <p class="text-xs text-muted-foreground">
         Enter the model identifier as specified by your provider
       </p>
@@ -138,7 +154,7 @@ async function saveSettings() {
         v-model="fastModel"
         placeholder="e.g., claude-haiku-4-20250514"
         class="w-full px-3 py-2 border rounded-md bg-background"
-      />
+      >
       <p class="text-xs text-muted-foreground">
         A smaller, faster model for quick checks
       </p>

@@ -14,43 +14,95 @@ const featureGroups = [
     title: 'Core Checks',
     description: 'Essential grammar and spelling features',
     features: [
-      { key: 'grammarCheck' as const, label: 'Grammar Check', description: 'Detect grammatical errors' },
-      { key: 'spellCheck' as const, label: 'Spell Check', description: 'Find and correct spelling mistakes' },
-      { key: 'punctuationCheck' as const, label: 'Punctuation Check', description: 'Fix punctuation issues' },
+      {
+        key: 'grammarCheck' as const,
+        label: 'Grammar Check',
+        description: 'Detect grammatical errors',
+      },
+      {
+        key: 'spellCheck' as const,
+        label: 'Spell Check',
+        description: 'Find and correct spelling mistakes',
+      },
+      {
+        key: 'punctuationCheck' as const,
+        label: 'Punctuation Check',
+        description: 'Fix punctuation issues',
+      },
     ],
   },
   {
     title: 'Style Analysis',
     description: 'Writing style and clarity improvements',
     features: [
-      { key: 'styleAnalysis' as const, label: 'Style Analysis', description: 'Analyze overall writing style' },
-      { key: 'passiveVoiceDetection' as const, label: 'Passive Voice Detection', description: 'Highlight passive voice usage' },
-      { key: 'adverbDetection' as const, label: 'Adverb Detection', description: 'Flag excessive adverb use' },
+      {
+        key: 'styleAnalysis' as const,
+        label: 'Style Analysis',
+        description: 'Analyze overall writing style',
+      },
+      {
+        key: 'passiveVoiceDetection' as const,
+        label: 'Passive Voice Detection',
+        description: 'Highlight passive voice usage',
+      },
+      {
+        key: 'adverbDetection' as const,
+        label: 'Adverb Detection',
+        description: 'Flag excessive adverb use',
+      },
     ],
   },
   {
     title: 'Readability',
     description: 'Text complexity and readability tools',
     features: [
-      { key: 'readabilityScore' as const, label: 'Readability Score', description: 'Show reading level scores' },
-      { key: 'readabilityHeatmap' as const, label: 'Readability Heatmap', description: 'Visual complexity overlay' },
+      {
+        key: 'readabilityScore' as const,
+        label: 'Readability Score',
+        description: 'Show reading level scores',
+      },
+      {
+        key: 'readabilityHeatmap' as const,
+        label: 'Readability Heatmap',
+        description: 'Visual complexity overlay',
+      },
     ],
   },
   {
     title: 'Enhancement',
     description: 'Writing improvement suggestions',
     features: [
-      { key: 'synonymSuggestions' as const, label: 'Synonym Suggestions', description: 'Alternative word choices' },
-      { key: 'rewritingSuggestions' as const, label: 'Rewriting Suggestions', description: 'Sentence rewrite options' },
-      { key: 'toneDetection' as const, label: 'Tone Detection', description: 'Analyze writing tone' },
+      {
+        key: 'synonymSuggestions' as const,
+        label: 'Synonym Suggestions',
+        description: 'Alternative word choices',
+      },
+      {
+        key: 'rewritingSuggestions' as const,
+        label: 'Rewriting Suggestions',
+        description: 'Sentence rewrite options',
+      },
+      {
+        key: 'toneDetection' as const,
+        label: 'Tone Detection',
+        description: 'Analyze writing tone',
+      },
     ],
   },
   {
     title: 'Utility',
     description: 'Additional helpful features',
     features: [
-      { key: 'wordCount' as const, label: 'Word Count', description: 'Show word and character counts' },
-      { key: 'autoCorrect' as const, label: 'Auto-Correct', description: 'Automatically fix common errors' },
+      {
+        key: 'wordCount' as const,
+        label: 'Word Count',
+        description: 'Show word and character counts',
+      },
+      {
+        key: 'autoCorrect' as const,
+        label: 'Auto-Correct',
+        description: 'Automatically fix common errors',
+      },
     ],
   },
 ];
@@ -84,7 +136,7 @@ async function saveSettings() {
 }
 
 // Enable/disable all in a group
-function toggleGroup(group: typeof featureGroups[0], enabled: boolean) {
+function toggleGroup(group: (typeof featureGroups)[0], enabled: boolean) {
   for (const feature of group.features) {
     features.value[feature.key] = enabled;
   }
@@ -138,7 +190,9 @@ function toggleGroup(group: typeof featureGroups[0], enabled: boolean) {
           >
             <div>
               <div class="font-medium text-sm">{{ feature.label }}</div>
-              <div class="text-xs text-muted-foreground">{{ feature.description }}</div>
+              <div class="text-xs text-muted-foreground">
+                {{ feature.description }}
+              </div>
             </div>
             <button
               type="button"

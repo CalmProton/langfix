@@ -168,7 +168,12 @@ error{code,message}:
  * Build the user prompt for style analysis
  */
 export function buildStyleUserPrompt(request: StyleAnalysisRequest): string {
-  const { text, context = 'formal', sensitivity = 'medium', categories = ['style', 'clarity', 'conciseness'] } = request;
+  const {
+    text,
+    context = 'formal',
+    sensitivity = 'medium',
+    categories = ['style', 'clarity', 'conciseness'],
+  } = request;
 
   // Build context section in TOON format
   const contextParts = [
@@ -182,7 +187,7 @@ export function buildStyleUserPrompt(request: StyleAnalysisRequest): string {
 Analysis Parameters:
 \`\`\`toon
 params{context,sensitivity,categories}:
-  ${contextParts.map(p => p.split(':')[1]).join(',')}
+  ${contextParts.map((p) => p.split(':')[1]).join(',')}
 \`\`\`
 
 TEXT:
@@ -226,10 +231,15 @@ export function countWords(text: string): number {
 /**
  * Estimate the complexity of text for model selection
  */
-export function estimateTextComplexity(text: string): 'simple' | 'moderate' | 'complex' {
+export function estimateTextComplexity(
+  text: string,
+): 'simple' | 'moderate' | 'complex' {
   const wordCount = countWords(text);
-  const sentenceCount = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
-  const avgWordsPerSentence = sentenceCount > 0 ? wordCount / sentenceCount : wordCount;
+  const sentenceCount = text
+    .split(/[.!?]+/)
+    .filter((s) => s.trim().length > 0).length;
+  const avgWordsPerSentence =
+    sentenceCount > 0 ? wordCount / sentenceCount : wordCount;
 
   if (wordCount < 50 && avgWordsPerSentence < 15) {
     return 'simple';

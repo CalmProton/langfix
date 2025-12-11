@@ -6,7 +6,9 @@ import FeaturesTab from './components/FeaturesTab.vue';
 import AppearanceTab from './components/AppearanceTab.vue';
 import AboutTab from './components/AboutTab.vue';
 
-const activeTab = ref<'provider' | 'models' | 'features' | 'appearance' | 'about'>('provider');
+const activeTab = ref<
+  'provider' | 'models' | 'features' | 'appearance' | 'about'
+>('provider');
 
 const tabs = [
   { id: 'provider' as const, label: 'AI Provider', icon: '🔌' },
@@ -22,9 +24,7 @@ const tabs = [
     <!-- Header -->
     <header class="mb-8">
       <h1 class="text-3xl font-bold mb-2">LangFix Settings</h1>
-      <p class="text-muted-foreground">
-        Configure your AI writing assistant
-      </p>
+      <p class="text-muted-foreground">Configure your AI writing assistant</p>
     </header>
 
     <!-- Tab Navigation -->
@@ -47,11 +47,11 @@ const tabs = [
 
     <!-- Tab Content -->
     <main>
-      <ProviderTab v-if="activeTab === 'provider'" />
-      <ModelsTab v-else-if="activeTab === 'models'" />
-      <FeaturesTab v-else-if="activeTab === 'features'" />
-      <AppearanceTab v-else-if="activeTab === 'appearance'" />
-      <AboutTab v-else-if="activeTab === 'about'" />
+      <ProviderTab v-if="activeTab === 'provider'"/>
+      <ModelsTab v-else-if="activeTab === 'models'"/>
+      <FeaturesTab v-else-if="activeTab === 'features'"/>
+      <AppearanceTab v-else-if="activeTab === 'appearance'"/>
+      <AboutTab v-else-if="activeTab === 'about'"/>
     </main>
   </div>
 </template>

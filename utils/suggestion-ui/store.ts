@@ -95,10 +95,9 @@ export class SuggestionStore {
           ...state,
           errors: action.errors,
           // Clear active error if it's no longer in the list
-          activeErrorId:
-            action.errors.some((e) => e.id === state.activeErrorId)
-              ? state.activeErrorId
-              : null,
+          activeErrorId: action.errors.some((e) => e.id === state.activeErrorId)
+            ? state.activeErrorId
+            : null,
         };
 
       case 'ADD_ERRORS':
@@ -114,7 +113,8 @@ export class SuggestionStore {
           errors: newErrors,
           activeErrorId:
             state.activeErrorId === action.id ? null : state.activeErrorId,
-          popupOpen: state.activeErrorId === action.id ? false : state.popupOpen,
+          popupOpen:
+            state.activeErrorId === action.id ? false : state.popupOpen,
         };
       }
 
@@ -138,8 +138,7 @@ export class SuggestionStore {
           ...state,
           visibility: action.visibility,
           // Hide popup when visibility changes to hidden
-          popupOpen:
-            action.visibility === 'hidden' ? false : state.popupOpen,
+          popupOpen: action.visibility === 'hidden' ? false : state.popupOpen,
         };
 
       case 'SET_THEME':
@@ -242,7 +241,9 @@ export class SuggestionStore {
   /**
    * Subscribe to visibility changes
    */
-  onVisibilityChange(listener: (visibility: VisibilityState) => void): Disposer {
+  onVisibilityChange(
+    listener: (visibility: VisibilityState) => void,
+  ): Disposer {
     this.visibilityListeners.add(listener);
     return () => this.visibilityListeners.delete(listener);
   }

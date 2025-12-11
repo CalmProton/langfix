@@ -175,7 +175,11 @@ export class ExplanationCache {
         (entry.accessCount === oldest.accessCount &&
           entry.cachedAt < oldest.cachedAt)
       ) {
-        oldest = { key, accessCount: entry.accessCount, cachedAt: entry.cachedAt };
+        oldest = {
+          key,
+          accessCount: entry.accessCount,
+          cachedAt: entry.cachedAt,
+        };
       }
     }
 

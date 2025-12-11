@@ -279,9 +279,7 @@ export class CorrectionHistory {
     }
 
     stats.acceptanceRate =
-      stats.total > 0
-        ? (stats.accepted + stats.modified) / stats.total
-        : 0;
+      stats.total > 0 ? (stats.accepted + stats.modified) / stats.total : 0;
 
     return stats;
   }
@@ -318,9 +316,7 @@ let historyInstance: CorrectionHistory | null = null;
 /**
  * Get or create the correction history singleton
  */
-export function getCorrectionHistory(
-  privacyMode?: boolean,
-): CorrectionHistory {
+export function getCorrectionHistory(privacyMode?: boolean): CorrectionHistory {
   if (!historyInstance) {
     historyInstance = new CorrectionHistory(privacyMode);
   } else if (privacyMode !== undefined) {

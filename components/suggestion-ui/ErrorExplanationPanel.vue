@@ -96,14 +96,12 @@ function toggleDetails() {
       <span class="lf-explanation-icon">{{ categoryIcon }}</span>
       <span class="lf-explanation-category">{{ categoryLabel }}</span>
       <span v-if="loading" class="lf-explanation-loading">
-        <span class="lf-spinner" />
+        <span class="lf-spinner"/>
       </span>
     </div>
 
     <!-- Summary -->
-    <div class="lf-explanation-summary">
-      {{ explanation.summary }}
-    </div>
+    <div class="lf-explanation-summary">{{ explanation.summary }}</div>
 
     <!-- Reason -->
     <div v-if="explanation.explanation.reason" class="lf-explanation-reason">
@@ -120,7 +118,10 @@ function toggleDetails() {
     />
 
     <!-- Details Section (expandable) -->
-    <div v-if="hasDetails || showLoadDetailsButton" class="lf-explanation-details-section">
+    <div
+      v-if="hasDetails || showLoadDetailsButton"
+      class="lf-explanation-details-section"
+    >
       <!-- Load Details Button -->
       <button
         v-if="showLoadDetailsButton"
@@ -130,7 +131,9 @@ function toggleDetails() {
         @click="handleLoadDetails"
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 12.5a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11zM8 4a.75.75 0 0 0-.75.75v2.5a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8 4zm0 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+          <path
+            d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 12.5a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11zM8 4a.75.75 0 0 0-.75.75v2.5a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8 4zm0 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
+          />
         </svg>
         {{ loading ? 'Loading...' : 'Learn more' }}
       </button>
@@ -158,12 +161,14 @@ function toggleDetails() {
       <div v-if="showDetails && hasDetails" class="lf-explanation-details">
         <!-- Rule -->
         <div v-if="explanation.explanation.rule" class="lf-detail-item">
-          <strong>Rule:</strong> {{ explanation.explanation.rule }}
+          <strong>Rule:</strong>
+          {{ explanation.explanation.rule }}
         </div>
 
         <!-- Style Guide -->
         <div v-if="explanation.explanation.styleGuide" class="lf-detail-item">
-          <strong>Style Guide:</strong> {{ explanation.explanation.styleGuide }}
+          <strong>Style Guide:</strong>
+          {{ explanation.explanation.styleGuide }}
         </div>
 
         <!-- Examples -->

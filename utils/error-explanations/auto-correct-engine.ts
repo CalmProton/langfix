@@ -296,7 +296,12 @@ export class AutoCorrectEngine {
     error: ExtendedGrammarError | SuggestionError,
   ): boolean {
     // Use scorer for base confidence/type checks
-    if (!this.scorer.shouldAutoCorrect(correction, this.config.autoCorrectThreshold)) {
+    if (
+      !this.scorer.shouldAutoCorrect(
+        correction,
+        this.config.autoCorrectThreshold,
+      )
+    ) {
       return false;
     }
 

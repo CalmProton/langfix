@@ -124,7 +124,10 @@ export class StyleAnalysisEngine {
     const response = await this.provider.sendRequest(aiRequest);
 
     // Parse TOON response
-    const { issues, warnings } = safeParseStyleToon(response.content, request.text);
+    const { issues, warnings } = safeParseStyleToon(
+      response.content,
+      request.text,
+    );
 
     if (warnings.length > 0) {
       console.warn('Style analysis warnings:', warnings);
@@ -140,7 +143,9 @@ export class StyleAnalysisEngine {
   /**
    * Analyze text in chunks for long documents
    */
-  async analyzeChunked(request: StyleAnalysisRequest): Promise<StyleAnalysisResponse> {
+  async analyzeChunked(
+    request: StyleAnalysisRequest,
+  ): Promise<StyleAnalysisResponse> {
     const start = performance.now();
     const { text, ...options } = request;
 
@@ -149,7 +154,11 @@ export class StyleAnalysisEngine {
       return this.analyze(request);
     }
 
-    const chunks = this.splitIntoChunks(text, this.config.maxChunkSize, this.config.chunkOverlap);
+    const chunks = this.splitIntoChunks(
+      text,
+      this.config.maxChunkSize,
+      this.config.chunkOverlap,
+    );
     const allIssues: StyleIssue[] = [];
 
     // Analyze each chunk
@@ -160,7 +169,7 @@ export class StyleAnalysisEngine {
       });
 
       // Adjust indices for chunk offset
-      const adjustedIssues = chunkResult.issues.map(issue => ({
+      const adjustedIssues = chunkResult.issues.map((issue) => ({
         ...issue,
         startIndex: issue.startIndex + chunk.offset,
         endIndex: issue.endIndex + chunk.offset,
@@ -233,9 +242,12 @@ export class StyleAnalysisEngine {
   /**
    * Get issues by category
    */
-  filterByCategory(issues: StyleIssue[], categories: IssueCategory[]): StyleIssue[] {
+  filterByCategory(
+    issues: StyleIssue[],
+    categories: IssueCategory[],
+  ): StyleIssue[] {
     const categorySet = new Set(categories);
-    return issues.filter(issue => categorySet.has(issue.category));
+    return issues.filter((issue) => categorySet.has(issue.category));
   }
 
   /**

@@ -57,7 +57,11 @@ function generateIssueId(): string {
 /**
  * Valid categories for style analysis
  */
-const VALID_CATEGORIES: Set<IssueCategory> = new Set(['style', 'clarity', 'conciseness']);
+const VALID_CATEGORIES: Set<IssueCategory> = new Set([
+  'style',
+  'clarity',
+  'conciseness',
+]);
 
 /**
  * Valid severities for style analysis
@@ -174,7 +178,10 @@ export interface StyleParseResult {
 /**
  * Safely parse TOON response with error handling
  */
-export function safeParseStyleToon(response: string, _text: string): StyleParseResult {
+export function safeParseStyleToon(
+  response: string,
+  _text: string,
+): StyleParseResult {
   const warnings: string[] = [];
   const raw = extractToonBlock(response);
 
@@ -285,5 +292,5 @@ export function filterIssuesByCategory(
   categories: IssueCategory[],
 ): StyleIssue[] {
   const categorySet = new Set(categories);
-  return issues.filter(issue => categorySet.has(issue.category));
+  return issues.filter((issue) => categorySet.has(issue.category));
 }

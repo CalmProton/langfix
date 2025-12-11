@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { HTMLAttributes } from "vue"
-import { cn } from "@/lib/utils"
+import type { HTMLAttributes } from 'vue';
+import { cn } from '@/lib/utils';
 
-const props = defineProps<{ class?: HTMLAttributes["class"] }>()
+const props = defineProps<{ class?: HTMLAttributes['class'] }>();
 </script>
 
 <template>
@@ -11,6 +11,6 @@ const props = defineProps<{ class?: HTMLAttributes["class"] }>()
     :class="cn('mt-auto flex flex-col gap-2 p-4', props.class)
     "
   >
-    <slot />
+    <slot/>
   </div>
 </template>

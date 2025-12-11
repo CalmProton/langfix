@@ -100,7 +100,7 @@ function buildContextToon(context: GrammarContext): string {
 
   if (parts.length === 0) return '';
 
-  return `Context:\n\`\`\`toon\ncontext{${parts.map(p => p.split(':')[0]).join(',')}}:\n  ${parts.map(p => p.split(':')[1]).join(',')}\n\`\`\``;
+  return `Context:\n\`\`\`toon\ncontext{${parts.map((p) => p.split(':')[0]).join(',')}}:\n  ${parts.map((p) => p.split(':')[1]).join(',')}\n\`\`\``;
 }
 
 /**

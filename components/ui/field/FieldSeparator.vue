@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { HTMLAttributes } from "vue"
-import { cn } from "@/lib/utils"
-import { Separator } from '@/components/ui/separator'
+import type { HTMLAttributes } from 'vue';
+import { cn } from '@/lib/utils';
+import { Separator } from '@/components/ui/separator';
 
 const props = defineProps<{
-  class?: HTMLAttributes["class"]
-}>()
+  class?: HTMLAttributes['class'];
+}>();
 </script>
 
 <template>
@@ -17,13 +17,13 @@ const props = defineProps<{
       props.class,
     )"
   >
-    <Separator class="absolute inset-0 top-1/2" />
+    <Separator class="absolute inset-0 top-1/2"/>
     <span
       v-if="$slots.default"
       class="bg-background text-muted-foreground relative mx-auto block w-fit px-2"
       data-slot="field-separator-content"
     >
-      <slot />
+      <slot/>
     </span>
   </div>
 </template>

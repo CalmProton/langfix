@@ -76,12 +76,10 @@ export const appearanceStorage = storage.defineItem<AppearanceSettings>(
 /**
  * Style analysis settings - synced across devices
  */
-export const styleAnalysisSettingsStorage = storage.defineItem<StyleAnalysisSettings>(
-  'sync:styleAnalysis',
-  {
+export const styleAnalysisSettingsStorage =
+  storage.defineItem<StyleAnalysisSettings>('sync:styleAnalysis', {
     fallback: DEFAULT_STYLE_ANALYSIS_SETTINGS,
-  },
-);
+  });
 
 // ============================================================================
 // Dictionary & Rules (sync storage with limits)

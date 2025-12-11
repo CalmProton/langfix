@@ -45,7 +45,9 @@ const buttonClass = computed(() => {
       viewBox="0 0 16 16"
       fill="currentColor"
     >
-      <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+      <path
+        d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"
+      />
     </svg>
 
     <!-- Correction Text -->
@@ -62,7 +64,10 @@ const buttonClass = computed(() => {
   </button>
 
   <!-- Description (shown below for primary) -->
-  <div v-if="isPrimary && correction.description" class="lf-correction-description">
+  <div
+    v-if="isPrimary && correction.description"
+    class="lf-correction-description"
+  >
     {{ correction.description }}
   </div>
 </template>

@@ -11,8 +11,18 @@ const saveStatus = ref<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
 // Theme options
 const themeOptions = [
-  { id: 'auto' as const, label: 'System', icon: '💻', description: 'Follow system preference' },
-  { id: 'light' as const, label: 'Light', icon: '☀️', description: 'Light theme' },
+  {
+    id: 'auto' as const,
+    label: 'System',
+    icon: '💻',
+    description: 'Follow system preference',
+  },
+  {
+    id: 'light' as const,
+    label: 'Light',
+    icon: '☀️',
+    description: 'Light theme',
+  },
   { id: 'dark' as const, label: 'Dark', icon: '🌙', description: 'Dark theme' },
 ];
 
@@ -20,15 +30,18 @@ const themeOptions = [
 onMounted(async () => {
   const stored = await appearanceStorage.getValue();
   theme.value = stored.theme ?? DEFAULT_APPEARANCE_SETTINGS.theme;
-  showWordCount.value = stored.showWordCount ?? DEFAULT_APPEARANCE_SETTINGS.showWordCount;
+  showWordCount.value =
+    stored.showWordCount ?? DEFAULT_APPEARANCE_SETTINGS.showWordCount;
 });
 
 // Apply theme to document
 watchEffect(() => {
   const root = document.documentElement;
-  
+
   if (theme.value === 'auto') {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const prefersDark = window.matchMedia(
+      '(prefers-color-scheme: dark)',
+    ).matches;
     root.classList.toggle('dark', prefersDark);
   } else {
     root.classList.toggle('dark', theme.value === 'dark');
@@ -60,9 +73,7 @@ async function saveSettings() {
   <div class="space-y-6">
     <div class="space-y-4">
       <h2 class="text-xl font-semibold">Appearance</h2>
-      <p class="text-muted-foreground text-sm">
-        Customize how LangFix looks
-      </p>
+      <p class="text-muted-foreground text-sm">Customize how LangFix looks</p>
     </div>
 
     <!-- Theme Selection -->
@@ -84,10 +95,12 @@ async function saveSettings() {
             :value="option.id"
             v-model="theme"
             class="sr-only"
-          />
+          >
           <span class="text-2xl">{{ option.icon }}</span>
           <span class="font-medium text-sm">{{ option.label }}</span>
-          <span class="text-xs text-muted-foreground text-center">{{ option.description }}</span>
+          <span class="text-xs text-muted-foreground text-center"
+            >{{ option.description }}</span
+          >
         </label>
       </div>
     </div>
@@ -95,8 +108,10 @@ async function saveSettings() {
     <!-- Additional Options -->
     <div class="space-y-4">
       <h3 class="text-sm font-medium">Display Options</h3>
-      
-      <label class="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-muted/50">
+
+      <label
+        class="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-muted/50"
+      >
         <div>
           <div class="font-medium text-sm">Show Word Count</div>
           <div class="text-xs text-muted-foreground">

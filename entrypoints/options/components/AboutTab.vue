@@ -9,10 +9,26 @@ const links = [
 ];
 
 const technologies = [
-  { name: 'WXT', url: 'https://wxt.dev', description: 'Cross-browser extension framework' },
-  { name: 'Vue 3', url: 'https://vuejs.org', description: 'Progressive JavaScript framework' },
-  { name: 'Tailwind CSS', url: 'https://tailwindcss.com', description: 'Utility-first CSS framework' },
-  { name: 'TOON', url: 'https://toonformat.dev', description: 'Token-efficient data format' },
+  {
+    name: 'WXT',
+    url: 'https://wxt.dev',
+    description: 'Cross-browser extension framework',
+  },
+  {
+    name: 'Vue 3',
+    url: 'https://vuejs.org',
+    description: 'Progressive JavaScript framework',
+  },
+  {
+    name: 'Tailwind CSS',
+    url: 'https://tailwindcss.com',
+    description: 'Utility-first CSS framework',
+  },
+  {
+    name: 'TOON',
+    url: 'https://toonformat.dev',
+    description: 'Token-efficient data format',
+  },
 ];
 </script>
 
@@ -40,9 +56,10 @@ const technologies = [
     <div class="space-y-3">
       <h3 class="font-medium">What is LangFix?</h3>
       <p class="text-sm text-muted-foreground leading-relaxed">
-        LangFix is a free, open-source alternative to Grammarly that lets you use your own AI API keys.
-        Connect to Anthropic, OpenAI, OpenRouter, or any compatible provider to get powerful writing
-        assistance while maintaining full control over your data and costs.
+        LangFix is a free, open-source alternative to Grammarly that lets you
+        use your own AI API keys. Connect to Anthropic, OpenAI, OpenRouter, or
+        any compatible provider to get powerful writing assistance while
+        maintaining full control over your data and costs.
       </p>
     </div>
 
@@ -109,7 +126,9 @@ const technologies = [
         >
           <div>
             <div class="font-medium text-sm">{{ tech.name }}</div>
-            <div class="text-xs text-muted-foreground">{{ tech.description }}</div>
+            <div class="text-xs text-muted-foreground">
+              {{ tech.description }}
+            </div>
           </div>
         </a>
       </div>

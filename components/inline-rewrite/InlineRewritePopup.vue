@@ -1,7 +1,10 @@
 <script lang="ts" setup>
 import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue';
 import { calculatePopupPosition } from '../../utils/suggestion-ui/rect-helpers';
-import { REWRITE_MODE_METADATA, type RewriteMode } from '../../utils/rewrite-engine/types';
+import {
+  REWRITE_MODE_METADATA,
+  type RewriteMode,
+} from '../../utils/rewrite-engine/types';
 import type { InlineRewriteState } from '../../utils/inline-rewrite/types';
 import type { PopupAnchor } from '../../utils/suggestion-ui/types';
 
@@ -37,8 +40,8 @@ const position = ref({ x: 0, y: 0 });
 const anchor = ref<PopupAnchor>('below');
 
 // Computed
-const isLoading = computed(() =>
-  props.state.status === 'loading' || props.state.status === 'streaming'
+const isLoading = computed(
+  () => props.state.status === 'loading' || props.state.status === 'streaming',
 );
 
 const isStreaming = computed(() => props.state.status === 'streaming');
@@ -47,21 +50,18 @@ const isDone = computed(() => props.state.status === 'done');
 
 const isError = computed(() => props.state.status === 'error');
 
-const hasResult = computed(() =>
-  props.state.resultText.length > 0
-);
+const hasResult = computed(() => props.state.resultText.length > 0);
 
-const canApply = computed(() =>
-  isDone.value && hasResult.value
-);
+const canApply = computed(() => isDone.value && hasResult.value);
 
-const currentModeLabel = computed(() =>
-  REWRITE_MODE_METADATA[props.state.mode]?.label || props.state.mode
+const currentModeLabel = computed(
+  () => REWRITE_MODE_METADATA[props.state.mode]?.label || props.state.mode,
 );
 
 const wordDelta = computed(() => {
   if (!props.state.stats) return null;
-  const delta = props.state.stats.rewrittenWords - props.state.stats.originalWords;
+  const delta =
+    props.state.stats.rewrittenWords - props.state.stats.originalWords;
   if (delta > 0) return `+${delta}`;
   if (delta < 0) return `${delta}`;
   return '0';
@@ -217,7 +217,12 @@ onUnmounted(() => {
         @click="handleClose"
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M12 4L4 12M4 4l8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path
+            d="M12 4L4 12M4 4l8 8"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
         </svg>
       </button>
     </div>
@@ -236,7 +241,7 @@ onUnmounted(() => {
         <span class="lf-rewrite-label">{{ currentModeLabel }}:</span>
         <div v-if="isDone" class="lf-rewrite-badges">
           <span v-if="wordDelta" class="lf-badge lf-badge--delta">
-            {{ wordDelta }} words
+            {{ wordDelta }}words
           </span>
           <span v-if="latencyDisplay" class="lf-badge lf-badge--time">
             {{ latencyDisplay }}
@@ -246,8 +251,8 @@ onUnmounted(() => {
 
       <!-- Loading state -->
       <div v-if="isLoading && !hasResult" class="lf-rewrite-loading">
-        <div class="lf-skeleton" />
-        <div class="lf-skeleton lf-skeleton--short" />
+        <div class="lf-skeleton"/>
+        <div class="lf-skeleton lf-skeleton--short"/>
       </div>
 
       <!-- Streaming/Result text -->
@@ -258,14 +263,12 @@ onUnmounted(() => {
         aria-live="polite"
       >
         {{ state.resultText }}
-        <span v-if="isStreaming" class="lf-cursor" />
+        <span v-if="isStreaming" class="lf-cursor"/>
       </div>
 
       <!-- Error state -->
       <div v-else-if="isError && state.error" class="lf-rewrite-error">
-        <div class="lf-error-message">
-          {{ state.error.message }}
-        </div>
+        <div class="lf-error-message">{{ state.error.message }}</div>
         <button
           v-if="state.error.retryable"
           type="button"
@@ -303,11 +306,7 @@ onUnmounted(() => {
       >
         Copy
       </button>
-      <button
-        type="button"
-        class="lf-btn lf-btn--ghost"
-        @click="handleClose"
-      >
+      <button type="button" class="lf-btn lf-btn--ghost" @click="handleClose">
         Cancel
       </button>
     </div>
@@ -435,7 +434,12 @@ onUnmounted(() => {
 
 .lf-skeleton {
   height: 14px;
-  background: linear-gradient(90deg, var(--lf-surface) 25%, var(--lf-border) 50%, var(--lf-surface) 75%);
+  background: linear-gradient(
+    90deg,
+    var(--lf-surface) 25%,
+    var(--lf-border) 50%,
+    var(--lf-surface) 75%
+  );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: 4px;
@@ -447,8 +451,12 @@ onUnmounted(() => {
 }
 
 @keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 .lf-cursor {
@@ -462,8 +470,13 @@ onUnmounted(() => {
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 .lf-rewrite-error {

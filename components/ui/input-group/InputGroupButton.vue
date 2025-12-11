@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import type { InputGroupButtonProps } from "."
-import { cn } from "@/lib/utils"
-import { Button } from '@/components/ui/button'
-import { inputGroupButtonVariants } from "."
+import type { InputGroupButtonProps } from '.';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { inputGroupButtonVariants } from '.';
 
 const props = withDefaults(defineProps<InputGroupButtonProps>(), {
-  size: "xs",
-  variant: "ghost",
-})
+  size: 'xs',
+  variant: 'ghost',
+});
 </script>
 
 <template>
@@ -16,6 +16,6 @@ const props = withDefaults(defineProps<InputGroupButtonProps>(), {
     :variant="props.variant"
     :class="cn(inputGroupButtonVariants({ size: props.size }), props.class)"
   >
-    <slot />
+    <slot/>
   </Button>
 </template>

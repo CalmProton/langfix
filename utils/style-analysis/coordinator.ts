@@ -43,10 +43,7 @@ export class StyleAnalysisCoordinator {
   /** Debounce delay in ms */
   private debounceDelay = 2000;
 
-  constructor(
-    provider: AIProvider,
-    config?: Partial<StyleAnalysisConfig>,
-  ) {
+  constructor(provider: AIProvider, config?: Partial<StyleAnalysisConfig>) {
     this.config = { ...DEFAULT_STYLE_ANALYSIS_CONFIG, ...config };
     this.engine = new StyleAnalysisEngine(provider, config);
   }
@@ -83,7 +80,9 @@ export class StyleAnalysisCoordinator {
   /**
    * Analyze text immediately (no debouncing)
    */
-  async analyzeText(request: StyleAnalysisRequest): Promise<StyleAnalysisResponse> {
+  async analyzeText(
+    request: StyleAnalysisRequest,
+  ): Promise<StyleAnalysisResponse> {
     const queueKey = this.getQueueKey(request);
 
     // Check if analysis already in progress for this text

@@ -122,7 +122,8 @@ export class ConfidenceScorer {
     }
 
     // Calculate length ratio (closer to 1 is better for preserving meaning)
-    const ratio = Math.min(originalLength, correctionLength) /
+    const ratio =
+      Math.min(originalLength, correctionLength) /
       Math.max(originalLength, correctionLength);
 
     // Slight bonus for similar length (indicates minimal change)
@@ -150,10 +151,7 @@ export class ConfidenceScorer {
   /**
    * Apply bonus based on user correction history
    */
-  private applyHistoryBonus(
-    score: number,
-    history?: HistorySummary,
-  ): number {
+  private applyHistoryBonus(score: number, history?: HistorySummary): number {
     if (!history || history.total === 0) {
       return score;
     }
@@ -229,7 +227,7 @@ export class ConfidenceScorer {
       // Only auto-correct simple replacements
       (correction.type === 'replacement' || correction.type === 'insertion') &&
       // Must preserve intent if metadata is available
-      (correction.metadata?.preservesIntent !== false)
+      correction.metadata?.preservesIntent !== false
     );
   }
 

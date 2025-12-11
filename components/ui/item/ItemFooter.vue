@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { HTMLAttributes } from "vue"
-import { cn } from "@/lib/utils"
+import type { HTMLAttributes } from 'vue';
+import { cn } from '@/lib/utils';
 
 const props = defineProps<{
-  class?: HTMLAttributes["class"]
-}>()
+  class?: HTMLAttributes['class'];
+}>();
 </script>
 
 <template>
@@ -12,6 +12,6 @@ const props = defineProps<{
     data-slot="item-footer"
     :class="cn('flex basis-full items-center justify-between gap-2', props.class)"
   >
-    <slot />
+    <slot/>
   </div>
 </template>

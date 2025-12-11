@@ -179,7 +179,9 @@ const MIRROR_STYLES = [
   'direction',
 ] as const;
 
-function getMirror(element: HTMLTextAreaElement | HTMLInputElement): HTMLDivElement {
+function getMirror(
+  element: HTMLTextAreaElement | HTMLInputElement,
+): HTMLDivElement {
   let mirror = mirrorCache.get(element);
   if (mirror) return mirror;
 
@@ -244,8 +246,10 @@ export function getRectFromTextarea(
   const markerRect = marker.getBoundingClientRect();
   const mirrorRect = mirror.getBoundingClientRect();
 
-  const x = elementRect.left + (markerRect.left - mirrorRect.left) - element.scrollLeft;
-  const y = elementRect.top + (markerRect.top - mirrorRect.top) - element.scrollTop;
+  const x =
+    elementRect.left + (markerRect.left - mirrorRect.left) - element.scrollLeft;
+  const y =
+    elementRect.top + (markerRect.top - mirrorRect.top) - element.scrollTop;
 
   return normalizeRect({
     x,
@@ -350,7 +354,10 @@ export function createPositionInvalidator(
 
   return {
     attach() {
-      window.addEventListener('scroll', handleScroll, { passive: true, capture: true });
+      window.addEventListener('scroll', handleScroll, {
+        passive: true,
+        capture: true,
+      });
       window.addEventListener('resize', handleResize, { passive: true });
     },
     detach() {

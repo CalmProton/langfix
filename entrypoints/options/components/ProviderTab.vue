@@ -22,10 +22,26 @@ const saveStatus = ref<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
 // Providers
 const providers = [
-  { id: 'anthropic' as const, name: 'Anthropic (Claude)', description: 'Claude models from Anthropic' },
-  { id: 'openai' as const, name: 'OpenAI (GPT)', description: 'GPT models from OpenAI' },
-  { id: 'openrouter' as const, name: 'OpenRouter', description: 'Access multiple AI providers' },
-  { id: 'custom' as const, name: 'Custom Provider', description: 'Use a custom API endpoint' },
+  {
+    id: 'anthropic' as const,
+    name: 'Anthropic (Claude)',
+    description: 'Claude models from Anthropic',
+  },
+  {
+    id: 'openai' as const,
+    name: 'OpenAI (GPT)',
+    description: 'GPT models from OpenAI',
+  },
+  {
+    id: 'openrouter' as const,
+    name: 'OpenRouter',
+    description: 'Access multiple AI providers',
+  },
+  {
+    id: 'custom' as const,
+    name: 'Custom Provider',
+    description: 'Use a custom API endpoint',
+  },
 ];
 
 // Computed
@@ -53,7 +69,7 @@ onMounted(async () => {
 // Update models when provider changes
 function onProviderChange(newType: ProviderType) {
   providerType.value = newType;
-  
+
   if (newType !== 'custom') {
     const defaults = DEFAULT_MODELS[newType];
     mainModel.value = defaults.main;
@@ -72,24 +88,27 @@ async function validateKey() {
   keyStatus.value = 'validating';
 
   try {
-    const config = providerType.value === 'custom'
-      ? {
-          type: providerType.value,
-          apiKey: apiKey.value,
-          baseUrl: baseUrl.value,
-          mainModel: mainModel.value,
-          fastModel: fastModel.value,
-          apiFormat: apiFormat.value,
-        }
-      : {
-          type: providerType.value,
-          apiKey: apiKey.value,
-          baseUrl: baseUrl.value || undefined,
-          mainModel: mainModel.value,
-          fastModel: fastModel.value,
-        };
+    const config =
+      providerType.value === 'custom'
+        ? {
+            type: providerType.value,
+            apiKey: apiKey.value,
+            baseUrl: baseUrl.value,
+            mainModel: mainModel.value,
+            fastModel: fastModel.value,
+            apiFormat: apiFormat.value,
+          }
+        : {
+            type: providerType.value,
+            apiKey: apiKey.value,
+            baseUrl: baseUrl.value || undefined,
+            mainModel: mainModel.value,
+            fastModel: fastModel.value,
+          };
 
-    const provider = createProvider(config as Parameters<typeof createProvider>[0]);
+    const provider = createProvider(
+      config as Parameters<typeof createProvider>[0],
+    );
 
     const valid = await provider.validateApiKey();
     keyStatus.value = valid ? 'valid' : 'invalid';
@@ -110,7 +129,9 @@ async function saveSettings() {
       baseUrl: baseUrl.value || undefined,
       mainModel: mainModel.value,
       fastModel: fastModel.value,
-      ...(providerType.value === 'custom' ? { apiFormat: apiFormat.value } : {}),
+      ...(providerType.value === 'custom'
+        ? { apiFormat: apiFormat.value }
+        : {}),
     });
 
     saveStatus.value = 'saved';
@@ -153,10 +174,12 @@ async function saveSettings() {
             :checked="providerType === provider.id"
             @change="onProviderChange(provider.id)"
             class="mt-1"
-          />
+          >
           <div>
             <div class="font-medium">{{ provider.name }}</div>
-            <div class="text-sm text-muted-foreground">{{ provider.description }}</div>
+            <div class="text-sm text-muted-foreground">
+              {{ provider.description }}
+            </div>
           </div>
         </label>
       </div>
@@ -173,7 +196,7 @@ async function saveSettings() {
           placeholder="Enter your API key..."
           class="flex-1 px-3 py-2 border rounded-md bg-background"
           @blur="validateKey"
-        />
+        >
         <button
           @click="validateKey"
           :disabled="!apiKey || keyStatus === 'validating'"
@@ -200,18 +223,18 @@ async function saveSettings() {
           v-model="baseUrl"
           placeholder="https://api.example.com/v1"
           class="w-full px-3 py-2 border rounded-md bg-background"
-        />
+        >
       </div>
 
       <div class="space-y-2">
         <label class="text-sm font-medium">API Format</label>
         <div class="flex gap-4">
           <label class="flex items-center gap-2">
-            <input type="radio" v-model="apiFormat" value="openai" />
+            <input type="radio" v-model="apiFormat" value="openai">
             <span>OpenAI-compatible</span>
           </label>
           <label class="flex items-center gap-2">
-            <input type="radio" v-model="apiFormat" value="anthropic" />
+            <input type="radio" v-model="apiFormat" value="anthropic">
             <span>Anthropic-compatible</span>
           </label>
         </div>
@@ -222,8 +245,18 @@ async function saveSettings() {
     <div v-if="currentDefaultModels" class="p-4 bg-muted rounded-lg">
       <div class="text-sm font-medium mb-2">Default Models</div>
       <div class="text-sm text-muted-foreground space-y-1">
-        <div>Main: <code class="bg-background px-1 rounded">{{ currentDefaultModels.main }}</code></div>
-        <div>Fast: <code class="bg-background px-1 rounded">{{ currentDefaultModels.fast }}</code></div>
+        <div>
+          Main:
+          <code class="bg-background px-1 rounded">
+            {{ currentDefaultModels.main }}
+          </code>
+        </div>
+        <div>
+          Fast:
+          <code class="bg-background px-1 rounded">
+            {{ currentDefaultModels.fast }}
+          </code>
+        </div>
       </div>
     </div>
 

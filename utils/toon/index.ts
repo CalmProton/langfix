@@ -5,7 +5,12 @@
  * TOON reduces token usage by ~40% compared to JSON while maintaining accuracy.
  */
 import { encode, decode } from '@toon-format/toon';
-import type { GrammarResult, StyleResult, RewriteResult, ToonError } from '../types';
+import type {
+  GrammarResult,
+  StyleResult,
+  RewriteResult,
+  ToonError,
+} from '../types';
 
 // ============================================================================
 // Core Encode/Decode Functions
@@ -62,7 +67,9 @@ function extractToonBlock(response: string): string {
 /**
  * Parse grammar check response from AI
  */
-export function parseGrammarResponse(response: string): ParseOutcome<GrammarResult> {
+export function parseGrammarResponse(
+  response: string,
+): ParseOutcome<GrammarResult> {
   const raw = extractToonBlock(response);
 
   try {
@@ -70,12 +77,20 @@ export function parseGrammarResponse(response: string): ParseOutcome<GrammarResu
 
     // Check if it's an error response
     if ('code' in data && 'message' in data) {
-      return { ok: false, error: `ai_error: ${data.code} - ${data.message}`, raw };
+      return {
+        ok: false,
+        error: `ai_error: ${data.code} - ${data.message}`,
+        raw,
+      };
     }
 
     // Validate structure
     if (!data.errors || !Array.isArray(data.errors)) {
-      return { ok: false, error: 'invalid_structure: missing errors array', raw };
+      return {
+        ok: false,
+        error: 'invalid_structure: missing errors array',
+        raw,
+      };
     }
 
     return { ok: true, data: data as GrammarResult, raw };
@@ -87,7 +102,9 @@ export function parseGrammarResponse(response: string): ParseOutcome<GrammarResu
 /**
  * Parse style analysis response from AI
  */
-export function parseStyleResponse(response: string): ParseOutcome<StyleResult> {
+export function parseStyleResponse(
+  response: string,
+): ParseOutcome<StyleResult> {
   const raw = extractToonBlock(response);
 
   try {
@@ -95,12 +112,20 @@ export function parseStyleResponse(response: string): ParseOutcome<StyleResult> 
 
     // Check if it's an error response
     if ('code' in data && 'message' in data) {
-      return { ok: false, error: `ai_error: ${data.code} - ${data.message}`, raw };
+      return {
+        ok: false,
+        error: `ai_error: ${data.code} - ${data.message}`,
+        raw,
+      };
     }
 
     // Validate structure
     if (!data.issues || !Array.isArray(data.issues)) {
-      return { ok: false, error: 'invalid_structure: missing issues array', raw };
+      return {
+        ok: false,
+        error: 'invalid_structure: missing issues array',
+        raw,
+      };
     }
 
     return { ok: true, data: data as StyleResult, raw };
@@ -112,7 +137,9 @@ export function parseStyleResponse(response: string): ParseOutcome<StyleResult> 
 /**
  * Parse rewrite response from AI
  */
-export function parseRewriteResponse(response: string): ParseOutcome<RewriteResult> {
+export function parseRewriteResponse(
+  response: string,
+): ParseOutcome<RewriteResult> {
   const raw = extractToonBlock(response);
 
   try {
@@ -120,12 +147,23 @@ export function parseRewriteResponse(response: string): ParseOutcome<RewriteResu
 
     // Check if it's an error response
     if ('code' in data && 'message' in data) {
-      return { ok: false, error: `ai_error: ${data.code} - ${data.message}`, raw };
+      return {
+        ok: false,
+        error: `ai_error: ${data.code} - ${data.message}`,
+        raw,
+      };
     }
 
     // Validate structure
-    if (typeof data.original !== 'string' || typeof data.rewritten !== 'string') {
-      return { ok: false, error: 'invalid_structure: missing original or rewritten', raw };
+    if (
+      typeof data.original !== 'string' ||
+      typeof data.rewritten !== 'string'
+    ) {
+      return {
+        ok: false,
+        error: 'invalid_structure: missing original or rewritten',
+        raw,
+      };
     }
 
     return { ok: true, data: data as RewriteResult, raw };

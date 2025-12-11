@@ -6,10 +6,19 @@
 import OpenAI from 'openai';
 import { BaseProvider } from './base';
 import { AIProviderError } from './errors';
-import type { AIRequest, AIResponse, OpenAIConfig, OpenRouterConfig, CustomConfig } from '../types';
+import type {
+  AIRequest,
+  AIResponse,
+  OpenAIConfig,
+  OpenRouterConfig,
+  CustomConfig,
+} from '../types';
 import { DEFAULT_BASE_URLS } from '../types';
 
-type OpenAICompatibleConfig = Omit<OpenAIConfig, 'type'> | Omit<OpenRouterConfig, 'type'> | Omit<CustomConfig, 'type'>;
+type OpenAICompatibleConfig =
+  | Omit<OpenAIConfig, 'type'>
+  | Omit<OpenRouterConfig, 'type'>
+  | Omit<CustomConfig, 'type'>;
 
 export class OpenAIProvider extends BaseProvider {
   name: string;

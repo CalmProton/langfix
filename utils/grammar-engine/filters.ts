@@ -2,10 +2,7 @@
  * Grammar Engine Filters
  * Dictionary and session-based error filtering
  */
-import {
-  dictionaryStorage,
-  sessionIgnoredWordsStorage,
-} from '../storage';
+import { dictionaryStorage, sessionIgnoredWordsStorage } from '../storage';
 import type { ExtendedGrammarError } from './types';
 
 // ============================================================================

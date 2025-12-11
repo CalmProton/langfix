@@ -65,7 +65,10 @@ changes[2]{from,to,reason}:
 /**
  * Build grammar check prompt
  */
-export function buildGrammarPrompt(text: string, context?: GrammarContext): string {
+export function buildGrammarPrompt(
+  text: string,
+  context?: GrammarContext,
+): string {
   const contextSection = context ? `\n\n${buildContextToon(context)}` : '';
 
   return `Analyze the following text for grammar, spelling, and punctuation errors.
@@ -88,7 +91,10 @@ Response:`;
 /**
  * Build style analysis prompt
  */
-export function buildStylePrompt(text: string, context?: GrammarContext): string {
+export function buildStylePrompt(
+  text: string,
+  context?: GrammarContext,
+): string {
   const contextSection = context ? `\n\n${buildContextToon(context)}` : '';
 
   return `Analyze the following text for style issues (passive voice, wordiness, clarity, filler words).
