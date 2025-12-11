@@ -277,6 +277,7 @@ export const templateUsageStorage = storage.defineItem<Record<string, number>>(
 
 import {
   DEFAULT_METRICS_SETTINGS,
+  type MetricsCustomPosition,
   type MetricsSettings,
 } from '#utils/metrics/types';
 
@@ -287,6 +288,27 @@ export const metricsSettingsStorage = storage.defineItem<MetricsSettings>(
   'sync:metricsSettings',
   {
     fallback: DEFAULT_METRICS_SETTINGS,
+  },
+);
+
+/**
+ * Custom position for metrics pill - stored per origin
+ * Key format: { [origin: string]: MetricsCustomPosition }
+ */
+export const metricsCustomPositionStorage = storage.defineItem<
+  Record<string, MetricsCustomPosition>
+>('local:metricsCustomPosition', {
+  fallback: {},
+});
+
+/**
+ * Hidden sites for metrics - stored locally
+ * Array of origins where metrics should be hidden
+ */
+export const metricsHiddenSitesStorage = storage.defineItem<string[]>(
+  'local:metricsHiddenSites',
+  {
+    fallback: [],
   },
 );
 

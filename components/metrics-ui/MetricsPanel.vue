@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
+import { Button } from '@/components/ui/button';
+import { BarChart3, EyeOff, Power, X } from 'lucide-vue-next';
 import type {
   MetricsState,
   CharacterCountMode,
@@ -15,6 +17,8 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   close: [];
+  'hide-on-site': [];
+  'disable-completely': [];
 }>();
 
 // Computed values
@@ -45,22 +49,28 @@ function formatNumber(value: number): string {
 function handleClose() {
   emit('close');
 }
+
+function handleHideOnSite() {
+  emit('hide-on-site');
+}
+
+function handleDisableCompletely() {
+  emit('disable-completely');
+}
 </script>
 
 <template>
   <div class="lf-metrics-panel" role="region" aria-label="Text metrics">
     <!-- Header -->
     <div class="lf-metrics-panel__header">
-      <span class="lf-metrics-panel__icon" aria-hidden="true">📊</span>
+      <BarChart3 class="lf-metrics-panel__icon" aria-hidden="true" />
       <span class="lf-metrics-panel__title">Text Metrics</span>
-      <button
-        class="lf-metrics-panel__close"
-        type="button"
+      <Button data-metrics-close variant="ghost" size="icon-sm"
         aria-label="Close metrics panel"
         @click="handleClose"
       >
-        ✕
-      </button>
+        <X />
+      </Button>
     </div>
 
     <!-- Content -->
@@ -139,6 +149,21 @@ function handleClose() {
           >{{ metrics.text.averageSentenceLength.toFixed(1) }}words</span
         >
       </div>
+
+      <!-- Divider -->
+      <div class="lf-metrics-panel__divider" />
+
+      <!-- Hide options -->
+      <div class="lf-metrics-panel__actions">
+        <Button variant="outline" size="sm" class="justify-start" @click="handleHideOnSite">
+          <EyeOff />
+          Hide on this site
+        </Button>
+        <Button variant="destructive" size="sm" class="justify-start" @click="handleDisableCompletely">
+          <Power />
+          Disable completely
+        </Button>
+      </div>
     </div>
   </div>
 </template>
@@ -168,42 +193,14 @@ function handleClose() {
 }
 
 .lf-metrics-panel__icon {
-  font-size: 16px;
-  line-height: 1;
+  width: 16px;
+    height: 16px;
 }
 
 .lf-metrics-panel__title {
   font-weight: 600;
   color: #1f2937;
   flex: 1;
-}
-
-.lf-metrics-panel__close {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  background: transparent;
-  border: none;
-  border-radius: 4px;
-  color: #6b7280;
-  font-size: 14px;
-  cursor: pointer;
-  transition:
-    background-color 0.15s ease,
-    color 0.15s ease;
-}
-
-.lf-metrics-panel__close:hover {
-  background: #e5e7eb;
-  color: #374151;
-}
-
-.lf-metrics-panel__close:focus-visible {
-  outline: 2px solid #3b82f6;
-  outline-offset: -2px;
 }
 
 .lf-metrics-panel__content {
@@ -259,6 +256,13 @@ function handleClose() {
   margin: 8px -12px;
 }
 
+/* Action buttons */
+.lf-metrics-panel__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
 /* Dark mode */
 @media (prefers-color-scheme: dark) {
   .lf-metrics-panel {
@@ -275,15 +279,6 @@ function handleClose() {
 
   .lf-metrics-panel__title {
     color: #f9fafb;
-  }
-
-  .lf-metrics-panel__close {
-    color: #9ca3af;
-  }
-
-  .lf-metrics-panel__close:hover {
-    background: #374151;
-    color: #e5e7eb;
   }
 
   .lf-metrics-panel__label {

@@ -98,6 +98,24 @@ export type CharacterCountMode = Static<typeof CharacterCountMode>;
 // Metrics Settings
 // ============================================================================
 
+// ============================================================================
+// Custom Position
+// ============================================================================
+
+export const MetricsCustomPosition = Type.Object({
+  /** Storage mode */
+  mode: Type.Union([Type.Literal('ratio'), Type.Literal('px')]),
+  /** X coordinate (ratio: 0..1 of viewport width, px: pixels from left) */
+  x: Type.Number(),
+  /** Y coordinate (ratio: 0..1 of viewport height, px: pixels from top) */
+  y: Type.Number(),
+});
+export type MetricsCustomPosition = Static<typeof MetricsCustomPosition>;
+
+// ============================================================================
+// Metrics Settings
+// ============================================================================
+
 export const MetricsSettings = Type.Object({
   /** Whether metrics display is enabled */
   enabled: Type.Boolean({ default: true }),
