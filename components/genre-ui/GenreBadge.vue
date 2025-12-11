@@ -15,10 +15,10 @@ const props = defineProps<{
 const variant = computed<BadgeVariants['variant']>(() => {
   const formalityMap: Record<string, BadgeVariants['variant']> = {
     'very-low': 'outline',
-    'low': 'outline',
-    'medium': 'secondary',
+    low: 'outline',
+    medium: 'secondary',
     'medium-high': 'secondary',
-    'high': 'default',
+    high: 'default',
     'very-high': 'default',
   };
   return formalityMap[props.genre.formality] || 'secondary';

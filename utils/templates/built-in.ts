@@ -11,7 +11,12 @@ import type { Template } from './types';
 function createBuiltInTemplate(
   data: Omit<
     Template,
-    'id' | 'placeholders' | 'isBuiltIn' | 'isFavorite' | 'createdAt' | 'updatedAt'
+    | 'id'
+    | 'placeholders'
+    | 'isBuiltIn'
+    | 'isFavorite'
+    | 'createdAt'
+    | 'updatedAt'
   >,
 ): Template {
   const now = Date.now();

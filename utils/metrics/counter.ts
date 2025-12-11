@@ -35,8 +35,7 @@ export class MetricsCounter {
     const paragraphs = this.countParagraphs(text);
 
     // Calculate averages (avoid division by zero)
-    const averageWordLength =
-      words > 0 ? charactersWithoutSpaces / words : 0;
+    const averageWordLength = words > 0 ? charactersWithoutSpaces / words : 0;
     const averageSentenceLength = sentences > 0 ? words / sentences : 0;
 
     return {

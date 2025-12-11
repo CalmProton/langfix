@@ -58,10 +58,10 @@ const technologies = [
       </CardHeader>
       <CardContent class="space-y-4 text-sm text-muted-foreground">
         <p>
-          LangFix is a free, open-source alternative to Grammarly that lets you use
-          your own AI API keys. Connect to Anthropic, OpenAI, OpenRouter, or any
-          compatible provider to get powerful writing assistance while maintaining
-          full control over your data and costs.
+          LangFix is a free, open-source alternative to Grammarly that lets you
+          use your own AI API keys. Connect to Anthropic, OpenAI, OpenRouter, or
+          any compatible provider to get powerful writing assistance while
+          maintaining full control over your data and costs.
         </p>
         <div class="grid gap-2 sm:grid-cols-2">
           <div class="rounded-lg border bg-muted/30 p-3">
@@ -87,16 +87,18 @@ const technologies = [
     <Card>
       <CardHeader>
         <CardTitle class="text-lg">Project links</CardTitle>
-        <CardDescription>Explore the code, docs, or file an issue.</CardDescription>
+        <CardDescription>
+          Explore the code, docs, or file an issue.
+        </CardDescription>
       </CardHeader>
       <CardContent class="flex flex-wrap gap-3">
         <Button
           v-for="link in links"
           :key="link.url"
- as="a"
+          as="a"
           :href="link.url"
           target="_blank"
- rel="noreferrer"
+          rel="noreferrer"
           variant="outline"
         >
           <span>{{ link.icon }}</span>
@@ -116,7 +118,7 @@ const technologies = [
           :key="tech.name"
           :href="tech.url"
           target="_blank"
- rel="noreferrer"
+          rel="noreferrer"
           class="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-muted/60"
         >
           <div>

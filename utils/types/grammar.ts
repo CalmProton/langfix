@@ -2,7 +2,7 @@
  * Grammar & Writing Analysis Types
  * TypeBox schemas for grammar checking and writing analysis results
  */
-import { Type, type Static } from '@sinclair/typebox';
+import { type Static, Type } from '@sinclair/typebox';
 
 // ============================================================================
 // Grammar Error Types

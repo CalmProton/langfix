@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
-import type { MetricsState, CharacterCountMode } from '../../utils/metrics/types';
+import type {
+  MetricsState,
+  CharacterCountMode,
+} from '../../utils/metrics/types';
 import { formatTimeValue } from '../../utils/metrics/calculator';
 
 const props = defineProps<{
@@ -65,29 +68,39 @@ function handleClose() {
       <!-- Basic counts -->
       <div class="lf-metrics-panel__row">
         <span class="lf-metrics-panel__label">Words</span>
-        <span class="lf-metrics-panel__value">{{ formatNumber(metrics.text.words) }}</span>
+        <span class="lf-metrics-panel__value"
+          >{{ formatNumber(metrics.text.words) }}</span
+        >
       </div>
 
       <div class="lf-metrics-panel__row">
         <span class="lf-metrics-panel__label">
           Characters
-          <span class="lf-metrics-panel__sublabel">{{ characterCountLabel }}</span>
+          <span class="lf-metrics-panel__sublabel"
+            >{{ characterCountLabel }}</span
+          >
         </span>
-        <span class="lf-metrics-panel__value">{{ formatNumber(characterCount) }}</span>
+        <span class="lf-metrics-panel__value"
+          >{{ formatNumber(characterCount) }}</span
+        >
       </div>
 
       <div class="lf-metrics-panel__row">
         <span class="lf-metrics-panel__label">Sentences</span>
-        <span class="lf-metrics-panel__value">{{ formatNumber(metrics.text.sentences) }}</span>
+        <span class="lf-metrics-panel__value"
+          >{{ formatNumber(metrics.text.sentences) }}</span
+        >
       </div>
 
       <div class="lf-metrics-panel__row">
         <span class="lf-metrics-panel__label">Paragraphs</span>
-        <span class="lf-metrics-panel__value">{{ formatNumber(metrics.text.paragraphs) }}</span>
+        <span class="lf-metrics-panel__value"
+          >{{ formatNumber(metrics.text.paragraphs) }}</span
+        >
       </div>
 
       <!-- Divider -->
-      <div class="lf-metrics-panel__divider" />
+      <div class="lf-metrics-panel__divider"/>
 
       <!-- Time metrics -->
       <div
@@ -101,10 +114,7 @@ function handleClose() {
         <span class="lf-metrics-panel__value">{{ readingTimeFormatted }}</span>
       </div>
 
-      <div
-        v-if="showSpeakingTime"
-        class="lf-metrics-panel__row"
-      >
+      <div v-if="showSpeakingTime" class="lf-metrics-panel__row">
         <span class="lf-metrics-panel__label">
           <span class="lf-metrics-panel__time-icon" aria-hidden="true">🎤</span>
           Speaking Time
@@ -113,17 +123,21 @@ function handleClose() {
       </div>
 
       <!-- Divider -->
-      <div class="lf-metrics-panel__divider" />
+      <div class="lf-metrics-panel__divider"/>
 
       <!-- Advanced metrics -->
       <div class="lf-metrics-panel__row lf-metrics-panel__row--small">
         <span class="lf-metrics-panel__label">Avg. word length</span>
-        <span class="lf-metrics-panel__value">{{ metrics.text.averageWordLength.toFixed(1) }} chars</span>
+        <span class="lf-metrics-panel__value"
+          >{{ metrics.text.averageWordLength.toFixed(1) }}chars</span
+        >
       </div>
 
       <div class="lf-metrics-panel__row lf-metrics-panel__row--small">
         <span class="lf-metrics-panel__label">Avg. sentence length</span>
-        <span class="lf-metrics-panel__value">{{ metrics.text.averageSentenceLength.toFixed(1) }} words</span>
+        <span class="lf-metrics-panel__value"
+          >{{ metrics.text.averageSentenceLength.toFixed(1) }}words</span
+        >
       </div>
     </div>
   </div>
@@ -138,8 +152,8 @@ function handleClose() {
   box-shadow:
     0 4px 16px rgba(0, 0, 0, 0.15),
     0 0 0 1px rgba(0, 0, 0, 0.05);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    sans-serif;
+  font-family:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 13px;
   overflow: hidden;
 }

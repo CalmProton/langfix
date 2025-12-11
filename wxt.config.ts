@@ -11,5 +11,5 @@ export default defineConfig({
     name: 'LangFix',
     description: 'Open-source AI-powered writing assistant',
     permissions: ['storage', 'contextMenus'],
-  }
+  },
 });

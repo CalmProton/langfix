@@ -126,14 +126,16 @@ export function createSimplifyMessage(
 // Event Listener Setup
 // ============================================================================
 
-export type SimplifyEventHandler = (event: CustomEvent<{
-  text: string;
-  range: { start: number; end: number };
-  surfaceId?: string;
-  mode: 'simplify';
-  reasons: string[];
-  score: number;
-}>) => void;
+export type SimplifyEventHandler = (
+  event: CustomEvent<{
+    text: string;
+    range: { start: number; end: number };
+    surfaceId?: string;
+    mode: 'simplify';
+    reasons: string[];
+    score: number;
+  }>,
+) => void;
 
 /**
  * Listen for simplify events from the readability UI

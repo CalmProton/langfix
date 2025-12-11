@@ -46,7 +46,8 @@ CRITICAL RULES:
         'Use formal language, proper titles, and polite forms. Suitable for business or official communication.',
       informal:
         'Use casual, conversational language. Suitable for friends and peers.',
-      neutral: 'Use neutral, standard language that is neither too formal nor too casual.',
+      neutral:
+        'Use neutral, standard language that is neither too formal nor too casual.',
     };
     prompt += `\n\nFORMALITY: ${formalityInstructions[options.formality]}`;
   }

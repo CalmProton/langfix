@@ -37,7 +37,13 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'update:open', value: boolean): void;
-  (e: 'save', template: Omit<Template, 'id' | 'createdAt' | 'updatedAt' | 'isBuiltIn' | 'placeholders'>): void;
+  (
+    e: 'save',
+    template: Omit<
+      Template,
+      'id' | 'createdAt' | 'updatedAt' | 'isBuiltIn' | 'placeholders'
+    >,
+  ): void;
   (e: 'cancel'): void;
 }>();
 
@@ -66,7 +72,9 @@ const isValid = computed(() => {
   );
 });
 
-const isEditMode = computed(() => props.template !== null && !props.template.isBuiltIn);
+const isEditMode = computed(
+  () => props.template !== null && !props.template.isBuiltIn,
+);
 
 // Parse tags from comma-separated input
 const tags = computed(() => {
@@ -136,7 +144,8 @@ const insertPlaceholder = () => {
         <DialogDescription>
           {{ isEditMode
             ? 'Modify your template below.'
-            : 'Create a reusable template with placeholders like {{variable_name}}.'
+            : 'Create a reusable template with placeholders like {{variable_name}}
+          .'
           }}
         </DialogDescription>
       </DialogHeader>
@@ -170,7 +179,7 @@ const insertPlaceholder = () => {
             <Label for="template-category">Category</Label>
             <Select v-model="category">
               <SelectTrigger id="template-category">
-                <SelectValue placeholder="Select category" />
+                <SelectValue placeholder="Select category"/>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem
@@ -178,7 +187,8 @@ const insertPlaceholder = () => {
                   :key="cat.id"
                   :value="cat.id"
                 >
-                  {{ cat.icon }} {{ cat.label }}
+                  {{ cat.icon }}
+                  {{ cat.label }}
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -213,7 +223,10 @@ const insertPlaceholder = () => {
             />
 
             <!-- Validation errors -->
-            <div v-if="!contentValidation.valid" class="text-sm text-destructive">
+            <div
+              v-if="!contentValidation.valid"
+              class="text-sm text-destructive"
+            >
               <p v-for="error in contentValidation.errors" :key="error">
                 {{ error }}
               </p>
@@ -229,7 +242,9 @@ const insertPlaceholder = () => {
                 :key="placeholder.key"
                 class="inline-flex items-center px-2 py-1 rounded-md bg-muted text-xs font-mono"
               >
-                {{ '{{' }}{{ placeholder.key }}{{ '}}' }}
+                {{ '{{' }}
+                {{ placeholder.key }}
+                {{ '}}' }}
               </span>
             </div>
           </div>
@@ -241,7 +256,7 @@ const insertPlaceholder = () => {
               v-model="isFavorite"
               type="checkbox"
               class="rounded"
-            />
+            >
             <Label for="template-favorite" class="font-normal cursor-pointer">
               Add to favorites
             </Label>

@@ -153,7 +153,9 @@ async function saveSettings() {
 <template>
   <div class="space-y-6">
     <div class="space-y-1">
-      <p class="text-sm uppercase tracking-[0.14em] text-muted-foreground">Provider</p>
+      <p class="text-sm uppercase tracking-[0.14em] text-muted-foreground">
+        Provider
+      </p>
       <h2 class="text-2xl font-semibold">Connect your AI backend</h2>
       <p class="text-muted-foreground text-sm">
         Select your AI provider and enter your API key.
@@ -166,20 +168,38 @@ async function saveSettings() {
         <CardDescription>Pick where LangFix sends requests.</CardDescription>
       </CardHeader>
       <CardContent>
-        <RadioGroup v-model="providerType" class="grid gap-3 md:grid-cols-2"
-          @update:modelValue="onProviderChange($event as ProviderType)">
-          <label v-for="provider in providers" :key="provider.id"
+        <RadioGroup
+          v-model="providerType"
+          class="grid gap-3 md:grid-cols-2"
+          @update:modelValue="onProviderChange($event as ProviderType)"
+        >
+          <label
+            v-for="provider in providers"
+            :key="provider.id"
             class="flex cursor-pointer items-start gap-3 rounded-lg border bg-card/30 p-4 transition-colors hover:border-primary"
             :class="providerType === provider.id ? 'border-primary shadow-sm' : 'border-border'"
-            :for="`provider-${provider.id}`">
-            <RadioGroupItem :id="`provider-${provider.id}`" :value="provider.id"
- class="mt-1"
- />
+            :for="`provider-${provider.id}`"
+          >
+            <RadioGroupItem
+              :id="`provider-${provider.id}`"
+              :value="provider.id"
+              class="mt-1"
+            />
             <div class="space-y-1">
-              <Label :for="`provider-${provider.id}`">{{ provider.name }}</Label>
-              <p class="text-sm text-muted-foreground">{{ provider.description }}</p>
+              <Label :for="`provider-${provider.id}`">
+                {{ provider.name }}
+              </Label>
+              <p class="text-sm text-muted-foreground">
+                {{ provider.description }}
+              </p>
             </div>
-            <Badge v-if="provider.id === 'custom'" variant="outline" class="ml-auto">Advanced</Badge>
+            <Badge
+              v-if="provider.id === 'custom'"
+              variant="outline"
+              class="ml-auto"
+            >
+              Advanced
+            </Badge>
           </label>
         </RadioGroup>
       </CardContent>
@@ -188,24 +208,37 @@ async function saveSettings() {
     <Card>
       <CardHeader class="space-y-1">
         <CardTitle class="text-lg">API key</CardTitle>
-        <CardDescription>Keys are stored locally in your browser.</CardDescription>
+        <CardDescription>
+          Keys are stored locally in your browser.
+        </CardDescription>
       </CardHeader>
       <CardContent class="space-y-3">
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
           <div class="flex-1 space-y-2">
             <Label for="apiKey">API key</Label>
-            <Input id="apiKey"
- v-model="apiKey"
- type="password" placeholder="Enter your API key" @blur="validateKey"
- />
+            <Input
+              id="apiKey"
+              v-model="apiKey"
+              type="password"
+              placeholder="Enter your API key"
+              @blur="validateKey"
+            />
           </div>
-          <Button class="self-start sm:self-end" variant="outline" :disabled="!apiKey || keyStatus === 'validating'"
-            @click="validateKey">
+          <Button
+            class="self-start sm:self-end"
+            variant="outline"
+            :disabled="!apiKey || keyStatus === 'validating'"
+            @click="validateKey"
+          >
             {{ keyStatus === 'validating' ? 'Checking…' : 'Test key' }}
           </Button>
         </div>
-        <p v-if="keyStatus === 'valid'" class="text-sm text-green-600">✓ API key is valid</p>
-        <p v-else-if="keyStatus === 'invalid'" class="text-sm text-destructive">✗ API key is invalid</p>
+        <p v-if="keyStatus === 'valid'" class="text-sm text-green-600">
+          ✓ API key is valid
+        </p>
+        <p v-else-if="keyStatus === 'invalid'" class="text-sm text-destructive">
+          ✗ API key is invalid
+        </p>
       </CardContent>
     </Card>
 
@@ -217,11 +250,12 @@ async function saveSettings() {
       <CardContent class="space-y-4">
         <div class="space-y-2">
           <Label for="baseUrl">Base URL</Label>
-          <Input id="baseUrl"
- v-model="baseUrl"
- type="url"
- placeholder="https://api.example.com/v1"
- />
+          <Input
+            id="baseUrl"
+            v-model="baseUrl"
+            type="url"
+            placeholder="https://api.example.com/v1"
+          />
         </div>
 
         <div class="space-y-2">
@@ -229,20 +263,26 @@ async function saveSettings() {
           <RadioGroup v-model="apiFormat" class="grid gap-2 sm:grid-cols-2">
             <label
               class="flex cursor-pointer items-center gap-3 rounded-lg border bg-card/30 p-3 transition-colors hover:border-primary"
-              for="format-openai">
-              <RadioGroupItem id="format-openai" value="openai" />
+              for="format-openai"
+            >
+              <RadioGroupItem id="format-openai" value="openai"/>
               <div>
                 <p class="font-medium text-sm">OpenAI-compatible</p>
-                <p class="text-xs text-muted-foreground">Works with most hosted providers.</p>
+                <p class="text-xs text-muted-foreground">
+                  Works with most hosted providers.
+                </p>
               </div>
             </label>
             <label
               class="flex cursor-pointer items-center gap-3 rounded-lg border bg-card/30 p-3 transition-colors hover:border-primary"
-              for="format-anthropic">
-              <RadioGroupItem id="format-anthropic" value="anthropic" />
+              for="format-anthropic"
+            >
+              <RadioGroupItem id="format-anthropic" value="anthropic"/>
               <div>
                 <p class="font-medium text-sm">Anthropic-compatible</p>
-                <p class="text-xs text-muted-foreground">Use Claude-style endpoints.</p>
+                <p class="text-xs text-muted-foreground">
+                  Use Claude-style endpoints.
+                </p>
               </div>
             </label>
           </RadioGroup>
@@ -253,7 +293,9 @@ async function saveSettings() {
     <Card v-else-if="currentDefaultModels">
       <CardHeader>
         <CardTitle class="text-lg">Default models</CardTitle>
-        <CardDescription>We prefill common choices for this provider.</CardDescription>
+        <CardDescription>
+          We prefill common choices for this provider.
+        </CardDescription>
       </CardHeader>
       <CardContent class="space-y-2 text-sm">
         <div class="flex items-center gap-2">
@@ -271,8 +313,12 @@ async function saveSettings() {
       <Button :disabled="saveStatus === 'saving'" @click="saveSettings">
         {{ saveStatus === 'saving' ? 'Saving…' : 'Save settings' }}
       </Button>
-      <span v-if="saveStatus === 'saved'" class="text-sm text-green-600">✓ Settings saved</span>
-      <span v-else-if="saveStatus === 'error'" class="text-sm text-destructive">✗ Error saving settings</span>
+      <span v-if="saveStatus === 'saved'" class="text-sm text-green-600"
+        >✓ Settings saved</span
+      >
+      <span v-else-if="saveStatus === 'error'" class="text-sm text-destructive"
+        >✗ Error saving settings</span
+      >
     </div>
   </div>
 </template>

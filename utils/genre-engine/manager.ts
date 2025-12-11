@@ -149,7 +149,9 @@ export class GenreManager {
    */
   private async loadCustomGenres(): Promise<void> {
     try {
-      const customGenres = await storage.getItem<CustomGenre[]>(CUSTOM_GENRES_STORAGE_KEY);
+      const customGenres = await storage.getItem<CustomGenre[]>(
+        CUSTOM_GENRES_STORAGE_KEY,
+      );
       if (customGenres && Array.isArray(customGenres)) {
         for (const genre of customGenres) {
           this.customGenres.set(genre.id, genre);
@@ -166,7 +168,9 @@ export class GenreManager {
    */
   private async loadPreferences(): Promise<void> {
     try {
-      const prefs = await storage.getItem<UserGenrePreferences>(GENRE_PREFERENCES_STORAGE_KEY);
+      const prefs = await storage.getItem<UserGenrePreferences>(
+        GENRE_PREFERENCES_STORAGE_KEY,
+      );
       if (prefs) {
         this.preferences = { ...DEFAULT_GENRE_PREFERENCES, ...prefs };
       }
@@ -180,7 +184,9 @@ export class GenreManager {
    */
   private async loadHistory(): Promise<void> {
     try {
-      const history = await storage.getItem<GenreHistoryEntry[]>(GENRE_HISTORY_STORAGE_KEY);
+      const history = await storage.getItem<GenreHistoryEntry[]>(
+        GENRE_HISTORY_STORAGE_KEY,
+      );
       if (history && Array.isArray(history)) {
         this.history = history;
       }
@@ -194,7 +200,9 @@ export class GenreManager {
    */
   private async restoreCurrentGenre(): Promise<void> {
     try {
-      const currentGenreId = await storage.getItem<string>(CURRENT_GENRE_STORAGE_KEY);
+      const currentGenreId = await storage.getItem<string>(
+        CURRENT_GENRE_STORAGE_KEY,
+      );
       if (currentGenreId && currentGenreId !== 'auto') {
         const genre = this.genres.get(currentGenreId);
         if (genre) {
@@ -271,7 +279,9 @@ export class GenreManager {
   /**
    * Update user preferences
    */
-  async updatePreferences(updates: Partial<UserGenrePreferences>): Promise<void> {
+  async updatePreferences(
+    updates: Partial<UserGenrePreferences>,
+  ): Promise<void> {
     this.preferences = { ...this.preferences, ...updates };
     await storage.setItem(GENRE_PREFERENCES_STORAGE_KEY, this.preferences);
   }
@@ -363,7 +373,7 @@ export class GenreManager {
       // Find recent entries for this domain (within last 7 days)
       const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
       const recentEntries = this.history.filter(
-        (entry) => entry.domain === hostname && entry.timestamp > cutoff
+        (entry) => entry.domain === hostname && entry.timestamp > cutoff,
       );
 
       if (recentEntries.length > 0) {
@@ -449,7 +459,7 @@ Respond with only the genre name in lowercase.`;
   async createCustomGenre(
     name: string,
     baseGenreId: string,
-    modifications: Partial<GenreConfig>
+    modifications: Partial<GenreConfig>,
   ): Promise<CustomGenre> {
     const baseGenre = this.genres.get(baseGenreId);
     if (!baseGenre) {
@@ -483,7 +493,7 @@ Respond with only the genre name in lowercase.`;
    */
   async updateCustomGenre(
     genreId: string,
-    updates: Partial<GenreConfig>
+    updates: Partial<GenreConfig>,
   ): Promise<CustomGenre> {
     const existing = this.customGenres.get(genreId);
     if (!existing) {

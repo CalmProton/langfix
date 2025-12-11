@@ -157,7 +157,8 @@ watch(
           :value="cat.id"
           class="text-xs"
         >
-          {{ cat.icon }} {{ cat.label }}
+          {{ cat.icon }}
+          {{ cat.label }}
         </TabsTrigger>
       </TabsList>
 
@@ -172,12 +173,16 @@ watch(
               class="mb-6"
             >
               <h3 class="text-sm font-medium mb-3 flex items-center gap-2">
-                <span>{{
+                <span
+                  >{{
                   TEMPLATE_CATEGORIES.find((c) => c.id === category)?.icon
-                }}</span>
-                <span>{{
+                }}</span
+                >
+                <span
+                  >{{
                   TEMPLATE_CATEGORIES.find((c) => c.id === category)?.label
-                }}</span>
+                }}</span
+                >
                 <span class="text-muted-foreground text-xs"
                   >({{ categoryTemplates.length }})</span
                 >

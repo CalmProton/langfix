@@ -2,8 +2,9 @@
  * AI Prompt Templates
  * Templates for communicating with AI models using TOON format
  */
-import { encodeToon } from './index';
+
 import type { GrammarContext, RewriteMode } from '../types';
+import { encodeToon } from './index';
 
 // ============================================================================
 // System Prompts

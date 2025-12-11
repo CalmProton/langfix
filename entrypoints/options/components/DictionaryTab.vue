@@ -60,12 +60,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 
 // ============================================================================
@@ -171,7 +166,8 @@ const filteredRules = computed(() => {
 const dictionaryStats = computed(() => ({
   total: dictionary.value.length,
   caseSensitive: dictionary.value.filter((e) => e.caseSensitive).length,
-  withContext: dictionary.value.filter((e) => e.context && e.context.length > 0).length,
+  withContext: dictionary.value.filter((e) => e.context && e.context.length > 0)
+    .length,
 }));
 
 const rulesStats = computed(() => ({
@@ -212,7 +208,8 @@ async function addWord() {
     await addDictionaryEntry({
       word: newWord.value.word.trim(),
       caseSensitive: newWord.value.caseSensitive,
-      context: newWord.value.context.length > 0 ? newWord.value.context : undefined,
+      context:
+        newWord.value.context.length > 0 ? newWord.value.context : undefined,
       notes: newWord.value.notes || undefined,
       usageCount: 0,
     });
@@ -275,7 +272,8 @@ async function addRuleEntry() {
       replacement: newRule.value.replacement || undefined,
       message: newRule.value.message || undefined,
       caseSensitive: newRule.value.caseSensitive,
-      context: newRule.value.context.length > 0 ? newRule.value.context : undefined,
+      context:
+        newRule.value.context.length > 0 ? newRule.value.context : undefined,
       enabled: true,
     });
 
@@ -418,7 +416,9 @@ async function handleImport() {
       return;
     }
 
-    const result = await importDictionaryData(data, { merge: importMerge.value });
+    const result = await importDictionaryData(data, {
+      merge: importMerge.value,
+    });
     invalidateDictionaryCache();
     await loadData();
 
@@ -426,10 +426,13 @@ async function handleImport() {
     importFile.value = null;
     importError.value = '';
 
-    alert(`Import complete: ${result.imported} items imported, ${result.skipped} skipped`);
+    alert(
+      `Import complete: ${result.imported} items imported, ${result.skipped} skipped`,
+    );
   } catch (error) {
     console.error('[LangFix] Failed to import data:', error);
-    importError.value = 'Failed to parse file. Please ensure it\'s a valid JSON export.';
+    importError.value =
+      "Failed to parse file. Please ensure it's a valid JSON export.";
   }
 }
 
@@ -465,7 +468,8 @@ function getRuleTypeLabel(type: string): string {
 
 function getRuleTypeBadgeClass(type: string): string {
   const classes: Record<string, string> = {
-    ignore: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+    ignore:
+      'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
     replace: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
     prefer: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
   };
@@ -486,7 +490,9 @@ function toggleContextSelection(ctx: string, list: string[]) {
   <div class="space-y-8">
     <!-- Header -->
     <div class="space-y-1">
-      <p class="text-sm uppercase tracking-[0.14em] text-muted-foreground">Dictionary</p>
+      <p class="text-sm uppercase tracking-[0.14em] text-muted-foreground">
+        Dictionary
+      </p>
       <h2 class="text-2xl font-semibold">Personal Dictionary & Rules</h2>
       <p class="text-muted-foreground text-sm">
         Manage your personal dictionary and custom grammar rules.
@@ -502,7 +508,9 @@ function toggleContextSelection(ctx: string, list: string[]) {
         </TabsTrigger>
         <TabsTrigger value="rules" class="gap-2">
           <span>📏</span>
-          <span>Custom Rules ({{ rulesStats.enabled }}/{{ rulesStats.total }})</span>
+          <span
+            >Custom Rules ({{ rulesStats.enabled }}/{{ rulesStats.total }})</span
+          >
         </TabsTrigger>
       </TabsList>
 
@@ -510,16 +518,12 @@ function toggleContextSelection(ctx: string, list: string[]) {
       <TabsContent value="dictionary" class="space-y-6">
         <!-- Actions Bar -->
         <div class="flex flex-wrap items-center gap-3">
-          <Button @click="showAddWordDialog = true">
-            ➕ Add Word
-          </Button>
+          <Button @click="showAddWordDialog = true">➕ Add Word</Button>
           <Button variant="outline" @click="showAddContextDialog = true">
             🏷️ Manage Contexts
           </Button>
-          <div class="flex-1" />
-          <Button variant="outline" @click="exportData">
-            📤 Export
-          </Button>
+          <div class="flex-1"/>
+          <Button variant="outline" @click="exportData">📤 Export</Button>
           <Button variant="outline" @click="showImportDialog = true">
             📥 Import
           </Button>
@@ -535,7 +539,7 @@ function toggleContextSelection(ctx: string, list: string[]) {
           />
           <Select v-model="dictionaryContextFilter">
             <SelectTrigger class="w-40">
-              <SelectValue placeholder="All Contexts" />
+              <SelectValue placeholder="All Contexts"/>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Contexts</SelectItem>
@@ -556,13 +560,17 @@ function toggleContextSelection(ctx: string, list: string[]) {
           </Card>
           <Card class="text-center">
             <CardContent class="p-4">
-              <div class="text-2xl font-bold">{{ dictionaryStats.caseSensitive }}</div>
+              <div class="text-2xl font-bold">
+                {{ dictionaryStats.caseSensitive }}
+              </div>
               <div class="text-sm text-muted-foreground">Case Sensitive</div>
             </CardContent>
           </Card>
           <Card class="text-center">
             <CardContent class="p-4">
-              <div class="text-2xl font-bold">{{ dictionaryStats.withContext }}</div>
+              <div class="text-2xl font-bold">
+                {{ dictionaryStats.withContext }}
+              </div>
               <div class="text-sm text-muted-foreground">With Context</div>
             </CardContent>
           </Card>
@@ -570,8 +578,13 @@ function toggleContextSelection(ctx: string, list: string[]) {
 
         <!-- Dictionary Table -->
         <Card class="overflow-hidden">
-          <div v-if="filteredDictionary.length === 0" class="p-8 text-center text-muted-foreground">
-            <p v-if="dictionary.length === 0">No words in your dictionary yet.</p>
+          <div
+            v-if="filteredDictionary.length === 0"
+            class="p-8 text-center text-muted-foreground"
+          >
+            <p v-if="dictionary.length === 0">
+              No words in your dictionary yet.
+            </p>
             <p v-else>No words match your search.</p>
           </div>
           <Table v-else>
@@ -585,13 +598,13 @@ function toggleContextSelection(ctx: string, list: string[]) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow
-                v-for="entry in filteredDictionary"
-                :key="entry.id"
-              >
+              <TableRow v-for="entry in filteredDictionary" :key="entry.id">
                 <TableCell>
                   <span class="font-mono">{{ entry.word }}</span>
-                  <p v-if="entry.notes" class="text-xs text-muted-foreground mt-1">
+                  <p
+                    v-if="entry.notes"
+                    class="text-xs text-muted-foreground mt-1"
+                  >
                     {{ entry.notes }}
                   </p>
                 </TableCell>
@@ -611,9 +624,13 @@ function toggleContextSelection(ctx: string, list: string[]) {
                       :key="ctx"
                       variant="secondary"
                     >
-                      {{ contexts.find(c => c.id === ctx)?.name || ctx }}
+                      {{contexts.find(c => c.id === ctx)?.name || ctx}}
                     </Badge>
-                    <span v-if="!entry.context?.length" class="text-muted-foreground text-sm">—</span>
+                    <span
+                      v-if="!entry.context?.length"
+                      class="text-muted-foreground text-sm"
+                      >—</span
+                    >
                   </div>
                 </TableCell>
                 <TableCell class="text-muted-foreground">
@@ -639,13 +656,9 @@ function toggleContextSelection(ctx: string, list: string[]) {
       <TabsContent value="rules" class="space-y-6">
         <!-- Actions Bar -->
         <div class="flex flex-wrap items-center gap-3">
-          <Button @click="showAddRuleDialog = true">
-            ➕ Add Rule
-          </Button>
-          <div class="flex-1" />
-          <Button variant="outline" @click="exportData">
-            📤 Export
-          </Button>
+          <Button @click="showAddRuleDialog = true">➕ Add Rule</Button>
+          <div class="flex-1"/>
+          <Button variant="outline" @click="exportData">📤 Export</Button>
           <Button variant="outline" @click="showImportDialog = true">
             📥 Import
           </Button>
@@ -663,25 +676,33 @@ function toggleContextSelection(ctx: string, list: string[]) {
         <div class="grid grid-cols-4 gap-4">
           <Card class="text-center">
             <CardContent class="p-4">
-              <div class="text-2xl font-bold">{{ rulesStats.enabled }}/{{ rulesStats.total }}</div>
+              <div class="text-2xl font-bold">
+                {{ rulesStats.enabled }}/{{ rulesStats.total }}
+              </div>
               <div class="text-sm text-muted-foreground">Active Rules</div>
             </CardContent>
           </Card>
           <Card class="text-center">
             <CardContent class="p-4">
-              <div class="text-2xl font-bold text-yellow-600">{{ rulesStats.ignore }}</div>
+              <div class="text-2xl font-bold text-yellow-600">
+                {{ rulesStats.ignore }}
+              </div>
               <div class="text-sm text-muted-foreground">Ignore</div>
             </CardContent>
           </Card>
           <Card class="text-center">
             <CardContent class="p-4">
-              <div class="text-2xl font-bold text-blue-600">{{ rulesStats.replace }}</div>
+              <div class="text-2xl font-bold text-blue-600">
+                {{ rulesStats.replace }}
+              </div>
               <div class="text-sm text-muted-foreground">Replace</div>
             </CardContent>
           </Card>
           <Card class="text-center">
             <CardContent class="p-4">
-              <div class="text-2xl font-bold text-green-600">{{ rulesStats.prefer }}</div>
+              <div class="text-2xl font-bold text-green-600">
+                {{ rulesStats.prefer }}
+              </div>
               <div class="text-sm text-muted-foreground">Prefer</div>
             </CardContent>
           </Card>
@@ -689,7 +710,10 @@ function toggleContextSelection(ctx: string, list: string[]) {
 
         <!-- Rules List -->
         <div class="space-y-3">
-          <Card v-if="filteredRules.length === 0" class="p-8 text-center text-muted-foreground">
+          <Card
+            v-if="filteredRules.length === 0"
+            class="p-8 text-center text-muted-foreground"
+          >
             <p v-if="customRules.length === 0">No custom rules defined yet.</p>
             <p v-else>No rules match your search.</p>
           </Card>
@@ -710,7 +734,9 @@ function toggleContextSelection(ctx: string, list: string[]) {
               <!-- Rule Info -->
               <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2 mb-1">
-                  <span class="font-medium">{{ rule.name || rule.pattern }}</span>
+                  <span class="font-medium"
+                    >{{ rule.name || rule.pattern }}</span
+                  >
                   <Badge
                     variant="outline"
                     :class="getRuleTypeBadgeClass(rule.type)"
@@ -735,9 +761,14 @@ function toggleContextSelection(ctx: string, list: string[]) {
 
                 <div class="text-sm text-muted-foreground space-y-1">
                   <p>
-                    <span class="font-mono bg-muted px-1 rounded">{{ rule.pattern }}</span>
+                    <span class="font-mono bg-muted px-1 rounded"
+                      >{{ rule.pattern }}</span
+                    >
                     <template v-if="rule.replacement">
-                      → <span class="font-mono bg-muted px-1 rounded">{{ rule.replacement }}</span>
+                      →
+                      <span class="font-mono bg-muted px-1 rounded"
+                        >{{ rule.replacement }}</span
+                      >
                     </template>
                   </p>
                   <p v-if="rule.message" class="italic">{{ rule.message }}</p>
@@ -747,7 +778,7 @@ function toggleContextSelection(ctx: string, list: string[]) {
                       :key="ctx"
                       variant="secondary"
                     >
-                      {{ contexts.find(c => c.id === ctx)?.name || ctx }}
+                      {{contexts.find(c => c.id === ctx)?.name || ctx}}
                     </Badge>
                   </div>
                 </div>
@@ -796,7 +827,9 @@ function toggleContextSelection(ctx: string, list: string[]) {
               :checked="newWord.caseSensitive"
               @update:checked="newWord.caseSensitive = $event"
             />
-            <Label for="new-word-case" class="font-normal">Case sensitive</Label>
+            <Label for="new-word-case" class="font-normal">
+              Case sensitive
+            </Label>
           </div>
 
           <div class="space-y-2">
@@ -829,10 +862,7 @@ function toggleContextSelection(ctx: string, list: string[]) {
           <Button variant="outline" @click="showAddWordDialog = false">
             Cancel
           </Button>
-          <Button
-            :disabled="!newWord.word.trim()"
-            @click="addWord"
-          >
+          <Button :disabled="!newWord.word.trim()" @click="addWord">
             Add to Dictionary
           </Button>
         </DialogFooter>
@@ -894,7 +924,9 @@ function toggleContextSelection(ctx: string, list: string[]) {
                   :checked="newRule.isRegex"
                   @update:checked="newRule.isRegex = $event"
                 />
-                <Label for="rule-regex" class="font-normal text-sm">Use regex</Label>
+                <Label for="rule-regex" class="font-normal text-sm">
+                  Use regex
+                </Label>
               </div>
               <div class="flex items-center gap-2">
                 <Checkbox
@@ -902,7 +934,9 @@ function toggleContextSelection(ctx: string, list: string[]) {
                   :checked="newRule.caseSensitive"
                   @update:checked="newRule.caseSensitive = $event"
                 />
-                <Label for="rule-case" class="font-normal text-sm">Case sensitive</Label>
+                <Label for="rule-case" class="font-normal text-sm">
+                  Case sensitive
+                </Label>
               </div>
             </div>
           </div>
@@ -951,10 +985,7 @@ function toggleContextSelection(ctx: string, list: string[]) {
           <Button variant="outline" @click="showAddRuleDialog = false">
             Cancel
           </Button>
-          <Button
-            :disabled="!newRule.pattern.trim()"
-            @click="addRuleEntry"
-          >
+          <Button :disabled="!newRule.pattern.trim()" @click="addRuleEntry">
             Add Rule
           </Button>
         </DialogFooter>
@@ -962,7 +993,10 @@ function toggleContextSelection(ctx: string, list: string[]) {
     </Dialog>
 
     <!-- Add Context Dialog -->
-    <Dialog :open="showAddContextDialog" @update:open="showAddContextDialog = $event">
+    <Dialog
+      :open="showAddContextDialog"
+      @update:open="showAddContextDialog = $event"
+    >
       <DialogContent class="max-w-md">
         <DialogHeader>
           <DialogTitle>Manage Contexts</DialogTitle>
@@ -973,11 +1007,7 @@ function toggleContextSelection(ctx: string, list: string[]) {
 
         <!-- Existing Contexts -->
         <div class="space-y-2 mb-4">
-          <Card
-            v-for="ctx in contexts"
-            :key="ctx.id"
-            class="p-3"
-          >
+          <Card v-for="ctx in contexts" :key="ctx.id" class="p-3">
             <div class="flex items-center justify-between">
               <div>
                 <span class="font-medium">{{ ctx.name }}</span>
@@ -995,7 +1025,10 @@ function toggleContextSelection(ctx: string, list: string[]) {
               </Button>
             </div>
           </Card>
-          <div v-if="contexts.length === 0" class="text-center text-muted-foreground py-4">
+          <div
+            v-if="contexts.length === 0"
+            class="text-center text-muted-foreground py-4"
+          >
             No contexts defined.
           </div>
         </div>
@@ -1071,12 +1104,7 @@ function toggleContextSelection(ctx: string, list: string[]) {
           <Button variant="outline" @click="showImportDialog = false">
             Cancel
           </Button>
-          <Button
-            :disabled="!importFile"
-            @click="handleImport"
-          >
-            Import
-          </Button>
+          <Button :disabled="!importFile" @click="handleImport">Import</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

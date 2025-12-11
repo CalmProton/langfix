@@ -275,14 +275,16 @@ export const GENRE_METADATA: Record<GenreId, GenreMetadata> = {
   academic: {
     id: 'academic',
     name: 'Academic',
-    description: 'Formal writing for research papers, essays, and academic publications',
+    description:
+      'Formal writing for research papers, essays, and academic publications',
     icon: '🎓',
     formalityLabel: 'High',
   },
   business: {
     id: 'business',
     name: 'Business',
-    description: 'Professional communication for emails, reports, and business documents',
+    description:
+      'Professional communication for emails, reports, and business documents',
     icon: '💼',
     formalityLabel: 'Medium-High',
   },
@@ -303,7 +305,8 @@ export const GENRE_METADATA: Record<GenreId, GenreMetadata> = {
   casual: {
     id: 'casual',
     name: 'Casual',
-    description: 'Conversational writing for social media and personal communication',
+    description:
+      'Conversational writing for social media and personal communication',
     icon: '💬',
     formalityLabel: 'Low',
   },
@@ -317,7 +320,8 @@ export const GENRE_METADATA: Record<GenreId, GenreMetadata> = {
   legal: {
     id: 'legal',
     name: 'Legal',
-    description: 'Precise language for contracts, policies, and legal documents',
+    description:
+      'Precise language for contracts, policies, and legal documents',
     icon: '⚖️',
     formalityLabel: 'Very High',
   },

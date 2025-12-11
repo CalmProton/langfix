@@ -49,7 +49,10 @@ const userPlaceholders = computed(() => {
 const previewContent = computed(() => {
   if (!props.template) return '';
   const systemVars = getSystemVariables();
-  return renderContent(props.template.content, { ...systemVars, ...values.value });
+  return renderContent(props.template.content, {
+    ...systemVars,
+    ...values.value,
+  });
 });
 
 // Check if all required fields are filled
@@ -137,7 +140,9 @@ const isLongField = (placeholder: Placeholder): boolean => {
             >
               <Label :for="`field-${placeholder.key}`">
                 {{ placeholder.label }}
-                <span v-if="placeholder.required" class="text-destructive">*</span>
+                <span v-if="placeholder.required" class="text-destructive"
+                  >*</span
+                >
               </Label>
 
               <!-- Textarea for long fields -->
@@ -174,7 +179,9 @@ const isLongField = (placeholder: Placeholder): boolean => {
         <div class="w-64 border-l pl-4 flex flex-col">
           <h4 class="text-sm font-medium mb-2">Preview</h4>
           <ScrollArea class="flex-1 bg-muted/50 rounded-md p-3">
-            <pre class="text-xs whitespace-pre-wrap font-mono">{{ previewContent }}</pre>
+            <pre
+              class="text-xs whitespace-pre-wrap font-mono"
+            >{{ previewContent }}</pre>
           </ScrollArea>
         </div>
       </div>

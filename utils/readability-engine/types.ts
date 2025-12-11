@@ -182,7 +182,7 @@ export const HEATMAP_COLORS: Record<ReadabilityLevel, HeatmapColor> = {
   moderate: {
     background: 'rgba(234, 179, 8, 0.20)', // yellow-500
     text: 'inherit',
-    opacity: 0.20,
+    opacity: 0.2,
   },
   hard: {
     background: 'rgba(239, 68, 68, 0.25)', // red-500

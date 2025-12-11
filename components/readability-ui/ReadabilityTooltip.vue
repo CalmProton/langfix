@@ -3,7 +3,10 @@ import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue';
 import type { SentenceScore } from '../../utils/readability-engine/types';
 import { getScoreLabel } from '../../utils/readability-engine/flesch';
 import { calculatePopupPosition } from '../../utils/suggestion-ui/rect-helpers';
-import type { PopupAnchor, ViewportRect } from '../../utils/suggestion-ui/types';
+import type {
+  PopupAnchor,
+  ViewportRect,
+} from '../../utils/suggestion-ui/types';
 
 const props = defineProps<{
   sentence: SentenceScore;
@@ -25,7 +28,9 @@ const anchor = ref<PopupAnchor>('below');
 // Computed
 const scoreLabel = computed(() => getScoreLabel(props.sentence.score));
 
-const levelClass = computed(() => `lf-readability-level--${props.sentence.level}`);
+const levelClass = computed(
+  () => `lf-readability-level--${props.sentence.level}`,
+);
 
 const tooltipStyle = computed(() => ({
   left: `${position.value.x}px`,
@@ -114,12 +119,15 @@ watchEffect(() => {
     <!-- Stats -->
     <div class="lf-readability-stats">
       <span class="lf-readability-stat">
-        <strong>{{ sentence.wordCount }}</strong> words
+        <strong>{{ sentence.wordCount }}</strong>words
       </span>
       <span class="lf-readability-stat">
-        <strong>{{ sentence.syllableCount }}</strong> syllables
+        <strong>{{ sentence.syllableCount }}</strong>syllables
       </span>
-      <span v-if="sentence.hasPassiveVoice" class="lf-readability-stat lf-readability-stat--warning">
+      <span
+        v-if="sentence.hasPassiveVoice"
+        class="lf-readability-stat lf-readability-stat--warning"
+      >
         Passive voice
       </span>
     </div>
@@ -142,8 +150,14 @@ watchEffect(() => {
         class="lf-readability-btn lf-readability-btn--primary"
         @click="handleSimplify"
       >
-        <svg class="lf-readability-icon" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M2.5 4.5a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+        <svg
+          class="lf-readability-icon"
+          viewBox="0 0 16 16"
+          fill="currentColor"
+        >
+          <path
+            d="M2.5 4.5a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
+          />
         </svg>
         Simplify
       </button>

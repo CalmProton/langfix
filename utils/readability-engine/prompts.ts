@@ -86,9 +86,7 @@ export function parseRefinementResponse(
   try {
     // Simple TOON-style parsing
     // Look for [sentence ...] blocks
-    const sentenceBlocks = response.matchAll(
-      /\[sentence\s+([\s\S]*?)\]/gi,
-    );
+    const sentenceBlocks = response.matchAll(/\[sentence\s+([\s\S]*?)\]/gi);
 
     for (const match of sentenceBlocks) {
       const block = match[1];
@@ -98,9 +96,7 @@ export function parseRefinementResponse(
       const id = idMatch?.[1] ?? '';
 
       // Extract suggestions array
-      const suggestionsMatch = block.match(
-        /suggestions:\s*\[([\s\S]*?)\]/i,
-      );
+      const suggestionsMatch = block.match(/suggestions:\s*\[([\s\S]*?)\]/i);
       const suggestions = suggestionsMatch
         ? extractArrayItems(suggestionsMatch[1])
         : [];

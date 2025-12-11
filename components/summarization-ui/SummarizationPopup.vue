@@ -155,10 +155,7 @@ onUnmounted(() => {
       </div>
 
       <!-- Key Takeaway -->
-      <div
-        v-else-if="isDone && state.keyTakeaway"
-        class="lf-summary-takeaway"
-      >
+      <div v-else-if="isDone && state.keyTakeaway" class="lf-summary-takeaway">
         <p class="lf-takeaway-text">{{ state.keyTakeaway }}</p>
       </div>
 

@@ -43,11 +43,7 @@ function handleChange(event: Event) {
     :disabled="disabled"
     @change="handleChange"
   >
-    <option
-      v-for="lang in languages"
-      :key="lang.code"
-      :value="lang.code"
-    >
+    <option v-for="lang in languages" :key="lang.code" :value="lang.code">
       {{ lang.displayName }}
     </option>
   </select>

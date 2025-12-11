@@ -3,10 +3,10 @@
  * Implementation using @anthropic-ai/sdk
  */
 import Anthropic from '@anthropic-ai/sdk';
-import { BaseProvider } from './base';
-import { AIProviderError } from './errors';
 import type { AIRequest, AIResponse, AnthropicConfig } from '../types';
 import { DEFAULT_BASE_URLS } from '../types';
+import { BaseProvider } from './base';
+import { AIProviderError } from './errors';
 
 export class AnthropicProvider extends BaseProvider {
   name = 'Anthropic';

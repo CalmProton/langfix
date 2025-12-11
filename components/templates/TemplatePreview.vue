@@ -57,7 +57,10 @@ const handleUse = () => {
       </DialogHeader>
 
       <!-- Tags -->
-      <div v-if="template?.tags && template.tags.length > 0" class="flex flex-wrap gap-1.5">
+      <div
+        v-if="template?.tags && template.tags.length > 0"
+        class="flex flex-wrap gap-1.5"
+      >
         <Badge
           v-for="tag in template.tags"
           :key="tag"
@@ -69,7 +72,10 @@ const handleUse = () => {
       </div>
 
       <!-- Placeholders Info -->
-      <div v-if="template?.placeholders && template.placeholders.length > 0" class="space-y-2">
+      <div
+        v-if="template?.placeholders && template.placeholders.length > 0"
+        class="space-y-2"
+      >
         <h4 class="text-sm font-medium">Placeholders to fill:</h4>
         <div class="flex flex-wrap gap-2">
           <span
@@ -78,18 +84,24 @@ const handleUse = () => {
             class="inline-flex items-center px-2 py-1 rounded-md bg-primary/10 text-primary text-xs font-mono"
           >
             {{ placeholder.label }}
-            <span v-if="placeholder.required" class="text-destructive ml-1">*</span>
+            <span v-if="placeholder.required" class="text-destructive ml-1"
+              >*</span
+            >
           </span>
         </div>
       </div>
 
       <!-- Preview Content -->
       <ScrollArea class="flex-1 border rounded-md bg-muted/30">
-        <pre class="p-4 text-sm whitespace-pre-wrap font-mono">{{ previewContent }}</pre>
+        <pre
+          class="p-4 text-sm whitespace-pre-wrap font-mono"
+        >{{ previewContent }}</pre>
       </ScrollArea>
 
       <DialogFooter>
-        <Button variant="outline" @click="emit('update:open', false)">Close</Button>
+        <Button variant="outline" @click="emit('update:open', false)">
+          Close
+        </Button>
         <Button @click="handleUse">Use Template</Button>
       </DialogFooter>
     </DialogContent>

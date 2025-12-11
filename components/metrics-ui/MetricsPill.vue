@@ -35,7 +35,8 @@ function handleClick() {
   >
     <span class="lf-metrics-pill__icon" aria-hidden="true">📊</span>
     <span class="lf-metrics-pill__metric">
-      {{ wordCountFormatted }} {{ metrics.text.words === 1 ? 'word' : 'words' }}
+      {{ wordCountFormatted }}
+      {{ metrics.text.words === 1 ? 'word' : 'words' }}
     </span>
     <template v-if="showReadingTime !== false">
       <span class="lf-metrics-pill__separator" aria-hidden="true">•</span>
@@ -54,8 +55,8 @@ function handleClick() {
   color: white;
   border: none;
   border-radius: 20px;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    sans-serif;
+  font-family:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 12px;
   font-weight: 500;
   line-height: 1.4;

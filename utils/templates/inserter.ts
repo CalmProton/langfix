@@ -2,10 +2,7 @@
  * Template Inserter
  * Utilities for inserting templates into text fields
  */
-import {
-  renderWithSystemVariables,
-  validatePlaceholderValues,
-} from './parser';
+import { renderWithSystemVariables, validatePlaceholderValues } from './parser';
 import type { Template } from './types';
 
 // ============================================================================

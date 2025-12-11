@@ -1,5 +1,5 @@
-import type { Component, Ref } from 'vue';
 import { createContext } from 'reka-ui';
+import type { Component, Ref } from 'vue';
 
 export { default as ChartContainer } from './ChartContainer.vue';
 export { default as ChartLegendContent } from './ChartLegendContent.vue';

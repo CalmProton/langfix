@@ -114,8 +114,8 @@ const featureGroups = [
   },
 ];
 
-const enabledTotal = computed(() =>
-  Object.values(features.value).filter(Boolean).length,
+const enabledTotal = computed(
+  () => Object.values(features.value).filter(Boolean).length,
 );
 
 onMounted(async () => {
@@ -153,10 +153,13 @@ function toggleGroup(group: (typeof featureGroups)[0], enabled: boolean) {
 <template>
   <div class="space-y-6">
     <div class="space-y-1">
-      <p class="text-sm uppercase tracking-[0.14em] text-muted-foreground">Features</p>
+      <p class="text-sm uppercase tracking-[0.14em] text-muted-foreground">
+        Features
+      </p>
       <h2 class="text-2xl font-semibold">Pick the tools you need</h2>
       <p class="text-muted-foreground text-sm">
-        Enable or disable LangFix capabilities. {{ enabledTotal }} features enabled.
+        Enable or disable LangFix capabilities. {{ enabledTotal }}features
+        enabled.
       </p>
     </div>
 
@@ -168,10 +171,18 @@ function toggleGroup(group: (typeof featureGroups)[0], enabled: boolean) {
             <CardDescription>{{ group.description }}</CardDescription>
           </div>
           <div class="flex gap-2">
-            <Button size="sm" variant="outline" @click="toggleGroup(group, true)">
+            <Button
+              size="sm"
+              variant="outline"
+              @click="toggleGroup(group, true)"
+            >
               All on
             </Button>
-            <Button size="sm" variant="ghost" @click="toggleGroup(group, false)">
+            <Button
+              size="sm"
+              variant="ghost"
+              @click="toggleGroup(group, false)"
+            >
               All off
             </Button>
           </div>
@@ -184,9 +195,14 @@ function toggleGroup(group: (typeof featureGroups)[0], enabled: boolean) {
           >
             <div>
               <p class="font-medium text-sm">{{ feature.label }}</p>
-              <p class="text-xs text-muted-foreground">{{ feature.description }}</p>
+              <p class="text-xs text-muted-foreground">
+                {{ feature.description }}
+              </p>
             </div>
-            <Switch v-model:checked="features[feature.key]" :aria-label="`Toggle ${feature.label}`" />
+            <Switch
+              v-model:checked="features[feature.key]"
+              :aria-label="`Toggle ${feature.label}`"
+            />
           </div>
         </CardContent>
       </Card>
@@ -196,8 +212,12 @@ function toggleGroup(group: (typeof featureGroups)[0], enabled: boolean) {
       <Button :disabled="saveStatus === 'saving'" @click="saveSettings">
         {{ saveStatus === 'saving' ? 'Saving…' : 'Save features' }}
       </Button>
-      <span v-if="saveStatus === 'saved'" class="text-sm text-green-600">✓ Settings saved</span>
-      <span v-else-if="saveStatus === 'error'" class="text-sm text-destructive">✗ Error saving settings</span>
+      <span v-if="saveStatus === 'saved'" class="text-sm text-green-600"
+        >✓ Settings saved</span
+      >
+      <span v-else-if="saveStatus === 'error'" class="text-sm text-destructive"
+        >✗ Error saving settings</span
+      >
     </div>
   </div>
 </template>

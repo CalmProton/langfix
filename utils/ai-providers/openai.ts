@@ -4,16 +4,16 @@
  * Also used for OpenAI-compatible APIs (OpenRouter, custom providers)
  */
 import OpenAI from 'openai';
-import { BaseProvider } from './base';
-import { AIProviderError } from './errors';
 import type {
   AIRequest,
   AIResponse,
+  CustomConfig,
   OpenAIConfig,
   OpenRouterConfig,
-  CustomConfig,
 } from '../types';
 import { DEFAULT_BASE_URLS } from '../types';
+import { BaseProvider } from './base';
+import { AIProviderError } from './errors';
 
 type OpenAICompatibleConfig =
   | Omit<OpenAIConfig, 'type'>

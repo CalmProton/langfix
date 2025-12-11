@@ -1,7 +1,10 @@
 <script lang="ts" setup>
 import { ref, computed, watch, onUnmounted } from 'vue';
 import type { MetricsState, MetricsSettings } from '../../utils/metrics/types';
-import { EMPTY_METRICS_STATE, DEFAULT_METRICS_SETTINGS } from '../../utils/metrics/types';
+import {
+  EMPTY_METRICS_STATE,
+  DEFAULT_METRICS_SETTINGS,
+} from '../../utils/metrics/types';
 import MetricsPill from './MetricsPill.vue';
 import MetricsPanel from './MetricsPanel.vue';
 
@@ -13,7 +16,7 @@ const props = withDefaults(
   {
     metrics: () => EMPTY_METRICS_STATE,
     settings: () => DEFAULT_METRICS_SETTINGS,
-  }
+  },
 );
 
 const emit = defineEmits<{
@@ -54,7 +57,9 @@ const isVisible = computed(() => {
 
 // Has content to show
 const hasContent = computed(() => {
-  return props.metrics.text.words > 0 || props.metrics.text.charactersWithSpaces > 0;
+  return (
+    props.metrics.text.words > 0 || props.metrics.text.charactersWithSpaces > 0
+  );
 });
 
 // Toggle expanded state
@@ -91,8 +96,14 @@ function onMouseDown(event: MouseEvent) {
 function onMouseMove(event: MouseEvent) {
   isDragging.value = true;
 
-  const x = Math.max(0, Math.min(event.clientX - dragOffset.value.x, window.innerWidth - 200));
-  const y = Math.max(0, Math.min(event.clientY - dragOffset.value.y, window.innerHeight - 50));
+  const x = Math.max(
+    0,
+    Math.min(event.clientX - dragOffset.value.x, window.innerWidth - 200),
+  );
+  const y = Math.max(
+    0,
+    Math.min(event.clientY - dragOffset.value.y, window.innerHeight - 50),
+  );
 
   customPosition.value = { x, y };
 }
@@ -112,7 +123,7 @@ watch(
   () => props.settings.position,
   () => {
     customPosition.value = null;
-  }
+  },
 );
 
 // Cleanup on unmount

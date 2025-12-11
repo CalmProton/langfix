@@ -11,7 +11,8 @@ import type { GenreConfig } from './types';
 export const ACADEMIC_GENRE: GenreConfig = {
   id: 'academic',
   name: 'Academic',
-  description: 'Formal writing for research papers, essays, and academic publications',
+  description:
+    'Formal writing for research papers, essays, and academic publications',
   icon: '🎓',
   formality: 'high',
   allowContractions: false,
@@ -40,7 +41,8 @@ export const ACADEMIC_GENRE: GenreConfig = {
     'Flag informal language',
     'Check for hedging language appropriateness',
   ],
-  rewriteInstructions: 'Rewrite in formal academic style while maintaining clarity and precision.',
+  rewriteInstructions:
+    'Rewrite in formal academic style while maintaining clarity and precision.',
 };
 
 // ============================================================================
@@ -50,7 +52,8 @@ export const ACADEMIC_GENRE: GenreConfig = {
 export const BUSINESS_GENRE: GenreConfig = {
   id: 'business',
   name: 'Business',
-  description: 'Professional communication for emails, reports, and business documents',
+  description:
+    'Professional communication for emails, reports, and business documents',
   icon: '💼',
   formality: 'medium-high',
   allowContractions: false,
@@ -78,7 +81,8 @@ export const BUSINESS_GENRE: GenreConfig = {
     'Verify clear calls to action',
     'Flag unnecessarily complex sentences',
   ],
-  rewriteInstructions: 'Rewrite in clear, professional business style that is concise and action-oriented.',
+  rewriteInstructions:
+    'Rewrite in clear, professional business style that is concise and action-oriented.',
 };
 
 // ============================================================================
@@ -117,7 +121,8 @@ export const CREATIVE_GENRE: GenreConfig = {
     'Flag telling instead of showing',
     'Verify varied sentence structure',
   ],
-  rewriteInstructions: 'Rewrite with creative flair while maintaining clarity and engagement.',
+  rewriteInstructions:
+    'Rewrite with creative flair while maintaining clarity and engagement.',
 };
 
 // ============================================================================
@@ -156,7 +161,8 @@ export const TECHNICAL_GENRE: GenreConfig = {
     'Flag ambiguous instructions',
     'Flag unnecessary complexity',
   ],
-  rewriteInstructions: 'Rewrite for maximum clarity and precision using consistent technical terminology.',
+  rewriteInstructions:
+    'Rewrite for maximum clarity and precision using consistent technical terminology.',
 };
 
 // ============================================================================
@@ -166,7 +172,8 @@ export const TECHNICAL_GENRE: GenreConfig = {
 export const CASUAL_GENRE: GenreConfig = {
   id: 'casual',
   name: 'Casual',
-  description: 'Conversational writing for social media and personal communication',
+  description:
+    'Conversational writing for social media and personal communication',
   icon: '💬',
   formality: 'low',
   allowContractions: true,
@@ -195,7 +202,8 @@ export const CASUAL_GENRE: GenreConfig = {
     'Flag stiff or robotic phrasing',
     'Flag unnecessarily complex words',
   ],
-  rewriteInstructions: 'Rewrite in a friendly, conversational style that feels natural and approachable.',
+  rewriteInstructions:
+    'Rewrite in a friendly, conversational style that feels natural and approachable.',
 };
 
 // ============================================================================
@@ -234,7 +242,8 @@ export const JOURNALISTIC_GENRE: GenreConfig = {
     'Flag buried leads',
     'Check paragraph length',
   ],
-  rewriteInstructions: 'Rewrite in clear, factual journalistic style with strong leads and objective tone.',
+  rewriteInstructions:
+    'Rewrite in clear, factual journalistic style with strong leads and objective tone.',
 };
 
 // ============================================================================
@@ -274,7 +283,8 @@ export const LEGAL_GENRE: GenreConfig = {
     'Flag vague quantifiers',
     'Verify consistent clause structure',
   ],
-  rewriteInstructions: 'Rewrite with legal precision, ensuring all terms are defined and language is unambiguous.',
+  rewriteInstructions:
+    'Rewrite with legal precision, ensuring all terms are defined and language is unambiguous.',
 };
 
 // ============================================================================

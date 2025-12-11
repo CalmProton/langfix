@@ -184,10 +184,7 @@ export async function filterBySessionIgnore(
 /**
  * Check if text matches a custom rule pattern
  */
-function matchesPattern(
-  text: string,
-  rule: CustomRule,
-): boolean {
+function matchesPattern(text: string, rule: CustomRule): boolean {
   try {
     if (rule.isRegex) {
       const flags = rule.caseSensitive ? 'g' : 'gi';
@@ -201,7 +198,10 @@ function matchesPattern(
     return text.toLowerCase() === rule.pattern.toLowerCase();
   } catch (e) {
     // Invalid regex pattern
-    console.warn(`[LangFix] Invalid regex pattern in rule "${rule.name || rule.id}":`, e);
+    console.warn(
+      `[LangFix] Invalid regex pattern in rule "${rule.name || rule.id}":`,
+      e,
+    );
     return false;
   }
 }
@@ -299,7 +299,9 @@ export async function filterByCustomRules(
               modifiedError = {
                 ...error,
                 suggestion: result.replacement,
-                explanation: result.message || `Custom rule: Replace with "${result.replacement}"`,
+                explanation:
+                  result.message ||
+                  `Custom rule: Replace with "${result.replacement}"`,
               };
             }
             break;
@@ -311,7 +313,8 @@ export async function filterByCustomRules(
                 ...error,
                 suggestion: result.replacement,
                 alternatives: [error.suggestion, ...(error.alternatives || [])],
-                explanation: result.message || `Preferred: "${result.replacement}"`,
+                explanation:
+                  result.message || `Preferred: "${result.replacement}"`,
               };
             }
             break;
@@ -360,7 +363,9 @@ export async function applyAllFilters(
  */
 export async function createFilterPipeline(
   options?: DictionaryFilterOptions,
-): Promise<(errors: ExtendedGrammarError[]) => Promise<ExtendedGrammarError[]>> {
+): Promise<
+  (errors: ExtendedGrammarError[]) => Promise<ExtendedGrammarError[]>
+> {
   // Pre-load cache
   await getCachedData();
 

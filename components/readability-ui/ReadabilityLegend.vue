@@ -52,7 +52,9 @@ function handleToggle() {
         @click="handleClose"
       >
         <svg viewBox="0 0 16 16" fill="currentColor">
-          <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+          <path
+            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
+          />
         </svg>
       </button>
     </div>
@@ -68,7 +70,9 @@ function handleToggle() {
         <span class="lf-legend-stat-label">sentences</span>
       </div>
       <div class="lf-legend-stat">
-        <span class="lf-legend-stat-value">{{ overall.avgWordsPerSentence }}</span>
+        <span class="lf-legend-stat-value"
+          >{{ overall.avgWordsPerSentence }}</span
+        >
         <span class="lf-legend-stat-label">avg words/sent</span>
       </div>
     </div>
@@ -91,13 +95,11 @@ function handleToggle() {
 
     <!-- Toggle Button -->
     <div class="lf-legend-actions">
-      <button
-        type="button"
-        class="lf-legend-toggle"
-        @click="handleToggle"
-      >
+      <button type="button" class="lf-legend-toggle" @click="handleToggle">
         <svg class="lf-legend-icon" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/>
+          <path
+            d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"
+          />
         </svg>
         Hide Heatmap
       </button>

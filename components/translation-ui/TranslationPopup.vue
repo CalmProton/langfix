@@ -86,7 +86,9 @@ async function translate() {
   } catch (err) {
     console.error('[LangFix] Translation error:', err);
     error.value =
-      err instanceof Error ? err.message : 'Translation failed. Please try again.';
+      err instanceof Error
+        ? err.message
+        : 'Translation failed. Please try again.';
   } finally {
     isTranslating.value = false;
   }
@@ -180,7 +182,7 @@ watch(formality, () => {
             :key="lang.code"
             :value="lang.code"
           >
-            {{ lang.name }} ({{ lang.nativeName }})
+            {{ lang.name }}({{ lang.nativeName }})
           </option>
         </select>
       </div>
@@ -232,9 +234,7 @@ watch(formality, () => {
     </div>
 
     <!-- Error message -->
-    <div v-if="error" class="lf-translation-error">
-      {{ error }}
-    </div>
+    <div v-if="error" class="lf-translation-error">{{ error }}</div>
 
     <!-- Translation result -->
     <div v-if="translatedText" class="lf-translation-result">
@@ -249,11 +249,7 @@ watch(formality, () => {
         >
           Replace Text
         </button>
-        <button
-          type="button"
-          class="lf-action-btn"
-          @click="copyToClipboard"
-        >
+        <button type="button" class="lf-action-btn" @click="copyToClipboard">
           {{ copied ? 'Copied!' : 'Copy' }}
         </button>
       </div>
@@ -272,7 +268,8 @@ watch(formality, () => {
   padding: 12px;
   min-width: 320px;
   max-width: 480px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 14px;
   color: var(--lf-text, #1a202c);
 }

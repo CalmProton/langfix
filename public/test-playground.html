@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Extension Test Playground</title>
-  <style>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extension Test Playground</title>
+    <style>
     :root {
       --bg: #0f172a;
       --panel: #111827;
@@ -17,14 +17,24 @@
       --warn: #f97316;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
     body {
       margin: 0;
       min-height: 100vh;
       font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-      background: radial-gradient(circle at 10% 20%, rgba(34,211,238,0.12), transparent 25%),
-                  radial-gradient(circle at 80% 0%, rgba(249,115,22,0.08), transparent 25%),
-                  var(--bg);
+      background:
+        radial-gradient(
+          circle at 10% 20%,
+          rgba(34, 211, 238, 0.12),
+          transparent 25%
+        ),
+        radial-gradient(
+          circle at 80% 0%,
+          rgba(249, 115, 22, 0.08),
+          transparent 25%
+        ), var(--bg);
       color: var(--text);
       line-height: 1.6;
     }
@@ -36,8 +46,12 @@
       align-items: center;
       gap: 12px;
       border-bottom: 1px solid var(--border);
-      background: linear-gradient(90deg, rgba(34,211,238,0.08), rgba(34,211,238,0))
-                  var(--panel);
+      background: linear-gradient(
+          90deg,
+          rgba(34, 211, 238, 0.08),
+          rgba(34, 211, 238, 0)
+        )
+        var(--panel);
       position: sticky;
       top: 0;
       z-index: 10;
@@ -63,10 +77,15 @@
       background: var(--surface);
       color: var(--text);
       cursor: pointer;
-      transition: transform 120ms ease, border-color 120ms ease;
+      transition:
+        transform 120ms ease,
+        border-color 120ms ease;
     }
 
-    header button:hover { border-color: var(--accent); transform: translateY(-1px); }
+    header button:hover {
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
 
     main {
       display: grid;
@@ -80,14 +99,23 @@
       border: 1px solid var(--border);
       border-radius: 14px;
       padding: 16px;
-      box-shadow: 0 12px 45px rgba(0,0,0,0.18);
+      box-shadow: 0 12px 45px rgba(0, 0, 0, 0.18);
       display: grid;
       gap: 10px;
     }
 
-    section h2 { margin: 0; font-size: 16px; letter-spacing: 0.3px; }
-    p { margin: 0; color: var(--muted); }
-    small { color: var(--muted); }
+    section h2 {
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: 0.3px;
+    }
+    p {
+      margin: 0;
+      color: var(--muted);
+    }
+    small {
+      color: var(--muted);
+    }
 
     .field {
       display: grid;
@@ -98,8 +126,13 @@
       background: var(--surface);
     }
 
-    label { font-weight: 600; color: var(--text); }
-    input, select, textarea {
+    label {
+      font-weight: 600;
+      color: var(--text);
+    }
+    input,
+    select,
+    textarea {
       width: 100%;
       padding: 10px;
       border-radius: 8px;
@@ -109,9 +142,13 @@
       font-size: 14px;
     }
 
-    textarea { resize: vertical; min-height: 120px; }
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
 
-    .radio-group, .checkbox-group {
+    .radio-group,
+    .checkbox-group {
       display: grid;
       gap: 6px;
       color: var(--muted);
@@ -125,25 +162,45 @@
       overflow: hidden;
     }
 
-    th, td {
+    th,
+    td {
       padding: 10px 12px;
       border-bottom: 1px solid var(--border);
       text-align: left;
     }
 
-    th { background: rgba(255,255,255,0.03); font-weight: 700; }
-    tr:last-child td { border-bottom: none; }
+    th {
+      background: rgba(255, 255, 255, 0.03);
+      font-weight: 700;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
 
-    .pill { display: inline-block; padding: 4px 8px; border-radius: 999px; font-size: 12px; }
-    .pill.green { background: rgba(34,197,94,0.12); color: #4ade80; }
-    .pill.orange { background: rgba(249,115,22,0.12); color: #fb923c; }
-    .pill.cyan { background: rgba(34,211,238,0.12); color: #67e8f9; }
+    .pill {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+    }
+    .pill.green {
+      background: rgba(34, 197, 94, 0.12);
+      color: #4ade80;
+    }
+    .pill.orange {
+      background: rgba(249, 115, 22, 0.12);
+      color: #fb923c;
+    }
+    .pill.cyan {
+      background: rgba(34, 211, 238, 0.12);
+      color: #67e8f9;
+    }
 
     .card {
       padding: 12px;
       border-radius: 12px;
       border: 1px dashed var(--border);
-      background: rgba(255,255,255,0.02);
+      background: rgba(255, 255, 255, 0.02);
     }
 
     .content-editable {
@@ -154,254 +211,369 @@
       background: #0b1220;
     }
 
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
-    .flex { display: flex; gap: 8px; align-items: center; }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+    .flex {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
 
     .badge {
       padding: 4px 8px;
       border-radius: 8px;
-      background: rgba(255,255,255,0.05);
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--border);
       font-size: 12px;
       color: var(--muted);
     }
 
-    .list-block ul, .list-block ol { margin: 6px 0 0 18px; color: var(--muted); }
+    .list-block ul,
+    .list-block ol {
+      margin: 6px 0 0 18px;
+      color: var(--muted);
+    }
 
-    .scenario { border-left: 3px solid var(--accent); padding-left: 10px; color: var(--muted); }
+    .scenario {
+      border-left: 3px solid var(--accent);
+      padding-left: 10px;
+      color: var(--muted);
+    }
 
-    .footer-note { text-align: center; color: var(--muted); margin-top: 8px; font-size: 13px; }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Extension Test Playground</h1>
-    <div class="actions">
-      <button id="add-paragraph">Add noisy paragraph</button>
-      <button id="toggle-long">Toggle long text</button>
-      <button id="reset-form">Reset form fields</button>
+    .footer-note {
+      text-align: center;
+      color: var(--muted);
+      margin-top: 8px;
+      font-size: 13px;
+    }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Extension Test Playground</h1>
+      <div class="actions">
+        <button id="add-paragraph">Add noisy paragraph</button>
+        <button id="toggle-long">Toggle long text</button>
+        <button id="reset-form">Reset form fields</button>
+      </div>
+      <small
+        >Use this page to test grammar, translation, readability, selection
+        handling, and DOM mutations.</small
+      >
+    </header>
+
+    <main>
+      <section>
+        <h2>Form Inputs</h2>
+        <div class="grid-2">
+          <div class="field">
+            <label for="name">Name</label>
+            <input id="name" name="name" placeholder="Jane Doe">
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              placeholder="user@example.com"
+            >
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              name="password"
+              value="hunter2"
+            >
+          </div>
+          <div class="field">
+            <label for="url">URL</label>
+            <input
+              id="url"
+              type="url"
+              name="url"
+              value="https://example.com/articles/sample"
+            >
+          </div>
+          <div class="field">
+            <label for="search">Search</label>
+            <input
+              id="search"
+              type="search"
+              name="search"
+              placeholder="Search phrase here"
+            >
+          </div>
+          <div class="field">
+            <label for="number">Number</label>
+            <input id="number" type="number" name="number" value="42">
+          </div>
+          <div class="field">
+            <label for="date">Date</label>
+            <input id="date" type="date" name="date" value="2024-11-05">
+          </div>
+          <div class="field">
+            <label for="color">Color</label>
+            <input id="color" type="color" name="color" value="#22d3ee">
+          </div>
+          <div class="field">
+            <label for="range">Range</label>
+            <input
+              id="range"
+              type="range"
+              name="range"
+              min="0"
+              max="100"
+              value="65"
+            >
+          </div>
+          <div class="field">
+            <label for="file">File input</label>
+            <input id="file" type="file" name="file">
+          </div>
+          <div class="field">
+            <label>Checkboxes</label>
+            <div class="checkbox-group">
+              <label class="flex">
+                <input type="checkbox" checked>
+                Enable smart suggestions
+              </label>
+              <label class="flex">
+                <input type="checkbox">
+                Allow rewrite
+              </label>
+              <label class="flex">
+                <input type="checkbox" checked>
+                Track readability metrics
+              </label>
+            </div>
+          </div>
+          <div class="field">
+            <label>Radios</label>
+            <div class="radio-group">
+              <label class="flex">
+                <input type="radio" name="mode" value="concise" checked>
+                Concise
+              </label>
+              <label class="flex">
+                <input type="radio" name="mode" value="balanced">
+                Balanced
+              </label>
+              <label class="flex">
+                <input type="radio" name="mode" value="verbose">
+                Verbose
+              </label>
+            </div>
+          </div>
+          <div class="field">
+            <label for="tone">Tone</label>
+            <select id="tone" name="tone">
+              <option>Neutral</option>
+              <option>Formal</option>
+              <option>Friendly</option>
+              <option>Playful</option>
+              <option>Apologetic</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="lang">Language</label>
+            <select id="lang" name="lang">
+              <option value="en">English</option>
+              <option value="es">Spanish</option>
+              <option value="de">German</option>
+              <option value="fr">French</option>
+              <option value="ja">Japanese</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Textareas & Editable</h2>
+        <div class="field">
+          <label for="textarea-one">Textarea with typos</label>
+          <textarea id="textarea-one">
+            This paragraph contain obvious mistakes, it lack subject verb
+            agreement and run-on sentences that the extension should probably
+            highlight to be fixed asap.
+          </textarea>
+        </div>
+        <div class="field">
+          <label for="textarea-two">Multiline content</label>
+          <textarea id="textarea-two">
+            Line one with simple text. Line two includes, perhaps, commas that
+            pause wrong. Line three is unusually short. Line four repeats
+            repeats words words for emphasis.
+          </textarea>
+        </div>
+        <div class="field">
+          <label>Contenteditable block</label>
+          <div id="editable" class="content-editable" contenteditable="true">
+            You can edit this block freely to test inline suggestions, hover
+            cards, and tooltips from the extension.
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Sample Article</h2>
+        <div class="card">
+          <p>
+            In a surprising twist, the committee were unable to reach a
+            unanimous decision. The report, which was supposed to clarify
+            matters, instead raise further questions. Several members suggests
+            that additional research is needed before moving forward.
+          </p>
+        </div>
+        <div class="card">
+          <p>
+            Another paragraph follows right here, filled with adjectives,
+            adverbs, and maybe some redundant wording that could be tightened.
+            Consider the clarity, rhythm, and flow as you run your extension
+            through this text.
+          </p>
+        </div>
+        <div class="card">
+          <p class="scenario">
+            Scenario: imagine you highlight this block to trigger translations,
+            summaries, or tone changes. Try selecting partial sentences, entire
+            paragraphs, and mixed punctuation!
+          </p>
+        </div>
+        <div class="flex">
+          <span class="badge">long form</span>
+          <span class="badge">nested spans</span>
+          <span class="badge">tooltips target</span>
+        </div>
+      </section>
+
+      <section>
+        <h2>Tables & Lists</h2>
+        <table aria-label="Books table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Status</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Invisible Cities</td>
+              <td>Italo Calvino</td>
+              <td>
+                <span class="pill green">Completed</span>
+              </td>
+              <td>94</td>
+            </tr>
+            <tr>
+              <td>The Left Hand of Darkness</td>
+              <td>Ursula Le Guin</td>
+              <td>
+                <span class="pill orange">In progress</span>
+              </td>
+              <td>86</td>
+            </tr>
+            <tr>
+              <td>Stories of Your Life</td>
+              <td>Ted Chiang</td>
+              <td>
+                <span class="pill cyan">Queued</span>
+              </td>
+              <td>88</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="list-block">
+          <strong>Ordered list</strong>
+          <ol>
+            <li>Collect raw text data.</li>
+            <li>Run readability scoring.</li>
+            <li>Apply rewrites and check again.</li>
+          </ol>
+        </div>
+        <div class="list-block">
+          <strong>Unordered list</strong>
+          <ul>
+            <li>Misspellings to catch quickly.</li>
+            <li>Phrases that feel too wordy.</li>
+            <li>Sentences missing verbs or objects.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <h2>Mixed Widgets</h2>
+        <div class="grid-2">
+          <div class="field">
+            <label for="select-multi">Multi-select simulation</label>
+            <select id="select-multi" multiple size="4">
+              <option selected>Documentation</option>
+              <option>Blog post</option>
+              <option selected>Support email</option>
+              <option>Product pitch</option>
+            </select>
+            <small>Use shift/ctrl-click to change selections.</small>
+          </div>
+          <div class="field">
+            <label for="textarea-short">Short text</label>
+            <textarea id="textarea-short" rows="4">
+              Short text. Very terse. Fragment.
+            </textarea>
+          </div>
+          <div class="field">
+            <label for="long-text">Long text block</label>
+            <textarea id="long-text" rows="6">
+              Sometimes the quickest way to see issues is to scroll through a
+              longer piece of text. This one includes several sentences, some of
+              which are tooooo looooong and contain repeated letters for
+              emphasis or exaggeration.
+            </textarea>
+          </div>
+          <div class="field">
+            <label for="json">JSON-like content</label>
+            <textarea id="json" rows="6">
+              { "title": "Draft", "details": "Incomplete and needs review",
+              "language": "en", "errors": ["missing punctuation", "incorrect
+              casing"] }
+            </textarea>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Dynamic Content</h2>
+        <div id="dynamic-list" class="card">
+          <p>
+            Click the button above to append paragraphs. Useful for testing
+            mutation observers.
+          </p>
+        </div>
+        <div class="card" id="toggle-block">
+          <p>
+            This block expands and collapses to show hidden text, helping test
+            reflows.
+          </p>
+          <p class="hidden-text" style="display:none;">
+            Hidden content appears here. The extension should handle nodes that
+            appear after initial load.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <div class="footer-note">
+      Open this file directly in the browser or via a local server. Tweak text
+      live to stress-test the extension.
     </div>
-    <small>Use this page to test grammar, translation, readability, selection handling, and DOM mutations.</small>
-  </header>
 
-  <main>
-    <section>
-      <h2>Form Inputs</h2>
-      <div class="grid-2">
-        <div class="field">
-          <label for="name">Name</label>
-          <input id="name" name="name" placeholder="Jane Doe">
-        </div>
-        <div class="field">
-          <label for="email">Email</label>
-          <input id="email" type="email" name="email" placeholder="user@example.com">
-        </div>
-        <div class="field">
-          <label for="password">Password</label>
-          <input id="password" type="password" name="password" value="hunter2">
-        </div>
-        <div class="field">
-          <label for="url">URL</label>
-          <input id="url" type="url" name="url" value="https://example.com/articles/sample">
-        </div>
-        <div class="field">
-          <label for="search">Search</label>
-          <input id="search" type="search" name="search" placeholder="Search phrase here">
-        </div>
-        <div class="field">
-          <label for="number">Number</label>
-          <input id="number" type="number" name="number" value="42">
-        </div>
-        <div class="field">
-          <label for="date">Date</label>
-          <input id="date" type="date" name="date" value="2024-11-05">
-        </div>
-        <div class="field">
-          <label for="color">Color</label>
-          <input id="color" type="color" name="color" value="#22d3ee">
-        </div>
-        <div class="field">
-          <label for="range">Range</label>
-          <input id="range" type="range" name="range" min="0" max="100" value="65">
-        </div>
-        <div class="field">
-          <label for="file">File input</label>
-          <input id="file" type="file" name="file">
-        </div>
-        <div class="field">
-          <label>Checkboxes</label>
-          <div class="checkbox-group">
-            <label class="flex"><input type="checkbox" checked> Enable smart suggestions</label>
-            <label class="flex"><input type="checkbox"> Allow rewrite</label>
-            <label class="flex"><input type="checkbox" checked> Track readability metrics</label>
-          </div>
-        </div>
-        <div class="field">
-          <label>Radios</label>
-          <div class="radio-group">
-            <label class="flex"><input type="radio" name="mode" value="concise" checked> Concise</label>
-            <label class="flex"><input type="radio" name="mode" value="balanced"> Balanced</label>
-            <label class="flex"><input type="radio" name="mode" value="verbose"> Verbose</label>
-          </div>
-        </div>
-        <div class="field">
-          <label for="tone">Tone</label>
-          <select id="tone" name="tone">
-            <option>Neutral</option>
-            <option>Formal</option>
-            <option>Friendly</option>
-            <option>Playful</option>
-            <option>Apologetic</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="lang">Language</label>
-          <select id="lang" name="lang">
-            <option value="en">English</option>
-            <option value="es">Spanish</option>
-            <option value="de">German</option>
-            <option value="fr">French</option>
-            <option value="ja">Japanese</option>
-          </select>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2>Textareas & Editable</h2>
-      <div class="field">
-        <label for="textarea-one">Textarea with typos</label>
-        <textarea id="textarea-one">This paragraph contain obvious mistakes, it lack subject verb agreement and run-on sentences that the extension should probably highlight to be fixed asap.</textarea>
-      </div>
-      <div class="field">
-        <label for="textarea-two">Multiline content</label>
-        <textarea id="textarea-two">Line one with simple text.
-Line two includes, perhaps, commas that pause wrong.
-Line three is unusually short.
-Line four repeats repeats words words for emphasis.</textarea>
-      </div>
-      <div class="field">
-        <label>Contenteditable block</label>
-        <div id="editable" class="content-editable" contenteditable="true">You can edit this block freely to test inline suggestions, hover cards, and tooltips from the extension.</div>
-      </div>
-    </section>
-
-    <section>
-      <h2>Sample Article</h2>
-      <div class="card">
-        <p>In a surprising twist, the committee were unable to reach a unanimous decision. The report, which was supposed to clarify matters, instead raise further questions. Several members suggests that additional research is needed before moving forward.</p>
-      </div>
-      <div class="card">
-        <p>Another paragraph follows right here, filled with adjectives, adverbs, and maybe some redundant wording that could be tightened. Consider the clarity, rhythm, and flow as you run your extension through this text.</p>
-      </div>
-      <div class="card">
-        <p class="scenario">Scenario: imagine you highlight this block to trigger translations, summaries, or tone changes. Try selecting partial sentences, entire paragraphs, and mixed punctuation!</p>
-      </div>
-      <div class="flex">
-        <span class="badge">long form</span>
-        <span class="badge">nested spans</span>
-        <span class="badge">tooltips target</span>
-      </div>
-    </section>
-
-    <section>
-      <h2>Tables & Lists</h2>
-      <table aria-label="Books table">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Status</th>
-            <th>Score</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Invisible Cities</td>
-            <td>Italo Calvino</td>
-            <td><span class="pill green">Completed</span></td>
-            <td>94</td>
-          </tr>
-          <tr>
-            <td>The Left Hand of Darkness</td>
-            <td>Ursula Le Guin</td>
-            <td><span class="pill orange">In progress</span></td>
-            <td>86</td>
-          </tr>
-          <tr>
-            <td>Stories of Your Life</td>
-            <td>Ted Chiang</td>
-            <td><span class="pill cyan">Queued</span></td>
-            <td>88</td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="list-block">
-        <strong>Ordered list</strong>
-        <ol>
-          <li>Collect raw text data.</li>
-          <li>Run readability scoring.</li>
-          <li>Apply rewrites and check again.</li>
-        </ol>
-      </div>
-      <div class="list-block">
-        <strong>Unordered list</strong>
-        <ul>
-          <li>Misspellings to catch quickly.</li>
-          <li>Phrases that feel too wordy.</li>
-          <li>Sentences missing verbs or objects.</li>
-        </ul>
-      </div>
-    </section>
-
-    <section>
-      <h2>Mixed Widgets</h2>
-      <div class="grid-2">
-        <div class="field">
-          <label for="select-multi">Multi-select simulation</label>
-          <select id="select-multi" multiple size="4">
-            <option selected>Documentation</option>
-            <option>Blog post</option>
-            <option selected>Support email</option>
-            <option>Product pitch</option>
-          </select>
-          <small>Use shift/ctrl-click to change selections.</small>
-        </div>
-        <div class="field">
-          <label for="textarea-short">Short text</label>
-          <textarea id="textarea-short" rows="4">Short text. Very terse. Fragment.</textarea>
-        </div>
-        <div class="field">
-          <label for="long-text">Long text block</label>
-          <textarea id="long-text" rows="6">Sometimes the quickest way to see issues is to scroll through a longer piece of text. This one includes several sentences, some of which are tooooo looooong and contain repeated letters for emphasis or exaggeration.</textarea>
-        </div>
-        <div class="field">
-          <label for="json">JSON-like content</label>
-          <textarea id="json" rows="6">{
-  "title": "Draft",
-  "details": "Incomplete and needs review",
-  "language": "en",
-  "errors": ["missing punctuation", "incorrect casing"]
-}</textarea>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2>Dynamic Content</h2>
-      <div id="dynamic-list" class="card">
-        <p>Click the button above to append paragraphs. Useful for testing mutation observers.</p>
-      </div>
-      <div class="card" id="toggle-block">
-        <p>This block expands and collapses to show hidden text, helping test reflows.</p>
-        <p class="hidden-text" style="display:none;">Hidden content appears here. The extension should handle nodes that appear after initial load.</p>
-      </div>
-    </section>
-  </main>
-
-  <div class="footer-note">Open this file directly in the browser or via a local server. Tweak text live to stress-test the extension.</div>
-
-  <script>
+    <script>
     const addParagraphBtn = document.getElementById('add-paragraph');
     const toggleLongBtn = document.getElementById('toggle-long');
     const resetFormBtn = document.getElementById('reset-form');
@@ -412,7 +584,9 @@ Line four repeats repeats words words for emphasis.</textarea>
 
     addParagraphBtn.addEventListener('click', () => {
       const p = document.createElement('p');
-      p.textContent = 'Newly inserted text with odd phrasing, extra spaces   and punctuation?? Added at ' + new Date().toLocaleTimeString();
+      p.textContent =
+        'Newly inserted text with odd phrasing, extra spaces   and punctuation?? Added at ' +
+        new Date().toLocaleTimeString();
       dynamicList.appendChild(p);
     });
 
@@ -425,7 +599,7 @@ Line four repeats repeats words words for emphasis.</textarea>
     });
 
     resetFormBtn.addEventListener('click', () => {
-      formInputs.forEach(el => {
+      formInputs.forEach((el) => {
         if (el.type === 'checkbox' || el.type === 'radio') {
           el.checked = el.defaultChecked;
         } else if (el.type === 'file') {
@@ -435,6 +609,6 @@ Line four repeats repeats words words for emphasis.</textarea>
         }
       });
     });
-  </script>
-</body>
+    </script>
+  </body>
 </html>

@@ -220,9 +220,7 @@ export class ToneEngine {
   /**
    * Rewrite text to match target tone
    */
-  async rewriteTone(
-    request: ToneRewriteRequest,
-  ): Promise<ToneRewriteResponse> {
+  async rewriteTone(request: ToneRewriteRequest): Promise<ToneRewriteResponse> {
     const start = performance.now();
     const { text, targetTone, sourceTone } = request;
 
@@ -431,11 +429,7 @@ export class ToneEngine {
     const trimmed = text.trim();
 
     if (!trimmed) {
-      throw new ToneEngineError(
-        'Text cannot be empty',
-        'EMPTY_TEXT',
-        false,
-      );
+      throw new ToneEngineError('Text cannot be empty', 'EMPTY_TEXT', false);
     }
 
     if (trimmed.length < this.config.minTextLength) {
@@ -458,7 +452,10 @@ export class ToneEngine {
   /**
    * Calculate rewrite statistics
    */
-  private calculateStats(original: string, rewritten: string): ToneRewriteStats {
+  private calculateStats(
+    original: string,
+    rewritten: string,
+  ): ToneRewriteStats {
     const originalWords = countWords(original);
     const rewrittenWords = countWords(rewritten);
     const originalChars = countChars(original);

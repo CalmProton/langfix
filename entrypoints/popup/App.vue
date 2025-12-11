@@ -9,12 +9,7 @@ import {
 import { DEFAULT_FEATURES, type FeatureSettings } from '@/utils/types';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 
@@ -118,8 +113,14 @@ defineExpose({
   <main class="popup">
     <header class="header">
       <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">LangFix</p>
-        <h1 class="text-xl font-bold leading-tight text-foreground">Writing assistant</h1>
+        <p
+          class="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground"
+        >
+          LangFix
+        </p>
+        <h1 class="text-xl font-bold leading-tight text-foreground">
+          Writing assistant
+        </h1>
         <p class="mt-1.5 text-sm text-muted-foreground">
           Streamlined controls for rewrite, grammar, and metrics.
         </p>
@@ -128,7 +129,9 @@ defineExpose({
     </header>
 
     <Card class="mb-3">
-      <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+      <CardHeader
+        class="flex flex-row items-center justify-between space-y-0 pb-2"
+      >
         <CardTitle class="text-sm font-semibold">Provider</CardTitle>
         <Badge :variant="state.provider.hasKey ? 'secondary' : 'destructive'">
           {{ state.provider.hasKey ? 'Configured' : 'API key missing' }}
@@ -147,44 +150,77 @@ defineExpose({
           <span class="text-muted-foreground">Fast model</span>
           <span class="font-semibold">{{ state.provider.fastModel }}</span>
         </div>
-        <p v-if="state.error" class="mt-2 text-xs text-destructive">{{ state.error }}</p>
+        <p v-if="state.error" class="mt-2 text-xs text-destructive">
+          {{ state.error }}
+        </p>
       </CardContent>
     </Card>
 
     <Card class="mb-3">
-      <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+      <CardHeader
+        class="flex flex-row items-center justify-between space-y-0 pb-2"
+      >
         <CardTitle class="text-sm font-semibold">Feature toggles</CardTitle>
-        <span v-if="state.actionStatus" class="text-xs text-muted-foreground">{{ state.actionStatus }}</span>
+        <span v-if="state.actionStatus" class="text-xs text-muted-foreground"
+          >{{ state.actionStatus }}</span
+        >
       </CardHeader>
       <CardContent class="space-y-2.5">
-        <div class="flex items-center justify-between gap-3 rounded-lg border p-2.5">
+        <div
+          class="flex items-center justify-between gap-3 rounded-lg border p-2.5"
+        >
           <div class="space-y-0.5">
             <Label class="text-sm font-semibold">Inline rewrite</Label>
-            <p class="text-xs text-muted-foreground">Enable rewrite popup and shortcuts.</p>
+            <p class="text-xs text-muted-foreground">
+              Enable rewrite popup and shortcuts.
+            </p>
           </div>
-          <Switch :checked="state.features.rewritingSuggestions"
-            @update:checked="toggleFeature('rewritingSuggestions')" />
+          <Switch
+            :checked="state.features.rewritingSuggestions"
+            @update:checked="toggleFeature('rewritingSuggestions')"
+          />
         </div>
-        <div class="flex items-center justify-between gap-3 rounded-lg border p-2.5">
+        <div
+          class="flex items-center justify-between gap-3 rounded-lg border p-2.5"
+        >
           <div class="space-y-0.5">
             <Label class="text-sm font-semibold">Grammar checks</Label>
-            <p class="text-xs text-muted-foreground">Show underlines and fixes on edit.</p>
+            <p class="text-xs text-muted-foreground">
+              Show underlines and fixes on edit.
+            </p>
           </div>
-          <Switch :checked="state.features.grammarCheck" @update:checked="toggleFeature('grammarCheck')" />
+          <Switch
+            :checked="state.features.grammarCheck"
+            @update:checked="toggleFeature('grammarCheck')"
+          />
         </div>
-        <div class="flex items-center justify-between gap-3 rounded-lg border p-2.5">
+        <div
+          class="flex items-center justify-between gap-3 rounded-lg border p-2.5"
+        >
           <div class="space-y-0.5">
             <Label class="text-sm font-semibold">Metrics overlay</Label>
-            <p class="text-xs text-muted-foreground">Word counts and pace while typing.</p>
+            <p class="text-xs text-muted-foreground">
+              Word counts and pace while typing.
+            </p>
           </div>
-          <Switch :checked="state.features.wordCount" @update:checked="toggleFeature('wordCount')" />
+          <Switch
+            :checked="state.features.wordCount"
+            @update:checked="toggleFeature('wordCount')"
+          />
         </div>
-        <div class="flex items-center justify-between gap-3 rounded-lg border p-2.5">
+        <div
+          class="flex items-center justify-between gap-3 rounded-lg border p-2.5"
+        >
           <div class="space-y-0.5">
             <Label class="text-sm font-semibold">Readability heatmap</Label>
-            <p class="text-xs text-muted-foreground">Highlight hard-to-read sentences.</p>
+            <p class="text-xs text-muted-foreground">
+              Highlight hard-to-read sentences.
+            </p>
           </div>
-          <Switch :checked="state.features.readabilityHeatmap" @update:checked="toggleFeature('readabilityHeatmap')" />
+          <Switch
+            :checked="state.features.readabilityHeatmap"
+            @update:checked="toggleFeature('readabilityHeatmap')"
+          />
         </div>
       </CardContent>
     </Card>
@@ -203,7 +239,9 @@ defineExpose({
       </CardContent>
     </Card>
 
-    <p v-if="state.loading" class="text-xs text-muted-foreground">Loading settings…</p>
+    <p v-if="state.loading" class="text-xs text-muted-foreground">
+      Loading settings…
+    </p>
   </main>
 </template>
 
@@ -212,7 +250,7 @@ defineExpose({
   width: 360px;
   min-height: 100%;
   padding: 16px;
-  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
 }
 
 .header {

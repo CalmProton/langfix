@@ -78,7 +78,9 @@ async function saveSettings() {
 <template>
   <div class="space-y-6">
     <div class="space-y-2">
-      <p class="text-sm uppercase tracking-[0.14em] text-muted-foreground">Appearance</p>
+      <p class="text-sm uppercase tracking-[0.14em] text-muted-foreground">
+        Appearance
+      </p>
       <h2 class="text-2xl font-semibold">Theme & display</h2>
       <p class="text-muted-foreground text-sm">Customize how LangFix looks.</p>
     </div>
@@ -86,25 +88,39 @@ async function saveSettings() {
     <Card>
       <CardHeader>
         <CardTitle class="text-lg">Theme</CardTitle>
-        <CardDescription>Select how LangFix follows your system.</CardDescription>
+        <CardDescription>
+          Select how LangFix follows your system.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <RadioGroup v-model="theme" class="grid gap-3 sm:grid-cols-3">
-          <label v-for="option in themeOptions" :key="option.id"
+          <label
+            v-for="option in themeOptions"
+            :key="option.id"
             class="flex cursor-pointer flex-col gap-3 rounded-lg border bg-card/30 p-4 transition-colors hover:border-primary"
-            :class="theme === option.id ? 'border-primary shadow-sm' : 'border-border'" :for="`theme-${option.id}`">
+            :class="theme === option.id ? 'border-primary shadow-sm' : 'border-border'"
+            :for="`theme-${option.id}`"
+          >
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2">
                 <span class="text-xl">{{ option.icon }}</span>
                 <div class="space-y-1">
-                  <Label :for="`theme-${option.id}`" class="text-base font-semibold">
+                  <Label
+                    :for="`theme-${option.id}`"
+                    class="text-base font-semibold"
+                  >
                     {{ option.label }}
                   </Label>
-                  <p class="text-xs text-muted-foreground">{{ option.description }}</p>
+                  <p class="text-xs text-muted-foreground">
+                    {{ option.description }}
+                  </p>
                 </div>
               </div>
-              <RadioGroupItem :id="`theme-${option.id}`" :value="option.id"
- aria-label="Theme choice" />
+              <RadioGroupItem
+                :id="`theme-${option.id}`"
+                :value="option.id"
+                aria-label="Theme choice"
+              />
             </div>
           </label>
         </RadioGroup>
@@ -117,14 +133,19 @@ async function saveSettings() {
         <CardDescription>Control what appears in the popup.</CardDescription>
       </CardHeader>
       <CardContent class="space-y-4">
-        <div class="flex items-start justify-between gap-4 rounded-lg border p-4">
+        <div
+          class="flex items-start justify-between gap-4 rounded-lg border p-4"
+        >
           <div class="space-y-1">
             <p class="font-medium text-sm">Show word count</p>
             <p class="text-xs text-muted-foreground">
               Display word and character count in the popup.
             </p>
           </div>
-          <Switch v-model:checked="showWordCount" aria-label="Toggle word count" />
+          <Switch
+            v-model:checked="showWordCount"
+            aria-label="Toggle word count"
+          />
         </div>
       </CardContent>
     </Card>
@@ -133,8 +154,12 @@ async function saveSettings() {
       <Button :disabled="saveStatus === 'saving'" @click="saveSettings">
         {{ saveStatus === 'saving' ? 'Saving…' : 'Save appearance' }}
       </Button>
-      <span v-if="saveStatus === 'saved'" class="text-sm text-green-600">✓ Settings saved</span>
-      <span v-else-if="saveStatus === 'error'" class="text-sm text-destructive">✗ Error saving settings</span>
+      <span v-if="saveStatus === 'saved'" class="text-sm text-green-600"
+        >✓ Settings saved</span
+      >
+      <span v-else-if="saveStatus === 'error'" class="text-sm text-destructive"
+        >✗ Error saving settings</span
+      >
     </div>
   </div>
 </template>

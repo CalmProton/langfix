@@ -64,7 +64,9 @@ function handleClick() {
   pointer-events: auto;
   cursor: pointer;
   border-radius: 2px;
-  transition: background-color 0.15s ease, opacity 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    opacity 0.15s ease;
   z-index: 9998;
 }
 

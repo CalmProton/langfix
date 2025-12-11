@@ -91,7 +91,9 @@ async function saveSettings() {
 <template>
   <div class="space-y-6">
     <div class="space-y-1">
-      <p class="text-sm uppercase tracking-[0.14em] text-muted-foreground">Models</p>
+      <p class="text-sm uppercase tracking-[0.14em] text-muted-foreground">
+        Models
+      </p>
       <h2 class="text-2xl font-semibold">Choose your stacks</h2>
       <p class="text-muted-foreground text-sm">
         Configure which AI models to use for different tasks.
@@ -101,7 +103,9 @@ async function saveSettings() {
     <div class="grid gap-4 md:grid-cols-2">
       <Card>
         <CardHeader>
-          <CardTitle class="text-base flex items-center gap-2">🧠 Main model</CardTitle>
+          <CardTitle class="text-base flex items-center gap-2">
+            🧠 Main model
+          </CardTitle>
           <CardDescription>
             Use for rewriting, tone analysis, and longer responses.
           </CardDescription>
@@ -112,7 +116,9 @@ async function saveSettings() {
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle class="text-base flex items-center gap-2">⚡ Fast model</CardTitle>
+          <CardTitle class="text-base flex items-center gap-2">
+            ⚡ Fast model
+          </CardTitle>
           <CardDescription>
             Optimized for quick grammar checks and small fixes.
           </CardDescription>
@@ -129,13 +135,14 @@ async function saveSettings() {
         <Button
           v-for="preset in currentPresets"
           :key="preset.label"
- size="sm" variant="outline"
+          size="sm"
+          variant="outline"
           :class="
             mainModel === preset.main && fastModel === preset.fast
               ? 'border-primary bg-primary/5'
               : ''
           "
- @click="applyPreset(preset)"
+          @click="applyPreset(preset)"
         >
           {{ preset.label }}
         </Button>
@@ -146,11 +153,12 @@ async function saveSettings() {
       <CardContent class="space-y-4 p-6">
         <div class="space-y-2">
           <Label for="mainModel">Main model</Label>
-          <Input id="mainModel"
- v-model="mainModel"
- type="text"
- placeholder="e.g., claude-sonnet-4-20250514"
- />
+          <Input
+            id="mainModel"
+            v-model="mainModel"
+            type="text"
+            placeholder="e.g., claude-sonnet-4-20250514"
+          />
           <p class="text-xs text-muted-foreground">
             Enter the model identifier as specified by your provider.
           </p>
@@ -158,11 +166,12 @@ async function saveSettings() {
 
         <div class="space-y-2">
           <Label for="fastModel">Fast model</Label>
-          <Input id="fastModel"
- v-model="fastModel"
- type="text"
- placeholder="e.g., claude-haiku-4-20250514"
- />
+          <Input
+            id="fastModel"
+            v-model="fastModel"
+            type="text"
+            placeholder="e.g., claude-haiku-4-20250514"
+          />
           <p class="text-xs text-muted-foreground">
             Use a smaller, faster model for quick checks.
           </p>
@@ -174,8 +183,12 @@ async function saveSettings() {
       <Button :disabled="saveStatus === 'saving'" @click="saveSettings">
         {{ saveStatus === 'saving' ? 'Saving…' : 'Save models' }}
       </Button>
-      <span v-if="saveStatus === 'saved'" class="text-sm text-green-600">✓ Settings saved</span>
-      <span v-else-if="saveStatus === 'error'" class="text-sm text-destructive">✗ Error saving settings</span>
+      <span v-if="saveStatus === 'saved'" class="text-sm text-green-600"
+        >✓ Settings saved</span
+      >
+      <span v-else-if="saveStatus === 'error'" class="text-sm text-destructive"
+        >✗ Error saving settings</span
+      >
     </div>
   </div>
 </template>

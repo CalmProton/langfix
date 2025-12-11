@@ -147,8 +147,7 @@ export function calculateFleschKincaidGrade(
   const avgSentenceLength = wordCount / sentenceCount;
   const avgSyllablesPerWord = syllableCount / wordCount;
 
-  const grade =
-    0.39 * avgSentenceLength + 11.8 * avgSyllablesPerWord - 15.59;
+  const grade = 0.39 * avgSentenceLength + 11.8 * avgSyllablesPerWord - 15.59;
 
   // Clamp to reasonable range (0-20)
   return Math.max(0, Math.min(20, grade));
@@ -192,8 +191,7 @@ export function calculateReadabilityMetrics(
   easyThreshold = 70,
   hardThreshold = 40,
 ): ReadabilityMetrics {
-  const avgWordsPerSentence =
-    sentenceCount > 0 ? wordCount / sentenceCount : 0;
+  const avgWordsPerSentence = sentenceCount > 0 ? wordCount / sentenceCount : 0;
   const avgSyllablesPerWord = wordCount > 0 ? syllableCount / wordCount : 0;
 
   const fleschScore = calculateFleschScore(

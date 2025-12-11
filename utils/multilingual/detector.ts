@@ -230,7 +230,10 @@ export async function detectLanguage(
       return {
         ...aiResult,
         alternativeLanguages: [
-          { language: clientResult.language, confidence: clientResult.confidence },
+          {
+            language: clientResult.language,
+            confidence: clientResult.confidence,
+          },
         ],
       };
     } catch {

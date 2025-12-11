@@ -65,7 +65,9 @@ export class ReadabilityStore {
   private listeners: Set<(state: ReadabilityUIState) => void>;
   private resultListeners: Set<(result: ReadabilityResult | null) => void>;
   private visibilityListeners: Set<(visibility: ReadabilityVisibility) => void>;
-  private hoveredSentenceListeners: Set<(sentence: SentenceScore | null) => void>;
+  private hoveredSentenceListeners: Set<
+    (sentence: SentenceScore | null) => void
+  >;
 
   constructor() {
     this.state = createInitialState();
@@ -117,7 +119,9 @@ export class ReadabilityStore {
    * Check if heatmap is visible
    */
   isHeatmapVisible(): boolean {
-    return this.state.visibility === 'heatmap' || this.state.visibility === 'legend';
+    return (
+      this.state.visibility === 'heatmap' || this.state.visibility === 'legend'
+    );
   }
 
   /**

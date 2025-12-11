@@ -47,9 +47,7 @@ export function analyzeSelection(): SelectionInfo | null {
  */
 function detectSelectionType(text: string): SelectionType {
   // Check for paragraph breaks (double newlines or multiple newlines)
-  const paragraphs = text
-    .split(/\n\s*\n+/)
-    .filter((p) => p.trim().length > 0);
+  const paragraphs = text.split(/\n\s*\n+/).filter((p) => p.trim().length > 0);
 
   if (paragraphs.length > 1) {
     return 'multi-paragraph';
@@ -179,9 +177,7 @@ export function validateSelection(
 /**
  * Extract text from selection with surrounding context
  */
-export function getSelectionWithContext(
-  contextChars = 100,
-): {
+export function getSelectionWithContext(contextChars = 100): {
   text: string;
   before: string;
   after: string;
