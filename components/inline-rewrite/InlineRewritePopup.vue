@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue';
-import { calculatePopupPosition } from '../../utils/suggestion-ui/rect-helpers';
+import { calculatePopupPosition } from '#utils/suggestion-ui/rect-helpers';
 import {
   REWRITE_MODE_METADATA,
   type RewriteMode,
-} from '../../utils/rewrite-engine/types';
-import type { InlineRewriteState } from '../../utils/inline-rewrite/types';
-import type { PopupAnchor } from '../../utils/suggestion-ui/types';
+} from '#utils/rewrite-engine/types';
+import type { InlineRewriteState } from '#utils/inline-rewrite/types';
+import type { PopupAnchor } from '#utils/suggestion-ui/types';
 
 const props = defineProps<{
   state: InlineRewriteState;

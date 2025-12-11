@@ -1,15 +1,12 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from 'vue';
-import { getProviderFromStorage } from '../../utils/ai-providers';
-import {
-  getLanguageSettings,
-  getTranslationGlossary,
-} from '../../utils/storage';
-import { translateText } from '../../utils/multilingual/translator';
+import { getProviderFromStorage } from '#utils/ai-providers';
+import { getLanguageSettings, getTranslationGlossary } from '#utils/storage';
+import { translateText } from '#utils/multilingual/translator';
 import {
   SUPPORTED_LANGUAGES,
   type TranslationFormality,
-} from '../../utils/multilingual/types';
+} from '#utils/multilingual/types';
 
 const props = defineProps<{
   text: string;

@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import type {
   SuggestionError,
   ViewportRect,
-} from '../../utils/suggestion-ui/types';
+} from '#utils/suggestion-ui/types';
 
 const props = defineProps<{
   error: SuggestionError;

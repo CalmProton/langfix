@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
-import type { CorrectionOption } from '../../utils/error-explanations/types';
+import type { CorrectionOption } from '#utils/error-explanations/types';
 
 const props = defineProps<{
   correction: CorrectionOption;

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
-import type { CorrectionOption } from '../../utils/error-explanations/types';
-import CorrectionOptionComponent from './CorrectionOption.vue';
+import type { CorrectionOption } from '#utils/error-explanations/types';
+import CorrectionOptionComponent from '#components/suggestion-ui/CorrectionOption.vue';
 
 const props = defineProps<{
   corrections: CorrectionOption[];

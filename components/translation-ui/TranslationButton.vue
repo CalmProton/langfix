@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { detectLanguageClient } from '../../utils/multilingual/detector';
-import { getLanguageName } from '../../utils/multilingual/types';
+import { detectLanguageClient } from '#utils/multilingual/detector';
+import { getLanguageName } from '#utils/multilingual/types';
 
 const props = defineProps<{
   text: string;

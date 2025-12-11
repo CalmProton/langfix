@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue';
-import { calculatePopupPosition } from '../../utils/suggestion-ui/rect-helpers';
+import { calculatePopupPosition } from '#utils/suggestion-ui/rect-helpers';
 import type {
   PopupAnchor,
   SuggestionError,
   ViewportRect,
-} from '../../utils/suggestion-ui/types';
+} from '#utils/suggestion-ui/types';
 
 const props = defineProps<{
   error: SuggestionError;

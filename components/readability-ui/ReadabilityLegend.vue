@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
-import type { OverallScore } from '../../utils/readability-engine/types';
-import { HEATMAP_COLORS } from '../../utils/readability-engine/types';
-import { getScoreLabel } from '../../utils/readability-engine/flesch';
+import type { OverallScore } from '#utils/readability-engine/types';
+import { HEATMAP_COLORS } from '#utils/readability-engine/types';
+import { getScoreLabel } from '#utils/readability-engine/flesch';
 
 const props = defineProps<{
   overall: OverallScore;

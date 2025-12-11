@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { ref, computed, watch, onUnmounted } from 'vue';
-import type { MetricsState, MetricsSettings } from '../../utils/metrics/types';
+import type { MetricsState, MetricsSettings } from '#utils/metrics/types';
 import {
   EMPTY_METRICS_STATE,
   DEFAULT_METRICS_SETTINGS,
-} from '../../utils/metrics/types';
-import MetricsPill from './MetricsPill.vue';
-import MetricsPanel from './MetricsPanel.vue';
+} from '#utils/metrics/types';
+import MetricsPill from '#components/metrics-ui/MetricsPill.vue';
+import MetricsPanel from '#components/metrics-ui/MetricsPanel.vue';
 
 const props = withDefaults(
   defineProps<{

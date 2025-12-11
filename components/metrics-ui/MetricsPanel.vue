@@ -3,8 +3,8 @@ import { computed } from 'vue';
 import type {
   MetricsState,
   CharacterCountMode,
-} from '../../utils/metrics/types';
-import { formatTimeValue } from '../../utils/metrics/calculator';
+} from '#utils/metrics/types';
+import { formatTimeValue } from '#utils/metrics/calculator';
 
 const props = defineProps<{
   metrics: MetricsState;

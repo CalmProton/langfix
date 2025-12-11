@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
-import type { MetricsState } from '../../utils/metrics/types';
-import { formatTimeValue } from '../../utils/metrics/calculator';
+import type { MetricsState } from '#utils/metrics/types';
+import { formatTimeValue } from '#utils/metrics/calculator';
 
 const props = defineProps<{
   metrics: MetricsState;

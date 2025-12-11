@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue';
-import type { SummarizationState } from '../../utils/summarization/types';
-import type { PopupAnchor } from '../../utils/suggestion-ui/types';
+import type { SummarizationState } from '#utils/summarization/types';
+import type { PopupAnchor } from '#utils/suggestion-ui/types';
 
 const props = defineProps<{
   state: SummarizationState;

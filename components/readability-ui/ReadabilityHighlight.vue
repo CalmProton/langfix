@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
-import type { SentenceScore } from '../../utils/readability-engine/types';
-import { HEATMAP_COLORS } from '../../utils/readability-engine/types';
-import type { ViewportRect } from '../../utils/suggestion-ui/types';
+import type { SentenceScore } from '#utils/readability-engine/types';
+import { HEATMAP_COLORS } from '#utils/readability-engine/types';
+import type { ViewportRect } from '#utils/suggestion-ui/types';
 
 const props = defineProps<{
   sentence: SentenceScore;

@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue';
-import type { SentenceScore } from '../../utils/readability-engine/types';
-import { getScoreLabel } from '../../utils/readability-engine/flesch';
-import { calculatePopupPosition } from '../../utils/suggestion-ui/rect-helpers';
+import type { SentenceScore } from '#utils/readability-engine/types';
+import { getScoreLabel } from '#utils/readability-engine/flesch';
+import { calculatePopupPosition } from '#utils/suggestion-ui/rect-helpers';
 import type {
   PopupAnchor,
   ViewportRect,
-} from '../../utils/suggestion-ui/types';
+} from '#utils/suggestion-ui/types';
 
 const props = defineProps<{
   sentence: SentenceScore;

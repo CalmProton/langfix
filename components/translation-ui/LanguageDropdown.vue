@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { SUPPORTED_LANGUAGES } from '../../utils/multilingual/types';
+import { SUPPORTED_LANGUAGES } from '#utils/multilingual/types';
 
 const props = defineProps<{
   selectedLanguage: string;
