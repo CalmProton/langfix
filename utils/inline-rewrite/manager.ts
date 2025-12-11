@@ -4,14 +4,14 @@
  */
 
 import { type App, createApp, h, reactive } from 'vue';
+import InlineRewritePopup from '#components/inline-rewrite/InlineRewritePopup.vue';
 import { browser } from '#imports';
-import InlineRewritePopup from '../../components/inline-rewrite/InlineRewritePopup.vue';
-import type { RewriteMode } from '../rewrite-engine/types';
+import type { RewriteMode } from '#utils/rewrite-engine/types';
 import {
   getShadowContainer,
   type ShadowContainer,
-} from '../suggestion-ui/shadow-container';
-import type { EditableSurface } from '../text-extraction/types';
+} from '#utils/suggestion-ui/shadow-container';
+import type { EditableSurface } from '#utils/text-extraction/types';
 import {
   createSelectionManager,
   type SelectionManager,

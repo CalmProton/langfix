@@ -2,7 +2,7 @@
  * Metrics Manager
  * Centralized manager for computing and caching text metrics
  */
-import type { EditableSurface } from '../text-extraction/types';
+import type { EditableSurface } from '#utils/text-extraction/types';
 import {
   createReadingTimeCalculator,
   type ReadingTimeCalculator,

@@ -3,7 +3,7 @@
  * Handles text selection detection and validation for inline rewrite
  */
 
-import type { EditableSurface } from '../text-extraction/types';
+import type { EditableSurface } from '#utils/text-extraction/types';
 import {
   DEFAULT_INLINE_REWRITE_CONFIG,
   type InlineRewriteConfig,

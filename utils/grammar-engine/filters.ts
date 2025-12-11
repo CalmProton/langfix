@@ -9,8 +9,8 @@
 import {
   applyAllFilters,
   invalidateDictionaryCache,
-} from '../dictionary/filter';
-import { dictionaryStorage, sessionIgnoredWordsStorage } from '../storage';
+} from '#utils/dictionary/filter';
+import { dictionaryStorage, sessionIgnoredWordsStorage } from '#utils/storage';
 import type { ExtendedGrammarError } from './types';
 
 // Re-export for external use

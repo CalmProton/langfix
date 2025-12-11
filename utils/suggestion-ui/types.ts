@@ -3,8 +3,8 @@
  * Types for the inline suggestion overlay system
  */
 
-import type { ExtendedGrammarError } from '../grammar-engine/types';
-import type { EditableSurface } from '../text-extraction/types';
+import type { ExtendedGrammarError } from '#utils/grammar-engine/types';
+import type { EditableSurface } from '#utils/text-extraction/types';
 
 // ============================================================================
 // Core Types

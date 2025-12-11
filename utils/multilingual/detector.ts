@@ -4,7 +4,7 @@
  * Uses franc-min for fast client-side detection
  */
 import { franc } from 'franc-min';
-import type { AIProvider } from '../types';
+import type { AIProvider } from '#utils/types';
 import type { LanguageDetection } from './types';
 
 // ============================================================================

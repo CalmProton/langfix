@@ -2,8 +2,8 @@
  * Error Explanation Prompts
  * TOON prompts for generating error explanations and corrections
  */
-import type { ExtendedGrammarError } from '../grammar-engine/types';
-import type { SuggestionError } from '../suggestion-ui/types';
+import type { ExtendedGrammarError } from '#utils/grammar-engine/types';
+import type { SuggestionError } from '#utils/suggestion-ui/types';
 
 // ============================================================================
 // System Prompts

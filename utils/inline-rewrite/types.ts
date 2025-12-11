@@ -3,7 +3,7 @@
  * TypeBox schemas for inline rewrite functionality
  */
 import { type Static, Type } from '@sinclair/typebox';
-import { RewriteMode, RewriteStats } from '../rewrite-engine/types';
+import { RewriteMode, RewriteStats } from '#utils/rewrite-engine/types';
 
 // ============================================================================
 // Selection Types

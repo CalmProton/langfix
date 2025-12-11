@@ -2,14 +2,14 @@
  * Dictionary Filter
  * Filters grammar errors based on personal dictionary and custom rules
  */
-import type { ExtendedGrammarError } from '../grammar-engine/types';
+import type { ExtendedGrammarError } from '#utils/grammar-engine/types';
 import {
   customRulesStorage,
   dictionaryStorage,
   markRuleUsed,
   sessionIgnoredWordsStorage,
-} from '../storage';
-import type { CustomRule, DictionaryEntry } from '../types';
+} from '#utils/storage';
+import type { CustomRule, DictionaryEntry } from '#utils/types';
 import type {
   DictionaryCache,
   DictionaryFilterOptions,

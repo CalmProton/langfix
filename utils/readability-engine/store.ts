@@ -5,7 +5,7 @@
 import type {
   ReadabilityResult,
   SentenceScore,
-} from '../readability-engine/types';
+} from '#utils/readability-engine/types';
 
 // ============================================================================
 // Types

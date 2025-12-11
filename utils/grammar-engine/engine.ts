@@ -2,7 +2,7 @@
  * Grammar Engine
  * Core grammar checking functionality with AI provider integration
  */
-import type { AIProvider, GrammarContext, ModelType } from '../types';
+import type { AIProvider, GrammarContext, ModelType } from '#utils/types';
 import { GrammarCache } from './cache';
 import { applyFilters } from './filters';
 import {

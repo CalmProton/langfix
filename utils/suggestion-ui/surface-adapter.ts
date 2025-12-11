@@ -3,8 +3,8 @@
  * Adapter for applying corrections to editable surfaces
  */
 
-import { createRangeFromOffsets } from '../text-extraction/helpers';
-import type { EditableSurface } from '../text-extraction/types';
+import { createRangeFromOffsets } from '#utils/text-extraction/helpers';
+import type { EditableSurface } from '#utils/text-extraction/types';
 import {
   cleanupMirror,
   getAllRectsFromRange,

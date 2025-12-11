@@ -4,11 +4,11 @@
  */
 
 import { type App, createApp, h, reactive } from 'vue';
+import type { ExtendedGrammarError } from '#utils/grammar-engine/types';
+import type { EditableSurface } from '#utils/text-extraction/types';
 // Import Vue components
 import ErrorUnderline from '@/components/suggestion-ui/ErrorUnderline.vue';
 import SuggestionPopup from '@/components/suggestion-ui/SuggestionPopup.vue';
-import type { ExtendedGrammarError } from '../grammar-engine/types';
-import type { EditableSurface } from '../text-extraction/types';
 import { createPositionInvalidator } from './rect-helpers';
 import {
   disposeShadowContainer,

@@ -2,7 +2,7 @@
  * Style Analysis Engine
  * Core engine for style, clarity, and conciseness analysis
  */
-import type { AIProvider, AIRequest, ModelType } from '../types';
+import type { AIProvider, AIRequest, ModelType } from '#utils/types';
 import { StyleAnalysisCache } from './cache';
 import { buildStyleAnalysisPrompt } from './prompts';
 import type {

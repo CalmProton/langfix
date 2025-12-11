@@ -3,7 +3,7 @@
  * Extended types for grammar checking with validation and caching
  */
 import { type Static, Type } from '@sinclair/typebox';
-import type { ModelType } from '../types';
+import type { ModelType } from '#utils/types';
 
 // ============================================================================
 // Grammar Check Result

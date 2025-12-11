@@ -19,7 +19,7 @@ export type {
   SentenceComplexity,
   UserGenrePreferences,
   VocabularyLevel,
-} from '../genre-engine/types';
+} from '#utils/genre-engine/types';
 // AI Provider types
 export * from './ai-provider';
 // Dictionary & custom rules types

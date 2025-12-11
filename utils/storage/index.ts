@@ -7,18 +7,18 @@ import type {
   CustomGenre,
   GenreHistoryEntry,
   UserGenrePreferences,
-} from '../genre-engine/types';
-import { DEFAULT_GENRE_PREFERENCES } from '../genre-engine/types';
+} from '#utils/genre-engine/types';
+import { DEFAULT_GENRE_PREFERENCES } from '#utils/genre-engine/types';
 import {
   DEFAULT_LANGUAGE_SETTINGS,
   type LanguageSettings,
-} from '../multilingual/types';
+} from '#utils/multilingual/types';
 import type {
   CustomRule,
   DictionaryContext,
   DictionaryEntry,
   DictionaryExport,
-} from '../types';
+} from '#utils/types';
 import {
   type AppearanceSettings,
   type BehaviorSettings,
@@ -31,13 +31,13 @@ import {
   type ProviderConfig,
   type ProviderSettings,
   type StyleAnalysisSettings,
-} from '../types';
+} from '#utils/types';
 import {
   DEFAULT_CONTEXTS,
   DICTIONARY_EXPORT_VERSION,
   MAX_CUSTOM_RULES,
   MAX_DICTIONARY_ENTRIES,
-} from '../types/dictionary';
+} from '#utils/types/dictionary';
 
 // ============================================================================
 // Provider Settings (local storage - contains sensitive data)
@@ -220,7 +220,7 @@ import {
   type Template,
   type TemplateSettings,
   type TemplateUsageEntry,
-} from '../templates/types';
+} from '#utils/templates/types';
 
 /**
  * Custom templates - synced across devices (max 200 templates)
@@ -278,7 +278,7 @@ export const templateUsageStorage = storage.defineItem<Record<string, number>>(
 import {
   DEFAULT_METRICS_SETTINGS,
   type MetricsSettings,
-} from '../metrics/types';
+} from '#utils/metrics/types';
 
 /**
  * Metrics display settings - synced across devices

@@ -3,8 +3,8 @@
  * Handles summarization requests from content scripts in the background
  */
 
-import { getProviderFromStorage } from '../ai-providers';
-import { decodeToon, type ParseOutcome } from '../toon';
+import { getProviderFromStorage } from '#utils/ai-providers';
+import { decodeToon, type ParseOutcome } from '#utils/toon';
 import type {
   SelectionType,
   SummarizationError,

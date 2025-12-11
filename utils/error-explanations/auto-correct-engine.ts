@@ -3,11 +3,11 @@
  * Generate and apply corrections to text
  */
 
-import type { ExtendedGrammarError } from '../grammar-engine/types';
-import type { ActionResult, SuggestionError } from '../suggestion-ui/types';
-import type { EditableSurface } from '../text-extraction/types';
-import { decodeToon } from '../toon';
-import type { AIProvider, AIRequest } from '../types';
+import type { ExtendedGrammarError } from '#utils/grammar-engine/types';
+import type { ActionResult, SuggestionError } from '#utils/suggestion-ui/types';
+import type { EditableSurface } from '#utils/text-extraction/types';
+import { decodeToon } from '#utils/toon';
+import type { AIProvider, AIRequest } from '#utils/types';
 import { getConfidenceScorer } from './confidence-scorer';
 import { getCorrectionHistory } from './correction-history';
 import {

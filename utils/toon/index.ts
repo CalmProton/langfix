@@ -8,13 +8,13 @@ import { decode, encode } from '@toon-format/toon';
 import type {
   ToneDetectionResult,
   ToneRewriteResult,
-} from '../tone-engine/types';
+} from '#utils/tone-engine/types';
 import type {
   GrammarResult,
   RewriteResult,
   StyleResult,
   ToonError,
-} from '../types';
+} from '#utils/types';
 
 // ============================================================================
 // Core Encode/Decode Functions

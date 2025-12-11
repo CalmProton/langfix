@@ -2,7 +2,7 @@
  * Dictionary Filter Types
  * Types for dictionary and custom rule filtering
  */
-import type { CustomRule, DictionaryEntry } from '../types';
+import type { CustomRule, DictionaryEntry } from '#utils/types';
 
 /**
  * Filter options for dictionary operations

@@ -4,13 +4,13 @@
  */
 
 import { type App, createApp, reactive } from 'vue';
+import SummarizationPopup from '#components/summarization-ui/SummarizationPopup.vue';
 import { browser } from '#imports';
-import SummarizationPopup from '../../components/summarization-ui/SummarizationPopup.vue';
-import { calculatePopupPosition } from '../suggestion-ui/rect-helpers';
+import { calculatePopupPosition } from '#utils/suggestion-ui/rect-helpers';
 import {
   getShadowContainer,
   type ShadowContainer,
-} from '../suggestion-ui/shadow-container';
+} from '#utils/suggestion-ui/shadow-container';
 import {
   analyzeSelection,
   getSelectionBottomRect,

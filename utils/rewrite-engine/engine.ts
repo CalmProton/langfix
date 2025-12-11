@@ -2,7 +2,7 @@
  * Rewrite Engine
  * Core rewriting functionality with AI provider integration
  */
-import type { AIProvider } from '../types';
+import type { AIProvider } from '#utils/types';
 import {
   buildRetryPrompt,
   buildRewritePrompt,

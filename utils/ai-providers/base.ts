@@ -2,7 +2,7 @@
  * Base AI Provider
  * Abstract base class for AI provider implementations
  */
-import type { AIProvider, AIRequest, AIResponse, ModelType } from '../types';
+import type { AIProvider, AIRequest, AIResponse, ModelType } from '#utils/types';
 
 export abstract class BaseProvider implements AIProvider {
   abstract name: string;

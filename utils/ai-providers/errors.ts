@@ -2,7 +2,7 @@
  * AI Provider Errors
  * Custom error classes for AI provider operations
  */
-import type { AIErrorCode } from '../types';
+import type { AIErrorCode } from '#utils/types';
 
 export class AIProviderError extends Error {
   constructor(

@@ -5,7 +5,7 @@
  * Computes readability metrics locally using Flesch Reading Ease and
  * secondary factors. Optionally refines results using AI model.
  */
-import type { AIProvider } from '../types';
+import type { AIProvider } from '#utils/types';
 import { ReadabilityCache } from './cache';
 import {
   calculateCompositeScore,

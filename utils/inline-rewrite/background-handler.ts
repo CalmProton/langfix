@@ -3,13 +3,13 @@
  * Handles streaming rewrite requests from content scripts
  */
 
-import { type RewriteEngine, RewriteError } from '../rewrite-engine/engine';
+import { type RewriteEngine, RewriteError } from '#utils/rewrite-engine/engine';
 import {
   calculateChangePercent,
   countChars,
   countWords,
-} from '../rewrite-engine/prompts';
-import type { RewriteMode, RewriteResult } from '../rewrite-engine/types';
+} from '#utils/rewrite-engine/prompts';
+import type { RewriteMode, RewriteResult } from '#utils/rewrite-engine/types';
 import type {
   InlineRewriteRequest,
   InlineRewriteResult,

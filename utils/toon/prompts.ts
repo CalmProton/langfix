@@ -3,7 +3,7 @@
  * Templates for communicating with AI models using TOON format
  */
 
-import type { GrammarContext, RewriteMode } from '../types';
+import type { GrammarContext, RewriteMode } from '#utils/types';
 import { encodeToon } from './index';
 
 // ============================================================================

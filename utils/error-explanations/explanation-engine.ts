@@ -3,10 +3,10 @@
  * Generate detailed error explanations using AI providers
  */
 
-import type { ExtendedGrammarError } from '../grammar-engine/types';
-import type { SuggestionError } from '../suggestion-ui/types';
-import { decodeToon } from '../toon';
-import type { AIProvider, AIRequest } from '../types';
+import type { ExtendedGrammarError } from '#utils/grammar-engine/types';
+import type { SuggestionError } from '#utils/suggestion-ui/types';
+import { decodeToon } from '#utils/toon';
+import type { AIProvider, AIRequest } from '#utils/types';
 import { type ExplanationCache, getExplanationCache } from './cache';
 import {
   type ConfidenceScorer,

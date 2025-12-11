@@ -3,7 +3,7 @@
  * Factory function and exports for AI provider management
  */
 
-import type { AIProvider, ProviderConfig } from '../types';
+import type { AIProvider, ProviderConfig } from '#utils/types';
 import { AnthropicProvider } from './anthropic';
 import { AIProviderError } from './errors';
 import { OpenAIProvider, OpenRouterProvider } from './openai';

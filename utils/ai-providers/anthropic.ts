@@ -3,8 +3,8 @@
  * Implementation using @anthropic-ai/sdk
  */
 import Anthropic from '@anthropic-ai/sdk';
-import type { AIRequest, AIResponse, AnthropicConfig } from '../types';
-import { DEFAULT_BASE_URLS } from '../types';
+import type { AIRequest, AIResponse, AnthropicConfig } from '#utils/types';
+import { DEFAULT_BASE_URLS } from '#utils/types';
 import { BaseProvider } from './base';
 import { AIProviderError } from './errors';
 

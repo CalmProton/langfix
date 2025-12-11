@@ -10,8 +10,8 @@ import type {
   CustomConfig,
   OpenAIConfig,
   OpenRouterConfig,
-} from '../types';
-import { DEFAULT_BASE_URLS } from '../types';
+} from '#utils/types';
+import { DEFAULT_BASE_URLS } from '#utils/types';
 import { BaseProvider } from './base';
 import { AIProviderError } from './errors';
 

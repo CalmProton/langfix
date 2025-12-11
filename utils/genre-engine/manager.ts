@@ -3,7 +3,7 @@
  * Singleton class for managing genre selection, detection, and history
  */
 import { storage } from '#imports';
-import type { AIProvider } from '../types';
+import type { AIProvider } from '#utils/types';
 import { BUILT_IN_GENRES, BUILT_IN_GENRES_MAP } from './configs';
 import type {
   CustomGenre,

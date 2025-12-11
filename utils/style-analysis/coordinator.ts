@@ -2,7 +2,7 @@
  * Style Analysis Coordinator
  * Manages analysis queuing, debouncing, and result aggregation
  */
-import type { AIProvider } from '../types';
+import type { AIProvider } from '#utils/types';
 import { StyleAnalysisEngine } from './engine';
 import type {
   IssueCategory,

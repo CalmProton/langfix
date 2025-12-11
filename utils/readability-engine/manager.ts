@@ -3,8 +3,8 @@
  * Coordinates the readability engine, store, and UI overlay
  */
 
-import type { EditableSurface } from '../text-extraction/types';
-import type { AIProvider } from '../types';
+import type { EditableSurface } from '#utils/text-extraction/types';
+import type { AIProvider } from '#utils/types';
 import { ReadabilityEngine } from './engine';
 import {
   createReadabilityStore,

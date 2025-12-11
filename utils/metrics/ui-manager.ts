@@ -4,13 +4,13 @@
  */
 
 import { type App, createApp, reactive } from 'vue';
-import MetricsDisplay from '@/components/metrics-ui/MetricsDisplay.vue';
-import { metricsSettingsStorage } from '../storage';
+import { metricsSettingsStorage } from '#utils/storage';
 import {
   getShadowContainer,
   type ShadowContainer,
-} from '../suggestion-ui/shadow-container';
-import type { EditableSurface } from '../text-extraction/types';
+} from '#utils/suggestion-ui/shadow-container';
+import type { EditableSurface } from '#utils/text-extraction/types';
+import MetricsDisplay from '@/components/metrics-ui/MetricsDisplay.vue';
 import { MetricsManager, type MetricsManagerOptions } from './manager';
 import type { MetricsSettings, MetricsState } from './types';
 import { DEFAULT_METRICS_SETTINGS, EMPTY_METRICS_STATE } from './types';

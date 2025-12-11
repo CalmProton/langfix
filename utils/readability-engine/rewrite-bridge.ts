@@ -2,7 +2,7 @@
  * Readability Rewrite Bridge
  * Connects the readability heatmap "Simplify" CTA to the rewrite engine
  */
-import type { EditableSurface } from '../text-extraction/types';
+import type { EditableSurface } from '#utils/text-extraction/types';
 import type { SentenceScore } from './types';
 
 // ============================================================================

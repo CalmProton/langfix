@@ -2,8 +2,8 @@
  * Confidence Scorer
  * Scores correction confidence based on various factors
  */
-import type { ExtendedGrammarError } from '../grammar-engine/types';
-import type { SuggestionError } from '../suggestion-ui/types';
+import type { ExtendedGrammarError } from '#utils/grammar-engine/types';
+import type { SuggestionError } from '#utils/suggestion-ui/types';
 import { mapErrorTypeToCategory } from './prompts';
 import type {
   CorrectionOption,

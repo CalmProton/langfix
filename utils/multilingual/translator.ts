@@ -2,7 +2,7 @@
  * Translation Service
  * AI-powered translation with formality and context support
  */
-import type { AIProvider } from '../types';
+import type { AIProvider } from '#utils/types';
 import { detectLanguage } from './detector';
 import {
   getLanguageName,

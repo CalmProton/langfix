@@ -2,7 +2,7 @@
  * Tone Detection & Rewrite Engine
  * Core engine for analyzing and transforming text tone
  */
-import type { AIProvider, AIRequest, ModelType } from '../types';
+import type { AIProvider, AIRequest, ModelType } from '#utils/types';
 import { ToneCache } from './cache';
 import { checkPreRewrite, validateRewrite } from './guardrails';
 import {

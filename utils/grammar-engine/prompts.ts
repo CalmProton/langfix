@@ -2,7 +2,7 @@
  * Grammar Engine Prompts
  * Specialized prompts for grammar checking with strict TOON output
  */
-import type { GrammarContext } from '../types';
+import type { GrammarContext } from '#utils/types';
 
 // ============================================================================
 // System Prompts
