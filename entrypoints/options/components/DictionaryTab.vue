@@ -1064,6 +1064,8 @@ function toggleContextSelection(ctx: string, list: string[]) {
 </template>
 
 <style scoped>
+@reference "../style.css";
+
 .card {
   @apply border rounded-xl bg-card;
 }

@@ -380,6 +380,8 @@ function getLanguageName(code: string): string {
 </template>
 
 <style scoped>
+@reference "../style.css";
+
 .card {
   @apply p-6 border rounded-xl bg-card;
 }
