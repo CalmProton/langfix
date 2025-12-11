@@ -9,6 +9,8 @@ export * from './ai-providers';
 export * from './genre-engine';
 // Grammar Engine
 export * from './grammar-engine';
+// Multilingual Support
+export * from './multilingual';
 // Readability Engine
 export * from './readability-engine';
 // Rewrite Engine

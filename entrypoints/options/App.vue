@@ -3,17 +3,19 @@ import { ref } from 'vue';
 import ProviderTab from './components/ProviderTab.vue';
 import ModelsTab from './components/ModelsTab.vue';
 import FeaturesTab from './components/FeaturesTab.vue';
+import LanguageTab from './components/LanguageTab.vue';
 import AppearanceTab from './components/AppearanceTab.vue';
 import AboutTab from './components/AboutTab.vue';
 
 const activeTab = ref<
-  'provider' | 'models' | 'features' | 'appearance' | 'about'
+  'provider' | 'models' | 'features' | 'language' | 'appearance' | 'about'
 >('provider');
 
 const tabs = [
   { id: 'provider' as const, label: 'AI Provider', icon: '🔌' },
   { id: 'models' as const, label: 'Models', icon: '🤖' },
   { id: 'features' as const, label: 'Features', icon: '⚡' },
+  { id: 'language' as const, label: 'Language', icon: '🌐' },
   { id: 'appearance' as const, label: 'Appearance', icon: '🎨' },
   { id: 'about' as const, label: 'About', icon: 'ℹ️' },
 ];
@@ -50,6 +52,7 @@ const tabs = [
       <ProviderTab v-if="activeTab === 'provider'"/>
       <ModelsTab v-else-if="activeTab === 'models'"/>
       <FeaturesTab v-else-if="activeTab === 'features'"/>
+      <LanguageTab v-else-if="activeTab === 'language'" />
       <AppearanceTab v-else-if="activeTab === 'appearance'"/>
       <AboutTab v-else-if="activeTab === 'about'"/>
     </main>

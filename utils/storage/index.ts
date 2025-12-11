@@ -9,6 +9,10 @@ import type {
   UserGenrePreferences,
 } from '../genre-engine/types';
 import { DEFAULT_GENRE_PREFERENCES } from '../genre-engine/types';
+import {
+  DEFAULT_LANGUAGE_SETTINGS,
+  type LanguageSettings,
+} from '../multilingual/types';
 import type { CustomRule, DictionaryEntry } from '../types';
 import {
   type AppearanceSettings,
@@ -154,6 +158,38 @@ export const customRulesStorage = storage.defineItem<CustomRule[]>(
     fallback: [],
   },
 );
+
+// ============================================================================
+// Language Settings (sync storage)
+// ============================================================================
+
+/**
+ * Language settings - synced across devices
+ */
+export const languageSettingsStorage = storage.defineItem<LanguageSettings>(
+  'sync:languageSettings',
+  {
+    fallback: DEFAULT_LANGUAGE_SETTINGS,
+  },
+);
+
+/**
+ * Per-site language overrides - stored locally for quick access
+ */
+export const siteLanguageOverridesStorage = storage.defineItem<
+  Record<string, string>
+>('local:siteLanguageOverrides', {
+  fallback: {},
+});
+
+/**
+ * Translation glossary - synced across devices (max 500 terms)
+ */
+export const translationGlossaryStorage = storage.defineItem<
+  Record<string, string>
+>('sync:translationGlossary', {
+  fallback: {},
+});
 
 // ============================================================================
 // Session Storage (cleared on browser close)
@@ -349,5 +385,168 @@ export async function clearAllStorage(): Promise<void> {
     customGenresStorage.removeValue(),
     currentGenreStorage.removeValue(),
     genreHistoryStorage.removeValue(),
+    languageSettingsStorage.removeValue(),
+    siteLanguageOverridesStorage.removeValue(),
+    translationGlossaryStorage.removeValue(),
   ]);
+}
+
+// ============================================================================
+// Language Settings Helper Functions
+// ============================================================================
+
+/**
+ * Get language settings
+ */
+export async function getLanguageSettings(): Promise<LanguageSettings> {
+  return languageSettingsStorage.getValue();
+}
+
+/**
+ * Save language settings
+ */
+export async function saveLanguageSettings(
+  settings: Partial<LanguageSettings>,
+): Promise<void> {
+  const current = await languageSettingsStorage.getValue();
+  await languageSettingsStorage.setValue({
+    ...current,
+    ...settings,
+  });
+}
+
+/**
+ * Get language override for a specific site
+ */
+export async function getLanguageForSite(
+  domain: string,
+): Promise<string | null> {
+  const settings = await languageSettingsStorage.getValue();
+
+  // Check per-site overrides first
+  if (settings.perSiteOverrides[domain]) {
+    return settings.perSiteOverrides[domain];
+  }
+
+  // Check local overrides (for quick access)
+  const localOverrides = await siteLanguageOverridesStorage.getValue();
+  return localOverrides[domain] || null;
+}
+
+/**
+ * Set language override for a specific site
+ */
+export async function setLanguageForSite(
+  domain: string,
+  language: string,
+): Promise<void> {
+  const current = await languageSettingsStorage.getValue();
+  await languageSettingsStorage.setValue({
+    ...current,
+    perSiteOverrides: {
+      ...current.perSiteOverrides,
+      [domain]: language,
+    },
+  });
+
+  // Also update local storage for quick access
+  const localOverrides = await siteLanguageOverridesStorage.getValue();
+  await siteLanguageOverridesStorage.setValue({
+    ...localOverrides,
+    [domain]: language,
+  });
+}
+
+/**
+ * Remove language override for a specific site
+ */
+export async function removeLanguageForSite(domain: string): Promise<void> {
+  const current = await languageSettingsStorage.getValue();
+  const { [domain]: _, ...rest } = current.perSiteOverrides;
+  await languageSettingsStorage.setValue({
+    ...current,
+    perSiteOverrides: rest,
+  });
+
+  // Also update local storage
+  const localOverrides = await siteLanguageOverridesStorage.getValue();
+  const { [domain]: __, ...localRest } = localOverrides;
+  await siteLanguageOverridesStorage.setValue(localRest);
+}
+
+/**
+ * Add term to translation glossary
+ */
+export async function addGlossaryTerm(
+  term: string,
+  translation: string,
+): Promise<void> {
+  const normalized = term.trim().toLowerCase();
+  if (!normalized || !translation.trim()) return;
+
+  const current = await translationGlossaryStorage.getValue();
+
+  // Keep max 500 terms
+  const entries = Object.entries(current);
+  if (entries.length >= 500 && !current[normalized]) {
+    // Remove oldest entry (first in object)
+    const [firstKey] = entries[0];
+    delete current[firstKey];
+  }
+
+  await translationGlossaryStorage.setValue({
+    ...current,
+    [normalized]: translation.trim(),
+  });
+}
+
+/**
+ * Remove term from translation glossary
+ */
+export async function removeGlossaryTerm(term: string): Promise<void> {
+  const normalized = term.trim().toLowerCase();
+  const current = await translationGlossaryStorage.getValue();
+  const { [normalized]: _, ...rest } = current;
+  await translationGlossaryStorage.setValue(rest);
+}
+
+/**
+ * Get translation glossary
+ */
+export async function getTranslationGlossary(): Promise<
+  Record<string, string>
+> {
+  return translationGlossaryStorage.getValue();
+}
+
+/**
+ * Check if a language is enabled for grammar checking
+ */
+export async function isLanguageEnabled(language: string): Promise<boolean> {
+  const settings = await languageSettingsStorage.getValue();
+  return settings.enabledLanguages.includes(language);
+}
+
+/**
+ * Enable a language for grammar checking
+ */
+export async function enableLanguage(language: string): Promise<void> {
+  const current = await languageSettingsStorage.getValue();
+  if (!current.enabledLanguages.includes(language)) {
+    await languageSettingsStorage.setValue({
+      ...current,
+      enabledLanguages: [...current.enabledLanguages, language],
+    });
+  }
+}
+
+/**
+ * Disable a language for grammar checking
+ */
+export async function disableLanguage(language: string): Promise<void> {
+  const current = await languageSettingsStorage.getValue();
+  await languageSettingsStorage.setValue({
+    ...current,
+    enabledLanguages: current.enabledLanguages.filter((l) => l !== language),
+  });
 }
