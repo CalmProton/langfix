@@ -10,9 +10,6 @@ export { RewriteEngine, RewriteError } from './engine';
 export {
   buildRetryPrompt,
   buildRewritePrompt,
-  calculateChangePercent,
-  countChars,
-  countWords,
   MODE_PROMPTS,
   REWRITE_SYSTEM_PROMPT,
 } from './prompts';

@@ -30,6 +30,5 @@ export * from './tone-engine';
 
 // TOON utilities
 export * from './toon';
-export * from './toon/prompts';
 // Types
 export * from './types';

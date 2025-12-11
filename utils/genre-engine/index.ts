@@ -18,5 +18,3 @@ export {
 } from './configs';
 // Manager
 export { GenreManager } from './manager';
-// Types
-export * from './types';

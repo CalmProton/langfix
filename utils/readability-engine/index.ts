@@ -22,7 +22,6 @@ export {
 } from './flesch';
 // Language detection
 export {
-  detectLanguage,
   getEnglishWordRatio,
   hasNonLatinCharacters,
   isEnglish,
@@ -65,10 +64,8 @@ export {
 } from './store';
 // Syllable counting
 export {
-  countSentences,
   countSyllables,
   countTextSyllables,
-  countWords,
   extractWords,
   getAverageWordLength,
   getComplexWordRatio,

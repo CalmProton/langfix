@@ -6,10 +6,6 @@
  */
 import { decode, encode } from '@toon-format/toon';
 import type {
-  ToneDetectionResult,
-  ToneRewriteResult,
-} from '#utils/tone-engine/types';
-import type {
   GrammarResult,
   RewriteResult,
   StyleResult,
@@ -241,80 +237,4 @@ export function wrapToonBlock(data: unknown): string {
  */
 export function buildContextSection(context: object): string {
   return `CONTEXT (TOON):\n${wrapToonBlock(context)}`;
-}
-
-// ============================================================================
-// Tone Detection/Rewrite Response Parsing
-// ============================================================================
-
-/**
- * Parse tone detection response from AI
- */
-export function parseToneDetectionResponse(
-  response: string,
-): ParseOutcome<ToneDetectionResult> {
-  const raw = extractToonBlock(response);
-
-  try {
-    const data = decodeToon<ToneDetectionResult | ToonError>(raw);
-
-    // Check if it's an error response
-    if ('code' in data && 'message' in data) {
-      return {
-        ok: false,
-        error: `ai_error: ${data.code} - ${data.message}`,
-        raw,
-      };
-    }
-
-    // Validate structure - must have primary and confidence
-    const result = data as ToneDetectionResult;
-    if (!result.primary || typeof result.confidence !== 'number') {
-      return {
-        ok: false,
-        error: 'invalid_structure: missing primary tone or confidence',
-        raw,
-      };
-    }
-
-    return { ok: true, data: result, raw };
-  } catch (error) {
-    return { ok: false, error: `decode_failed: ${String(error)}`, raw };
-  }
-}
-
-/**
- * Parse tone rewrite response from AI
- */
-export function parseToneRewriteResponse(
-  response: string,
-): ParseOutcome<ToneRewriteResult> {
-  const raw = extractToonBlock(response);
-
-  try {
-    const data = decodeToon<ToneRewriteResult | ToonError>(raw);
-
-    // Check if it's an error response
-    if ('code' in data && 'message' in data) {
-      return {
-        ok: false,
-        error: `ai_error: ${data.code} - ${data.message}`,
-        raw,
-      };
-    }
-
-    // Validate structure - must have tone and output
-    const result = data as ToneRewriteResult;
-    if (!result.tone || typeof result.output !== 'string') {
-      return {
-        ok: false,
-        error: 'invalid_structure: missing tone or output',
-        raw,
-      };
-    }
-
-    return { ok: true, data: result, raw };
-  } catch (error) {
-    return { ok: false, error: `decode_failed: ${String(error)}`, raw };
-  }
 }

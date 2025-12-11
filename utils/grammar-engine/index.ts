@@ -8,17 +8,9 @@ export { GrammarCache } from './cache';
 // Main engine class and factory
 export { createGrammarEngine, GrammarEngine } from './engine';
 
-// Filters
-export {
-  applyFilters,
-  filterByDictionary,
-  filterBySessionIgnore,
-} from './filters';
-
 // Prompts
 export {
   buildGrammarCheckPrompt,
-  countWords,
   GRAMMAR_FAST_SYSTEM_PROMPT,
   GRAMMAR_MAIN_SYSTEM_PROMPT,
 } from './prompts';
