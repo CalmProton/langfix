@@ -13,6 +13,8 @@ export * from './rewrite-engine';
 export * from './storage';
 // Text Extraction
 export * from './text-extraction';
+// Tone Engine
+export * from './tone-engine';
 
 // TOON utilities
 export * from './toon';
