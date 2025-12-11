@@ -1,5 +1,9 @@
 import { defineContentScript } from 'wxt/utils/define-content-script';
 import {
+  disposeInlineRewriteManager,
+  getInlineRewriteManager,
+} from '@/utils/inline-rewrite';
+import {
   disposeSuggestionUIManager,
   getSuggestionUIManager,
 } from '@/utils/suggestion-ui';
@@ -20,6 +24,9 @@ export default defineContentScript({
     // Create the suggestion UI manager
     const suggestionUI = getSuggestionUIManager();
 
+    // Create the inline rewrite manager
+    const inlineRewrite = getInlineRewriteManager();
+
     // Track current surface for change watching
     let currentWatchDisposer: (() => void) | null = null;
 
@@ -35,6 +42,9 @@ export default defineContentScript({
 
       // Update suggestion UI surface
       suggestionUI.setSurface(surface);
+
+      // Update inline rewrite surface
+      inlineRewrite.setSurface(surface);
 
       if (surface) {
         // Watch for text changes to clear/update errors
@@ -53,6 +63,7 @@ export default defineContentScript({
     function initialize() {
       textManager.init();
       suggestionUI.init();
+      inlineRewrite.init();
 
       // Track focus changes to update suggestion UI
       textManager.onFocusChange((current, _previous) => {
@@ -94,6 +105,11 @@ export default defineContentScript({
       (window as unknown as { __langfix: unknown }).__langfix = {
         textManager,
         suggestionUI,
+        inlineRewrite,
+        // Helper to manually test inline rewrite
+        testRewrite: () => {
+          inlineRewrite.triggerRewrite();
+        },
         // Helper to manually test suggestion UI with mock errors
         testErrors: () => {
           const surface = textManager.getFocusedSurface();
@@ -128,6 +144,7 @@ export default defineContentScript({
         currentWatchDisposer();
       }
       disposeSuggestionUIManager();
+      disposeInlineRewriteManager();
     });
 
     console.log('[LangFix] Content script initialized');
