@@ -3,8 +3,8 @@ import { computed, ref } from 'vue';
 import type {
   CorrectionOption,
   ErrorExplanation,
-} from '../../utils/error-explanations/types';
-import AutoCorrectActions from './AutoCorrectActions.vue';
+} from '#utils/error-explanations/types';
+import AutoCorrectActions from '#components/suggestion-ui/AutoCorrectActions.vue';
 
 const props = defineProps<{
   explanation: ErrorExplanation;
