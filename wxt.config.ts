@@ -1,5 +1,5 @@
-import { defineConfig } from 'wxt';
 import tailwindcss from '@tailwindcss/vite';
+import { defineConfig } from 'wxt';
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
@@ -10,5 +10,7 @@ export default defineConfig({
   manifest: {
     name: 'LangFix',
     description: 'Open-source AI-powered writing assistant',
+    permissions: ['storage'],
   },
+  imports: false,
 });

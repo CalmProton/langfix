@@ -2,16 +2,17 @@
  * AI Providers
  * Factory function and exports for AI provider management
  */
-import { AnthropicProvider } from './anthropic';
-import { OpenAIProvider, OpenRouterProvider } from './openai';
-import { AIProviderError } from './errors';
-import type { AIProvider, ProviderConfig } from '../types';
 
+import type { AIProvider, ProviderConfig } from '../types';
+import { AnthropicProvider } from './anthropic';
+import { AIProviderError } from './errors';
+import { OpenAIProvider, OpenRouterProvider } from './openai';
+
+export { AnthropicProvider } from './anthropic';
 // Re-export components
 export { BaseProvider } from './base';
-export { AnthropicProvider } from './anthropic';
-export { OpenAIProvider, OpenRouterProvider } from './openai';
 export { AIProviderError } from './errors';
+export { OpenAIProvider, OpenRouterProvider } from './openai';
 
 /**
  * Create an AI provider instance based on configuration

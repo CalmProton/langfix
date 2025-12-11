@@ -2,19 +2,19 @@
  * Storage Layer
  * WXT storage definitions for settings, dictionary, and session data
  */
-import { storage } from 'wxt/storage';
+import { storage } from '#imports';
+import type { CustomRule, DictionaryEntry } from '../types';
 import {
-  type ProviderSettings,
-  type FeatureSettings,
-  type BehaviorSettings,
   type AppearanceSettings,
-  type ProviderConfig,
-  DEFAULT_PROVIDER_SETTINGS,
-  DEFAULT_FEATURES,
-  DEFAULT_BEHAVIOR_SETTINGS,
+  type BehaviorSettings,
   DEFAULT_APPEARANCE_SETTINGS,
+  DEFAULT_BEHAVIOR_SETTINGS,
+  DEFAULT_FEATURES,
+  DEFAULT_PROVIDER_SETTINGS,
+  type FeatureSettings,
+  type ProviderConfig,
+  type ProviderSettings,
 } from '../types';
-import type { DictionaryEntry, CustomRule } from '../types';
 
 // ============================================================================
 // Provider Settings (local storage - contains sensitive data)
@@ -44,16 +44,22 @@ export const providerSettingsStorage = storage.defineItem<ProviderSettings>(
 /**
  * Feature toggles - synced across devices
  */
-export const featuresStorage = storage.defineItem<FeatureSettings>('sync:features', {
-  fallback: DEFAULT_FEATURES,
-});
+export const featuresStorage = storage.defineItem<FeatureSettings>(
+  'sync:features',
+  {
+    fallback: DEFAULT_FEATURES,
+  },
+);
 
 /**
  * Behavior settings - synced across devices
  */
-export const behaviorStorage = storage.defineItem<BehaviorSettings>('sync:behavior', {
-  fallback: DEFAULT_BEHAVIOR_SETTINGS,
-});
+export const behaviorStorage = storage.defineItem<BehaviorSettings>(
+  'sync:behavior',
+  {
+    fallback: DEFAULT_BEHAVIOR_SETTINGS,
+  },
+);
 
 /**
  * Appearance settings - synced across devices
@@ -82,9 +88,12 @@ export const dictionaryStorage = storage.defineItem<DictionaryEntry[]>(
 /**
  * Custom rules - synced across devices (max 200 rules)
  */
-export const customRulesStorage = storage.defineItem<CustomRule[]>('sync:customRules', {
-  fallback: [],
-});
+export const customRulesStorage = storage.defineItem<CustomRule[]>(
+  'sync:customRules',
+  {
+    fallback: [],
+  },
+);
 
 // ============================================================================
 // Session Storage (cleared on browser close)
@@ -161,7 +170,9 @@ export async function addToDictionary(word: string): Promise<void> {
   const current = await dictionaryStorage.getValue();
 
   // Check if already exists
-  if (current.some((e: DictionaryEntry) => e.word.toLowerCase() === normalized)) {
+  if (
+    current.some((e: DictionaryEntry) => e.word.toLowerCase() === normalized)
+  ) {
     return;
   }
 
@@ -192,7 +203,9 @@ export async function removeFromDictionary(word: string): Promise<void> {
 export async function isInDictionary(word: string): Promise<boolean> {
   const normalized = word.trim().toLowerCase();
   const dictionary = await dictionaryStorage.getValue();
-  return dictionary.some((e: DictionaryEntry) => e.word.toLowerCase() === normalized);
+  return dictionary.some(
+    (e: DictionaryEntry) => e.word.toLowerCase() === normalized,
+  );
 }
 
 /**
@@ -242,7 +255,9 @@ export async function addCustomRule(
  */
 export async function removeCustomRule(ruleId: string): Promise<void> {
   const current = await customRulesStorage.getValue();
-  await customRulesStorage.setValue(current.filter((r: CustomRule) => r.id !== ruleId));
+  await customRulesStorage.setValue(
+    current.filter((r: CustomRule) => r.id !== ruleId),
+  );
 }
 
 /**
@@ -251,7 +266,9 @@ export async function removeCustomRule(ruleId: string): Promise<void> {
 export async function toggleCustomRule(ruleId: string): Promise<void> {
   const current = await customRulesStorage.getValue();
   await customRulesStorage.setValue(
-    current.map((r: CustomRule) => (r.id === ruleId ? { ...r, enabled: !r.enabled } : r)),
+    current.map((r: CustomRule) =>
+      r.id === ruleId ? { ...r, enabled: !r.enabled } : r,
+    ),
   );
 }
 
