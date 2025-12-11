@@ -1,7 +1,13 @@
 @import "../../assets/styles/global.css";
 
+html, body {
+  width: 1180px;
+  max-height: 572px;
+}
+
 #app {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
 }

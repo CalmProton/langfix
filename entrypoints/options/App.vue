@@ -32,19 +32,7 @@ const tabs = [
 
 <template>
   <div class="min-h-screen bg-background">
-    <div class="mx-auto flex max-w-5xl flex-col gap-8 px-6 py-10">
-      <header class="space-y-2">
-        <p
-          class="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground"
-        >
-          Settings
-        </p>
-        <h1 class="text-3xl font-bold leading-tight">LangFix Control Panel</h1>
-        <p class="text-muted-foreground">
-          Configure your AI writing assistant experience.
-        </p>
-      </header>
-
+    <div class="mx-auto flex w-full flex-col gap-8 px-8 py-10">
       <Tabs v-model="activeTab" class="space-y-6">
         <TabsList class="flex w-full flex-wrap gap-2">
           <TabsTrigger
