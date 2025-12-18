@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",
-    "@openrouter/sdk": "^0.2.9",
+    "@openrouter/sdk": "^0.3.7",
     "@sinclair/typebox": "^0.34.41",
     "@tanstack/vue-table": "^8.21.3",
     "@toon-format/toon": "^2.1.0",
