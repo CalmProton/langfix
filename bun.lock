@@ -6,7 +6,7 @@
       "name": "wxt-vue-starter",
       "dependencies": {
         "@anthropic-ai/sdk": "^0.71.2",
-        "@openrouter/sdk": "^0.2.9",
+        "@openrouter/sdk": "^0.3.7",
         "@sinclair/typebox": "^0.34.41",
         "@tanstack/vue-table": "^8.21.3",
         "@toon-format/toon": "^2.1.0",
@@ -167,7 +167,7 @@
 
     "@nodelib/fs.walk": ["@nodelib/fs.walk@1.2.8", "", { "dependencies": { "@nodelib/fs.scandir": "2.1.5", "fastq": "^1.6.0" } }, "sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg=="],
 
-    "@openrouter/sdk": ["@openrouter/sdk@0.2.9", "", { "dependencies": { "zod": "^3.25.0 || ^4.0.0" } }, "sha512-O3tu6PwoKzwYXCCT+azFneb0F1T6YcZUqlNVEFABWLOcBzdvsCfgW+GM3QKeBL9V0E1ZBjVy9yssavNjhphO6Q=="],
+    "@openrouter/sdk": ["@openrouter/sdk@0.3.7", "", { "dependencies": { "zod": "^3.25.0 || ^4.0.0" } }, "sha512-jHR7ive7s17kwnE/9+PHXkwKwObEn+hEuW52v8bBkn76insdF3nCcN1xkotHR4i87zLJc8SwE0/2vQsPIAkvnA=="],
 
     "@pnpm/config.env-replace": ["@pnpm/config.env-replace@1.1.0", "", {}, "sha512-htyl8TWnKL7K/ESFa1oW2UB5lVDxuF5DpM7tBi6Hu2LNL3mWkIzNLG6N4zoCUP1lCKNxWy/3iu8mS8MvToGd6w=="],
 
